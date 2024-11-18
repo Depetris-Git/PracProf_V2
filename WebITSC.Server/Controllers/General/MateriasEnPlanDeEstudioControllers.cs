@@ -36,7 +36,7 @@ namespace WebITSC.Server.Controllers.General
 
             return Ok(MateriasEnPlanDeEstudio);
         }
-
+        [HttpGet("{byPlan}")]
         public async Task<ActionResult<List<MateriaEnPlanEstudio>>> GetByPlan(int planEstudioId)
         {
             var MateriasEnPlanDeEstudio = await eRepositorio.FullGetByPlanEstudio(planEstudioId);
