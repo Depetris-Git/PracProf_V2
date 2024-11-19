@@ -8,15 +8,15 @@
 <!-- Definimos variables que contienen el valor del rol -->
 @{
     var administrador = "Administrador";
-    var alumno = "Alumno";
-    var profesor = "Profesor";
+    var alumnos = "Alumnos";
+    var profesores = "Profesores";
 }
 
 <!-- Botones para seleccionar el rol -->
 <div class="role-selection">
     <button class="btn btn-primary" @onclick="() => SelectRole(administrador)">Administrador</button>
-    <button class="btn btn-primary" @onclick="() => SelectRole(alumno)">Alumno</button>
-    <button class="btn btn-primary" @onclick="() => SelectRole(profesor)">Profesor</button>
+    <button class="btn btn-primary" @onclick="() => SelectRole(alumnos)">Alumnos</button>
+    <button class="btn btn-primary" @onclick="() => SelectRole(profesores)">Profesores</button>
 </div>
 
 @if (!string.IsNullOrEmpty(selectedRole))
