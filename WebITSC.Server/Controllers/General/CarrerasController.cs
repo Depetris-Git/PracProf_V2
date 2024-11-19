@@ -32,6 +32,14 @@ namespace WebITSC.Admin.Server.Controllers
                 return Ok(carreras);
             }
 
+           /* [HttpGet("ForSearch")]
+            public async Task<ActionResult<List<GetCarreraDTO>>> GetAllByName()
+            {
+                var carreras = await eRepositorio.Select();
+
+                return Ok(carreras);
+            }
+            */
             [HttpGet("{id:int}")]
             public async Task<ActionResult<GetCarreraDTO>> Get(int id)
             {
@@ -58,6 +66,28 @@ namespace WebITSC.Admin.Server.Controllers
 
             }
 
+            [HttpGet("IdByName")]
+            public async Task<ActionResult<int>> GetIdByName(string name)
+            {
+               var a = eRepositorio.GetByNombre(name);
+                if (a != null)
+                {
+                    var b = a.Result;
+                    if (b == 0)
+                    {
+                        return NotFound(0);
+                    }
+                    else
+                    {
+                        return Ok(b);
+                    }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+             
 
             [HttpPost]
             public async Task<ActionResult<int>> Post(CrearCarreraDTO entidadDTO)

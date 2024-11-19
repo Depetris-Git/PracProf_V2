@@ -32,4 +32,22 @@ namespace WebITSC.Shared.General.DTO
                                       //Estadística y Probabilidad, año 2 (segundo año)... y así.
         public int? NumeroOrden { get; set; }
     }
+
+    public class TraerMateriaEnPlanDTO
+    {
+        public int Id { get; set; }
+        public int HrsRelojAnuales { get; set; }
+        public int HrsCatedraSemanales { get; set; }
+        public string Anual_Cuatrimestral { get; set; }
+        public int Anno { get; set; }
+        public int? NumeroOrden { get; set; }
+        public string NombreMateria { get; set; }
+        public int AnnoPlanEstudio { get; set; }
+    }
+
+    public class MateriaEnPlanSearchDTO
+    {
+        public string NombreCarrera { get; set; }
+        public int? Anno { get; set; }
+    }
 }

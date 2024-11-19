@@ -147,13 +147,12 @@ namespace WebITSC.Server.Controllers.General
 
         }
 
-        [HttpGet("GetId")]
-        public async Task<ActionResult<List<MateriaEnPlanEstudio>>> GetByCarreraAndAnno([FromBody] GetByCarreraAnnoPlanEstudioDTO entidadDTO)
+        [HttpGet("GetListByPlan")]
+        public async Task<ActionResult<List<TraerMateriaEnPlanDTO>>> GetByCarreraAndAnno(string Carrera, int Anno)
         {
-            if (entidadDTO != null)
-            {
-                var a = await carreraRepositorio.GetByNombre(entidadDTO.NombreCarrera);
-                var b = await planEstudioRepositorio.GetIdByCarreraAnno(a, entidadDTO.Anno);
+                
+                var a = await carreraRepositorio.GetByNombre(Carrera);
+                var b = await planEstudioRepositorio.GetIdByCarreraAnno(a, Anno);
                 if (b != 0)
                 {
                     var resultado = await eRepositorio.FullGetByPlanEstudio(b);
@@ -164,18 +163,13 @@ namespace WebITSC.Server.Controllers.General
                     }
                     else
                     {
-                        return NotFound($"No se encontraron Materias en el Plan de Estudio del año {entidadDTO.Anno}");
+                        return NotFound($"No se encontraron Materias en el Plan de Estudio del año {Anno}");
                     }
                 }
                 else
                 {
                     return NotFound("No se encontró un Plan de Estudio");
                 }
-            }
-            else
-            {
-                return NotFound("No se encontró un Plan de Estudio");
-            }
         }
 
     }

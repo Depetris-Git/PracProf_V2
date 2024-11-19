@@ -1,6 +1,8 @@
 ﻿using WebITSC.DB.Data;
 using WebITSC.DB.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http.HttpResults;
+using WebITSC.Shared.General.DTO;
 
 namespace WebITSC.Admin.Server.Repositorio
 {
@@ -20,13 +22,26 @@ namespace WebITSC.Admin.Server.Repositorio
                 .Include(p => p.PlanEstudio)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
-        public async Task<List<MateriaEnPlanEstudio>> FullGetByPlanEstudio(int planEstudioId)
+        public async Task<List<TraerMateriaEnPlanDTO>> FullGetByPlanEstudio(int planEstudioId)
         {
-            return await context.MateriasEnPlanEstudio
-                .Include(p => p.Materia.Nombre)
-                .Include(p => p.PlanEstudio.Anno)
-                .Where(p => p.PlanEstudioId == planEstudioId)
-                .ToListAsync();
+            var res = await context.MateriasEnPlanEstudio
+                                .Where(p => p.PlanEstudioId == planEstudioId)
+                                .Select(p => new TraerMateriaEnPlanDTO
+                                {
+                                    // Datos de MateriasEnPlanEstudio
+                                   Id = p.Id,
+                                    HrsRelojAnuales = p.HrsRelojAnuales,
+                                    HrsCatedraSemanales = p.HrsCatedraSemanales,
+                                    Anual_Cuatrimestral = p.Anual_Cuatrimestral,
+                                    Anno = p.Anno,
+                                    NumeroOrden = p.NumeroOrden,
+
+                                    //Datos Adicionales
+                                    NombreMateria = p.Materia.Nombre,
+                                    AnnoPlanEstudio = p.PlanEstudio.Anno
+                                })
+                                .ToListAsync();
+            return res;
         }
         public async Task<List<MateriaEnPlanEstudio>> FullGetByMateria(int materiaId)
         {

@@ -23,4 +23,10 @@ namespace WebITSC.Shared.General.DTO.Carreraa
         [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string Modalidad { get; set; }
     }
+
+    public class CarreraSearchDTO
+    {
+        public int Id { get; set; }
+        public string Nombre { get; set; }
+    }
 }
