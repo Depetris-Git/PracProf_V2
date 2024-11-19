@@ -1,4 +1,4 @@
-﻿@page "/lista-alumnos"
+﻿@page "/Administracion/ListaAlumnos"
 @using WebITSC.Shared.General.DTO.Alumnos
 @using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
 @using WebITSC.Shared.General.DTO.Carreraa
@@ -6,6 +6,10 @@
 @inject NavigationManager Navigation
 
 <h3>Lista de Alumnos</h3>
+
+<button class="btn btn-primary" @onclick="IrACargaAlumnos" style="position: fixed; top: 80px; right: 20px;"> Cargar + Alumnos</button>
+
+
 
 <!-- Filtros de búsqueda -->
 <div class="form-group">
@@ -28,6 +32,7 @@
     <label for="cohorteFilter">Filtrar por Cohorte</label>
     <InputNumber class="form-control" id="cohorteFilter" @bind-Value="selectedCohorte" />
 </div>
+
 
 <!-- Tabla de Alumnos -->
 <table class="table table-striped">
@@ -145,4 +150,11 @@
             Console.WriteLine($"Error al obtener los alumnos o carreras: {ex.Message}");
         }
     }
+
+    private void IrACargaAlumnos()
+    {
+        // Redirige a la página de CargaAlumnos
+        Navigation.NavigateTo("/Administracion/CargaAlumnos");
+    }
+
 }
