@@ -64,41 +64,35 @@ namespace Repositorio.General
                             {
                                 Asignatura = cm.Turno.MateriaEnPlanEstudio.Materia.Nombre,
                                 ValorNota = context.Notas
-                                    .Where(n => n.Evaluacion.TipoEvaluacion == "Final" && n.CursadoMateria.AlumnoId == a.Id)
-                                    .Select(n => n.ValorNota)
-                                    .First(),
-                                NotaLetra = NumeroANombre(context.Notas
-                                            .Where(n => n.Evaluacion.TipoEvaluacion == "Final" && n.CursadoMateria.AlumnoId == a.Id)
+                                            .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
                                             .Select(n => n.ValorNota)
-                                            .First()),
+                                            .FirstOrDefault(), // Aquí filtro por cada materia específica
+                                NotaLetra = NumeroANombre(context.Notas
+                                            .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                            .Select(n => n.ValorNota)
+                                            .FirstOrDefault()),
                                 Libro = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                                    .Select(n => n.Evaluacion.Libro)
-                                    .FirstOrDefault(),
+                                        .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                        .Select(n => n.Evaluacion.Libro)
+                                        .FirstOrDefault(),
                                 Folio = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                                    .Select(n => n.Evaluacion.Folio)
-                                    .FirstOrDefault(),
+                                        .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                        .Select(n => n.Evaluacion.Folio)
+                                        .FirstOrDefault(),
                                 Dia = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                                    .Select(n => n.Evaluacion.Fecha.Day)
-                                    .FirstOrDefault(),
+                                        .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                        .Select(n => n.Evaluacion.Fecha.Day)
+                                        .FirstOrDefault(),
                                 Mes = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                                    .Select(n => n.Evaluacion.Fecha.Month)
-                                    .FirstOrDefault(),
+                                        .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                        .Select(n => n.Evaluacion.Fecha.Month)
+                                        .FirstOrDefault(),
                                 Anno = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id && n.Evaluacion.TipoEvaluacion == "Final")
-                                    .Select(n => n.Evaluacion.Fecha.Year)
-                                    .FirstOrDefault(),
-                                CondicionActual = context.Notas
-                                    .Where(n => n.CursadoMateria.AlumnoId == a.Id)
-                                    .Select(n => n.CursadoMateria.CondicionActual)
-                                    .FirstOrDefault(),
-                                Sede = context.CursadosMateria
-                                    .Where(cm => cm.Alumno.Id == a.Id)
-                                    .Select(cm => cm.Turno.Sede)
-                                    .FirstOrDefault()
+                                        .Where(n => n.CursadoMateriaId == cm.Id && n.Evaluacion.TipoEvaluacion == "Final")
+                                        .Select(n => n.Evaluacion.Fecha.Year)
+                                        .FirstOrDefault(),
+                                CondicionActual = cm.CondicionActual,
+                                Sede = cm.Turno.Sede
                             }).ToList(),
                 Fecha = DateOnly.FromDateTime(DateTime.Now)
             }).FirstOrDefaultAsync();
