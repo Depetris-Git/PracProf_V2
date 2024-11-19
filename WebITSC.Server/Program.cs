@@ -48,7 +48,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
+//SERVICIO DE ROLES FRONT
+builder.Services.AddSingleton<ServicioRol>();
 
 
 builder.Services.AddControllersWithViews();
