@@ -11,29 +11,35 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
-        <label for="Carrera">Carrera</label>
-        <InputSelect class="form-control" id="Carrera" @bind-Value="searchParams.NombreCarrera">
-            <option value="">Seleccione...</option>
-            @foreach (var carrera in carreras)
-            {
-                <option value="@carrera.Nombre">@carrera.Nombre</option>
-            }
-        </InputSelect>
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <label for="Carrera">Carrera</label>
+            <InputSelect class="form-control" id="Carrera" @bind-Value="searchParams.NombreCarrera">
+                <option value="">Seleccione...</option>
+                @foreach (var carrera in carreras)
+                {
+                    <option value="@carrera.Nombre">@carrera.Nombre</option>
+                }
+            </InputSelect>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="Anno">Año del Plan de Estudio</label>
-        <InputNumber class="form-control" id="Anno" @bind-Value="searchParams.Anno" />
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="Anno">Año del Plan de Estudio</label>
+            <InputNumber class="form-control" id="Anno" @bind-Value="searchParams.Anno" />
+        </div>
     </div>
-    <div>
-        <button type="submit" class="btn btn-primary">Buscar Materias</button>
+    <div class="row">
+        <div class="col-md-4 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Buscar Materias</button>
+        </div>
     </div>
 </EditForm>
 
 @if (materiasPlanEstudio != null && materiasPlanEstudio.Any())
 {
-    <h4>Resultados:</h4>
-    <table class="table table-striped">
+    <h4 class="mt-4">Materias Encontradas</h4>
+    <table class="table table-striped mt-3">
         <thead>
             <tr>
                 <th>Nombre de la Materia</th>
@@ -63,7 +69,7 @@
 }
 else if (materiasPlanEstudio != null)
 {
-    <p>No se encontraron resultados.</p>
+    <p class="mt-4">No se encontraron resultados.</p>
 }
 @code {
     private MateriaEnPlanSearchDTO searchParams = new();
