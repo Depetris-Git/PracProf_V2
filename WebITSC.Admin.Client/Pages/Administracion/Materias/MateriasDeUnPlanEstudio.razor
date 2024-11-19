@@ -25,7 +25,9 @@
         <label for="Anno">Año del Plan de Estudio</label>
         <InputNumber class="form-control" id="Anno" @bind-Value="searchParams.Anno" />
     </div>
-    <button type="submit" class="btn btn-primary">Buscar Materias</button>
+    <div>
+        <button type="submit" class="btn btn-primary">Buscar Materias</button>
+    </div>
 </EditForm>
 
 @if (materiasPlanEstudio != null && materiasPlanEstudio.Any())
@@ -84,16 +86,31 @@ else if (materiasPlanEstudio != null)
 
     private async Task HandleValidSubmit()
     {
+        Console.WriteLine("HandleValidSumit iniciado");
         try
         {
             var url = $"api/MateriaEnPlanEstudio/GetListByPlan?Carrera={searchParams.NombreCarrera}&Anno={searchParams.Anno}";
 
-            var respuesta = await http.GetFromJsonAsync<List<TraerMateriaEnPlanDTO>>(url);
+            var res = await http.GetFromJsonAsync<List<TraerMateriaEnPlanDTO>>(url);
+
+            if (res != null)
+            {
+                materiasPlanEstudio = res;
+                Console.WriteLine($"Materias encontradas: {materiasPlanEstudio.Count}");
+            }
+            else
+            {
+                Console.WriteLine("No se encontraron materias.");
+                materiasPlanEstudio = new List<TraerMateriaEnPlanDTO>();
+            }
+
         }
         catch (Exception ex)
         {
             // Manejar el error de conexión o cualquier otra excepción
-            Console.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Error al obtener materias: {ex.Message}");
+            materiasPlanEstudio = new List<TraerMateriaEnPlanDTO>();
         }
+        StateHasChanged();
     }
 }
