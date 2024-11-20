@@ -162,24 +162,35 @@ else if (materiasPlanEstudio != null)
                 <div class="modal-body">
                     <EditForm Model="@nuevaMateria" OnValidSubmit="AgregarNuevaMateria">
                         <DataAnnotationsValidator />
+
+                        <!-- Selección de Carrera y Año -->
                         <div class="form-group">
-                            <label for="PlanEstudioId">Plan de Estudio</label>
-                            <select id="PlanEstudioId" class="form-control" @bind-Value="nuevaMateria.PlanEstudioId">
-                                @foreach (var plan in planesEstudio)
-                                {
-                                    <option value="@plan.Id">@plan.Nombre (@plan.Anno)</option>
-                                }
-                            </select>
+                            <label for="NombreCarrera">Carrera</label>
+                            <InputText id="NombreCarrera" class="form-control" @bind-Value="nombreCarrera" />
                         </div>
+                        <div class="form-group">
+                            <label for="AnnoPlan">Año del Plan de Estudio</label>
+                            <InputNumber id="AnnoPlan" class="form-control" @bind-Value="annoPlan" />
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" @onclick="ObtenerPlanEstudioId">Confirmar Carrera y Año</button>
+                            <p class="text-muted mt-2">
+                                Plan de Estudio seleccionado: @planEstudioId
+                            </p>
+                        </div>
+
+                        <!-- Selección de Materia -->
                         <div class="form-group">
                             <label for="MateriaId">Materia</label>
                             <select id="MateriaId" class="form-control" @bind-Value="nuevaMateria.MateriaId">
                                 @foreach (var materia in materias)
                                 {
-                                    <option value="@materia.Id">@materia.Nombre</option>
+                                    <option value="@materia.Id">@materia.Nombre - Año @materia.Anno</option>
                                 }
                             </select>
                         </div>
+
+                        <!-- Datos restantes de MateriaEnPlanEstudio -->
                         <div class="form-group">
                             <label for="HrsRelojAnuales">Horas Reloj Anuales</label>
                             <InputNumber id="HrsRelojAnuales" class="form-control" @bind-Value="nuevaMateria.HrsRelojAnuales" />
@@ -214,10 +225,11 @@ else if (materiasPlanEstudio != null)
     private bool mostrarConfirmacionEliminar = false;
     private int idParaEliminar;
     private TraerMateriaEnPlanDTO materiaSeleccionada;
-    private bool mostrarModalAgregar = false;
     private MateriaEnPlanPutDTO nuevaMateria = new MateriaEnPlanPutDTO();
     private List<GetByCarreraAnnoPlanEstudioDTO> planesEstudio; // Lista de Planes de Estudio
+    private GetByCarreraAnnoPlanEstudioDTO datosPlan = new GetByCarreraAnnoPlanEstudioDTO();
     private List<GetMateriaDTO> materias; // Lista de Materias disponibles
+    private bool mostrarModalAgregar = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -309,6 +321,7 @@ else if (materiasPlanEstudio != null)
         idParaEliminar = 0;
         mostrarConfirmacionEliminar = false;
     }
+
 
     private async Task EliminarRegistro()
     {
