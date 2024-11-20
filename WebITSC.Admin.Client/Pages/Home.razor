@@ -3,21 +3,24 @@
 @inject ServicioRol ServicioRol
 @inject NavigationManager Navigation
 
-<h3>Selecciona tu Rol</h3>
+<div class="center-text">
+    <h3><b>SELECCIONA TU ROL</b></h3>
+</div>
 
 <!-- Definimos variables que contienen el valor del rol -->
 @{
     var administrador = "Administrador";
-    var alumno = "Alumno";
-    var profesor = "Profesor";
+    var alumnos = "Alumnos";
+    var profesores = "Profesores";
 }
 
 <!-- Botones para seleccionar el rol -->
 <div class="role-selection">
-    <button class="btn btn-primary" @onclick="() => SelectRole(administrador)">Administrador</button>
-    <button class="btn btn-primary" @onclick="() => SelectRole(alumno)">Alumno</button>
-    <button class="btn btn-primary" @onclick="() => SelectRole(profesor)">Profesor</button>
+    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(administrador)">Administradores</button>
+    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(alumnos)">Alumnos</button>
+    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(profesores)">Profesores</button>
 </div>
+
 
 @if (!string.IsNullOrEmpty(selectedRole))
 {

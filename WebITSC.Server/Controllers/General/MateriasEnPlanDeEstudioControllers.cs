@@ -6,6 +6,7 @@ using WebITSC.DB.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
 using WebITSC.Shared.General.DTO;
 using Repositorio.General;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace WebITSC.Server.Controllers.General
 {
@@ -51,6 +52,41 @@ namespace WebITSC.Server.Controllers.General
             if (MateriaEnPlanDeEstudio == null) return NotFound();
 
             return Ok(MateriaEnPlanDeEstudio);
+        }
+
+        [HttpGet("Simple{id:int}")]
+        public async Task<ActionResult<MateriaEnPlanEstudio>> GetSimpleById(int id)
+        {
+            var MateriaEnPlanDeEstudio = await eRepositorio.SelectById(id);
+            if (MateriaEnPlanDeEstudio == null) return NotFound();
+
+            return Ok(MateriaEnPlanDeEstudio);
+        }
+
+        [HttpGet("DTO/{id:int}")]
+        public async Task<ActionResult<TraerMateriaEnPlanDTO>> GetDTOById(int id)
+        {
+            var registro = await eRepositorio.SelectById(id);
+            if (registro == null)
+            {
+                return NotFound("El registro solicitado no existe.");
+            }
+
+            // Mapeo al DTO (si SelectById no devuelve ya un DTO)
+            var dto = new TraerMateriaEnPlanDTO
+            {
+                Id = registro.Id,
+                MateriaId = registro.MateriaId,
+                HrsRelojAnuales = registro.HrsRelojAnuales,
+                HrsCatedraSemanales = registro.HrsCatedraSemanales,
+                Anual_Cuatrimestral = registro.Anual_Cuatrimestral,
+                Anno = registro.Anno,
+                NumeroOrden = registro.NumeroOrden,
+                NombreMateria = registro.Materia.Nombre,
+                AnnoPlanEstudio = registro.PlanEstudio.Anno
+            };
+
+            return Ok(dto);
         }
         #region Peticiones Get
 
@@ -125,7 +161,32 @@ namespace WebITSC.Server.Controllers.General
             }
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpPut("Actualizar{id:int}")]
+        public async Task<ActionResult> PutWithDTO(TraerMateriaEnPlanDTO entidadDTO)
+        {
+            var sel = await eRepositorio.SelectById(entidadDTO.Id);
+            if (sel == null)
+            {
+                return NotFound("No se encontró el registro a Modificar.");
+            }
+            sel.HrsCatedraSemanales = entidadDTO.HrsCatedraSemanales;
+            sel.Anual_Cuatrimestral = entidadDTO.Anual_Cuatrimestral;
+            sel.Anno = entidadDTO.Anno;
+            sel.HrsRelojAnuales = entidadDTO.HrsRelojAnuales;
+            sel.NumeroOrden = entidadDTO.NumeroOrden;
+
+            try
+            {
+                await eRepositorio.Update(sel.Id, sel);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+            [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var existe = await eRepositorio.Existe(id);

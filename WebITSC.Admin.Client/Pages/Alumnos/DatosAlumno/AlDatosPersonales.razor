@@ -1,0 +1,139 @@
+﻿@page "/Alumnos/Datos-Personales"
+@inject HttpClient http
+@using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
+
+<style>
+
+	thead {
+		background-color: dodgerblue;
+		color: white;
+	}
+
+
+	h2{
+		background-color: cornflowerblue;
+		color: white;
+		padding: 15px;
+		border-radius: 5px;
+		text-align: center;
+		box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+
+		.form-group label {
+			font-size: 18px;
+			font-weight: bold;
+			color: #2C3E50;
+			margin-bottom: 10px;
+		}
+
+
+	.form-control {
+		border-radius: 25px;
+		border: 2px solid #3498DB;
+		padding: 10px 15px;
+		font-size: 16px;
+		transition: all 0.3s ease;
+	}
+
+
+		.form-control:focus {
+			border-color: #1ABC9C;
+			box-shadow: 0 0 5px rgba(26, 188, 156, 0.5);
+			outline: none;
+		}
+
+
+		.form-control::placeholder {
+			color: gray;
+			font-style: italic;
+		}
+</style>
+
+<h2>Datos personales</h2>
+<br>
+
+<div class="form-group">
+	<label for="search">Documento</label>
+	<InputText class="form-control" id="search" @bind-Value="searchTerm" placeholder="Ingresar doc.." />
+</div>
+
+
+@if (!string.IsNullOrWhiteSpace(searchTerm))
+{
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Nombre</th>
+				<th>Apellido</th>
+				<th>Documento</th>
+				<th>Sexo</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var item in FilteredAlumnos)
+			{
+				<tr>
+					<td>@item.Nombre</td>
+					<td>@item.Apellido</td>
+					<td>@item.Documento</td>
+					<td>@item.Sexo</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Ingrese su Documento porfavor...</p>
+}
+@code {
+
+	List<BuscarAlumnoDTO> AlumnoFiltrado = new List<BuscarAlumnoDTO>();
+	string mensaje = "";
+	public string searchTerm = string.Empty;
+
+	private IEnumerable<BuscarAlumnoDTO> FilteredAlumnos
+	{
+		get
+		{
+			var filtered = AlumnoFiltrado.AsEnumerable();
+
+			if (!string.IsNullOrWhiteSpace(searchTerm))
+			{
+				filtered = filtered.Where(a =>
+							a.Documento.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+			}
+
+			return filtered;
+		}
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+		try
+		{
+			AlumnoFiltrado = await http.GetFromJsonAsync<List<BuscarAlumnoDTO>>("api/Alumnos/buscar");
+
+
+			if (AlumnoFiltrado == null)
+			{
+				AlumnoFiltrado = new List<BuscarAlumnoDTO>();
+			}
+
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error al obtener los alumnos : {ex.Message}");
+		}
+	}
+
+
+}
+
