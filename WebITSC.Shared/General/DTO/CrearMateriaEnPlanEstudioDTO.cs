@@ -36,15 +36,45 @@ namespace WebITSC.Shared.General.DTO
     public class TraerMateriaEnPlanDTO
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Las horas de reloj anuales son necesarias")]
         public int HrsRelojAnuales { get; set; }
+
+
+        [Required(ErrorMessage = "Las horas de cátedra semanales son necesarias")]
         public int HrsCatedraSemanales { get; set; }
+
+        [Required(ErrorMessage = "Saber si la materia es anual o cuatrimestral es necesario")]
+        [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
+        public string Anual_Cuatrimestral { get; set; }
+
+        [Required(ErrorMessage = "Saber el año en que se cursa la materia es necesario")]
+        public int Anno { get; set; }
+        public int? NumeroOrden { get; set; }
+
+        [Required(ErrorMessage = "Nombre de la materia asociada es necesario")]
+        public string NombreMateria { get; set; }
+
+        [Required(ErrorMessage = "Id de la materia asociada es necesario")]
+        public int MateriaId;
+        public int AnnoPlanEstudio { get; set; }
+    }
+    public class MateriaEnPlanPutDTO
+    {
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Las horas de reloj anuales son necesarias")]
+        public int HrsRelojAnuales { get; set; }
+
+        [Required(ErrorMessage = "Las horas de cátedra semanales son necesarias")]
+        public int HrsCatedraSemanales { get; set; }
+
+        [Required(ErrorMessage = "Saber si la materia es anual o cuatrimestral es necesario")]
+        [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string Anual_Cuatrimestral { get; set; }
         public int Anno { get; set; }
         public int? NumeroOrden { get; set; }
-        public string NombreMateria { get; set; }
-        public int AnnoPlanEstudio { get; set; }
     }
-
     public class MateriaEnPlanSearchDTO
     {
         public string NombreCarrera { get; set; }

@@ -4,6 +4,7 @@ using WebITSC.Admin.Server.Repositorio;
 using WebITSC.DB.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
 using WebITSC.Shared.General.DTO;
+using WebITSC.DB.Data;
 
 namespace WebITSC.Admin.Server.Controllers
 {
@@ -43,6 +44,7 @@ namespace WebITSC.Admin.Server.Controllers
                    return sel;
            }
 
+
             [HttpGet("existe/{id:int}")]
             public async Task<ActionResult<bool>> Existe(int id)
             {
@@ -71,6 +73,7 @@ namespace WebITSC.Admin.Server.Controllers
             [HttpPut("{id:int}")]
             public async Task<ActionResult> Put(int id, [FromBody] Materia entidad)
             {
+
                 if (id != entidad.Id)
                 {
                     return BadRequest("Datos incorrectos");
@@ -95,6 +98,21 @@ namespace WebITSC.Admin.Server.Controllers
                 {
                     return BadRequest(e.Message);
                 }
+            }
+
+            [HttpPut("Actualizar/{id}")]
+            public async Task<ActionResult> UpdateMateria(int id, [FromBody] PutNombreMateriaDTO materiaDTO)
+            {
+                var materia = await repositorio.SelectById(id);
+                if (materia == null)
+                {
+                    return NotFound("Materia no encontrada");
+                }
+
+                materia.Nombre = materiaDTO.Nombre;
+                await repositorio.Update(id, materia);
+
+                return NoContent();
             }
 
             [HttpDelete("{id:int}")]

@@ -38,7 +38,7 @@
 
 @if (materiasPlanEstudio != null && materiasPlanEstudio.Any())
 {
-    <h4 class="mt-4">Materias Encontradas</h4>
+    <h4 class="mt-4">Materias en el Plan de Estudio</h4>
     <table class="table table-striped mt-3">
         <thead>
             <tr>
@@ -55,26 +55,169 @@
             @foreach (var materia in materiasPlanEstudio)
             {
                 <tr>
-                    <td>@materia.NombreMateria</td>
+                    <td>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>@materia.NombreMateria</span>
+                            <button class="btn btn-primary btn-sm ml-2"
+                                    @onclick="() => RedirigirAModificarMateria(materia.MateriaId)">
+                                Editar
+                            </button>
+                        </div>
+                    </td>
                     <td>@materia.AnnoPlanEstudio</td>
                     <td>@materia.Anno</td>
                     <td>@materia.HrsRelojAnuales</td>
                     <td>@materia.HrsCatedraSemanales</td>
                     <td>@materia.Anual_Cuatrimestral</td>
                     <td>@(materia.NumeroOrden.HasValue ? materia.NumeroOrden.ToString() : "-")</td>
+                    <td>
+                        <!-- Botón Modificar -->
+                        <button class="btn btn-sm btn-warning btn-sm" @onclick="() => AbrirModalEditar(materia.Id)">Modificar</button>
+
+                        <!-- Botón Eliminar -->
+                        <button class="btn btn-sm btn-danger btn-sm" @onclick="() => ConfirmarEliminar(materia.Id)">Eliminar</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <div class="text-right mt-3">
+        <button class="btn btn-success" @onclick="AbrirModalAgregar">Agregar Materia</button>
+    </div>
 }
 else if (materiasPlanEstudio != null)
 {
     <p class="mt-4">No se encontraron resultados.</p>
 }
+@if (mostrarModalEditar)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Materia en Plan</h5>
+                    <small class="text-muted d-block mb-3">
+                        Si quiere cambiar el Plan al que pertenece, elimine este registro y agréguelo al Plan correspondiente.
+                        Si quiere editar el nombre de la materia haga click en el botón editar y modifique los parámetros que desee de esa materia.
+                        </small>
+                    <button type="button" class="close" @onclick="CerrarModalEditar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@materiaSeleccionada" OnValidSubmit="GuardarCambios">
+                        <DataAnnotationsValidator />
+                        <div class="form-group">
+                            <label for="HrsRelojAnuales">Horas Reloj Anuales</label>
+                            <InputNumber id="HrsRelojAnuales" class="form-control" @bind-Value="materiaSeleccionada.HrsRelojAnuales" />
+                        </div>
+                        <div class="form-group">
+                            <label for="HrsCatedraSemanales">Horas Cátedra Semanales</label>
+                            <InputNumber id="HrsCatedraSemanales" class="form-control" @bind-Value="materiaSeleccionada.HrsCatedraSemanales" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Anual_Cuatrimestral">Anual/Cuatrimestral</label>
+                            <InputText id="Anual_Cuatrimestral" class="form-control" @bind-Value="materiaSeleccionada.Anual_Cuatrimestral" />
+                        </div>
+                        <div class="form-group">
+                            <label for="NumeroOrden">Número de Orden</label>
+                            <InputNumber id="NumeroOrden" class="form-control" @bind-Value="materiaSeleccionada.NumeroOrden" />
+                        </div>
+                        <button type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CerrarModalEditar">Cancelar</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (mostrarConfirmacionEliminar)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar Registro</h5>
+                    <button type="button" class="close" @onclick="CerrarConfirmacionEliminar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea eliminar este registro?</p>
+                    <button class="btn btn-danger" @onclick="EliminarRegistro">Aceptar</button>
+                    <button class="btn btn-secondary" @onclick="CerrarConfirmacionEliminar">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*
+@if (mostrarModalAgregar)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Agregar Nueva Materia al Plan de Estudio</h5>
+                    <button type="button" class="close" @onclick="CerrarModalAgregar">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@nuevaMateria" OnValidSubmit="AgregarNuevaMateria">
+                        <DataAnnotationsValidator />
+                        <div class="form-group">
+                            <label for="PlanEstudioId">Plan de Estudio</label>
+                            <select id="PlanEstudioId" class="form-control" @bind-Value="nuevaMateria.PlanEstudioId">
+                                @foreach (var plan in planesEstudio)
+                                {
+                                    <option value="@plan.Id">@plan.Nombre (@plan.Anno)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="MateriaId">Materia</label>
+                            <select id="MateriaId" class="form-control" @bind-Value="nuevaMateria.MateriaId">
+                                @foreach (var materia in materias)
+                                {
+                                    <option value="@materia.Id">@materia.Nombre</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="HrsRelojAnuales">Horas Reloj Anuales</label>
+                            <InputNumber id="HrsRelojAnuales" class="form-control" @bind-Value="nuevaMateria.HrsRelojAnuales" />
+                        </div>
+                        <div class="form-group">
+                            <label for="HrsCatedraSemanales">Horas Cátedra Semanales</label>
+                            <InputNumber id="HrsCatedraSemanales" class="form-control" @bind-Value="nuevaMateria.HrsCatedraSemanales" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Anual_Cuatrimestral">Anual/Cuatrimestral</label>
+                            <InputText id="Anual_Cuatrimestral" class="form-control" @bind-Value="nuevaMateria.Anual_Cuatrimestral" />
+                        </div>
+                        <div class="form-group">
+                            <label for="NumeroOrden">Número de Orden</label>
+                            <InputNumber id="NumeroOrden" class="form-control" @bind-Value="nuevaMateria.NumeroOrden" />
+                        </div>
+                        <button type="submit" class="btn btn-success">Aceptar</button>
+                        <button type="button" class="btn btn-secondary" @onclick="CerrarModalAgregar">Cancelar</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    *@
 @code {
     private MateriaEnPlanSearchDTO searchParams = new();
     private List<CarreraSearchDTO> carreras = new();
     private List<TraerMateriaEnPlanDTO> materiasPlanEstudio;
+    //------------------- Nuevo -------------------------
+    private bool mostrarModalEditar = false;
+    private bool mostrarConfirmacionEliminar = false;
+    private int idParaEliminar;
+    private TraerMateriaEnPlanDTO materiaSeleccionada;
+    private bool mostrarModalAgregar = false;
+    private MateriaEnPlanPutDTO nuevaMateria = new MateriaEnPlanPutDTO();
+    private List<GetByCarreraAnnoPlanEstudioDTO> planesEstudio; // Lista de Planes de Estudio
+    private List<GetMateriaDTO> materias; // Lista de Materias disponibles
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,5 +261,116 @@ else if (materiasPlanEstudio != null)
             materiasPlanEstudio = new List<TraerMateriaEnPlanDTO>();
         }
         StateHasChanged();
+    }
+    // ----------------------------------------------------------------------------------------
+    //De acá para abajo ajustar según los controllers a crear
+
+    private void AbrirModalEditar(int id)
+    {
+        // Buscar la materia por ID en la lista y cargar los datos en el modelo
+        materiaSeleccionada = materiasPlanEstudio.FirstOrDefault(m => m.Id == id);
+        mostrarModalEditar = true;
+    }
+
+    private void CerrarModalEditar()
+    {
+        materiaSeleccionada = null;
+        mostrarModalEditar = false;
+    }
+
+    private async Task GuardarCambios()
+    {
+        var url = $"api/MateriaEnPlanEstudio/Actualizar{materiaSeleccionada.Id}";
+        var response = await http.PutAsJsonAsync(url, materiaSeleccionada);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Cambios guardados correctamente");
+
+            // Actualizar la lista de materias si es necesario
+            StateHasChanged();
+        }
+        else
+        {
+            Console.WriteLine("Error al guardar los cambios");
+        }
+        CerrarModalEditar();
+        
+    }
+
+    private void ConfirmarEliminar(int id)
+    {
+        idParaEliminar = id;
+        mostrarConfirmacionEliminar = true;
+    }
+
+    private void CerrarConfirmacionEliminar()
+    {
+        idParaEliminar = 0;
+        mostrarConfirmacionEliminar = false;
+    }
+
+    private async Task EliminarRegistro()
+    {
+        // Lógica para eliminar el registro de la base de datos
+        var url = $"api/MateriaEnPlanEstudio/{idParaEliminar}";
+        var response = await http.DeleteAsync(url);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Registro eliminado correctamente");
+            // Actualizar la lista de materias
+            materiasPlanEstudio = materiasPlanEstudio.Where(m => m.Id != idParaEliminar).ToList();
+        }
+        else
+        {
+            Console.WriteLine("Error al eliminar el registro");
+        }
+        CerrarConfirmacionEliminar();
+    }
+
+    private void AbrirModalAgregar()
+    {
+        // Preseleccionar el plan de estudio de la búsqueda actual
+       // nuevaMateria.PlanEstudioId = planSeleccionado.Id;
+       // nuevaMateria.AnnoPlanEstudio = planSeleccionado.Anno;
+       // nuevaMateria.Carrera = planSeleccionado.Carrera;
+
+        mostrarModalAgregar = true;
+    }
+
+    private void CerrarModalAgregar()
+    {
+       // nuevaMateria = new TraerMateriaEnPlanDTO();
+        mostrarModalAgregar = false;
+    }
+
+    private async Task AgregarNuevaMateria() 
+    {
+        //MateriaEnPlanDeEstudio sería la entidad a Agregar, no "Materia".
+        //El método se llama así por simpleza del nombre.
+        //-----------------------------------------------------------------------
+        var url = "api/MateriaEnPlanEstudio/Acutalizar";
+        var response = await http.PostAsJsonAsync(url, nuevaMateria);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Registro agregado correctamente");
+            // Actualizar la lista de materias en el plan de estudio
+            //materiasPlanEstudio.Add(nuevaMateria);
+        }
+        else
+        {
+            Console.WriteLine("Error al agregar el registro");
+        }
+        CerrarModalAgregar();
+    }
+
+    private async Task RedirigirAModificarMateria(int materiaId)
+    {
+        // Redirige a la página de gestión de Materias, con el id de la materia para modificar
+        // Comentada por que la página en cuestión no existe tdoavía.
+        // Navigation.NavigateTo($"/Administracion/Materia/{materiaId}");
+        Console.WriteLine($"Redirigiendo a la página de gestión de Materia con Id: {materiaId}");
     }
 }

@@ -85,5 +85,34 @@ namespace WebITSC.Admin.Server.Repositorio
                 .Include(p => p.PlanEstudio)
                 .ToListAsync();
         }
+
+        
+        /*
+         public async Task<bool> Update(int id, E entidad)
+        {
+            if (id != entidad.Id)
+            {
+                return false;
+            }
+            var EntidadExistente = await SelectById(id);
+
+            if (EntidadExistente == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                context.Entry(EntidadExistente).CurrentValues.SetValues(entidad);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+         */
     }
 }
