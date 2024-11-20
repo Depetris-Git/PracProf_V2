@@ -9,8 +9,6 @@
 
 <button class="btn btn-primary" @onclick="IrACargaAlumnos" style="position: fixed; top: 80px; right: 20px;"> Cargar + Alumnos</button>
 
-
-
 <!-- Filtros de búsqueda -->
 <div class="form-group">
     <label for="search">Buscar</label>
@@ -33,7 +31,6 @@
     <InputNumber class="form-control" id="cohorteFilter" @bind-Value="selectedCohorte" />
 </div>
 
-
 <!-- Tabla de Alumnos -->
 <table class="table table-striped">
     <thead>
@@ -55,6 +52,7 @@
             <th>Foto Carnet</th>
             <th>CUS</th>
             <th>Estado</th>
+            <th>Acciones</th> <!-- Nueva columna para acciones -->
         </tr>
     </thead>
     <tbody>
@@ -78,6 +76,9 @@
                 <td>@alumno.FotoCarnet</td>
                 <td>@alumno.Cus</td>
                 <td>@(alumno.EstadoAlumno ? "Activo" : "Inactivo")</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => IrAEditarAlumno(alumno.Documento)">Editar</button>
+                </td>
             </tr>
         }
     </tbody>
@@ -157,4 +158,9 @@
         Navigation.NavigateTo("/Administracion/CargaAlumnos");
     }
 
+    private void IrAEditarAlumno(string documento)
+    {
+        // Redirige a la página de edición del alumno utilizando el documento
+        Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
+    }
 }
