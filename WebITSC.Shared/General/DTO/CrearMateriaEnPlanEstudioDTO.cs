@@ -57,6 +57,9 @@ namespace WebITSC.Shared.General.DTO
 
         [Required(ErrorMessage = "Id de la materia asociada es necesario")]
         public int MateriaId;
+
+        [Required(ErrorMessage = "Id del plan de estudio asociado es necesario")]
+        public int PlanEstudioId;
         public int AnnoPlanEstudio { get; set; }
     }
     public class MateriaEnPlanPutDTO

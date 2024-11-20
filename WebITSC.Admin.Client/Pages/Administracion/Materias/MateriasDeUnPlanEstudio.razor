@@ -97,13 +97,13 @@ else if (materiasPlanEstudio != null)
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Editar Materia en Plan</h5>
-                    <small class="text-muted d-block mb-3">
-                        Si quiere cambiar el Plan al que pertenece, elimine este registro y agréguelo al Plan correspondiente.
-                        Si quiere editar el nombre de la materia haga click en el botón editar y modifique los parámetros que desee de esa materia.
-                        </small>
                     <button type="button" class="close" @onclick="CerrarModalEditar">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <small class="text-muted d-block mb-3">
+                        Si quiere cambiar el Plan al que pertenece, elimine este registro y agréguelo al Plan correspondiente.
+                        Si quiere editar el nombre de la materia haga click en el botón editar y modifique los parámetros que desee de esa materia.
+                    </small>
                     <EditForm Model="@materiaSeleccionada" OnValidSubmit="GuardarCambios">
                         <DataAnnotationsValidator />
                         <div class="form-group">
