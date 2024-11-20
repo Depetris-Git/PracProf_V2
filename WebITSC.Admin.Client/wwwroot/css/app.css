@@ -150,3 +150,20 @@ body, html {
     align-items: center; /* Centra el contenido verticalmente */
     text-align: center; /* Centra el texto dentro del contenedor */
 }
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.center-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+}
+/*_________________________________________
+*/
+/* Fijar el navbar en la parte superior */
+
