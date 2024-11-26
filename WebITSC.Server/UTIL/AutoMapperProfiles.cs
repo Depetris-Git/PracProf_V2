@@ -17,21 +17,34 @@ namespace WebITSC.Admin.Server.UTIL
         {
             CreateMap<CrearAlumnoDTO, Alumno>();
 
-
-            // Mapeo de CrearAlumnoDTO a Persona
             CreateMap<CrearAlumnoDTO, Persona>()
-                                    .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
-                                    .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))
-                                    .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento))
-                                    .ForMember(dest => dest.TipoDocumentoId, opt => opt.MapFrom(src => src.TipoDocumentoId))
-                                    .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
-                                    .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))
+                .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento))
+                .ForMember(dest => dest.TipoDocumentoId, opt => opt.MapFrom(src => src.TipoDocumentoId))
+                .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
 
-            
-            // Mapeo de CrearAlumnoDTO a Usuario (también podrías hacerlo si la lógica de tu usuario depende del DTO)
             CreateMap<CrearAlumnoDTO, Usuario>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Contrasena));
+
+
+            CreateMap<Alumno, EditarAlumnoDTO>().ReverseMap();
+            CreateMap<EditarAlumnoDTO, Alumno>();
+
+            CreateMap<EditarAlumnoDTO, Persona>()
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))
+                .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento))
+                .ForMember(dest => dest.TipoDocumentoId, opt => opt.MapFrom(src => src.TipoDocumentoId))
+                .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
+
+            CreateMap<EditarAlumnoDTO, Usuario>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Contrasena));
+
 
 
             CreateMap<Alumno, Shared.General.DTO.Alumnos.GetAlumnoDTO>()

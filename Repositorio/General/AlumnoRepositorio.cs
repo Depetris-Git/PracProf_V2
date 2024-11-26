@@ -119,7 +119,26 @@ namespace WebITSC.Admin.Server.Repositorio
             
         }
 
-            
+
+        //-----------editar alumno------------------------
+
+        public async Task<Alumno> GetAlumnoPorDocumento(string documento)
+        {
+            return await context.Alumnos
+                .Include(a => a.Usuario)
+                .Include(a => a.Usuario.Persona)
+                .FirstOrDefaultAsync(a => a.Usuario.Persona.Documento == documento);
+        }
+
+
+        public async Task<bool> Update(Alumno alumno)
+        {
+            context.Alumnos.Update(alumno);
+            return await context.SaveChangesAsync() > 0;
+        }
+
+        //---------------------------------------------------
+
         public async Task<bool> EliminarAlumno(int alumnoId)
         {
             using (var transaction = await context.Database.BeginTransactionAsync())
