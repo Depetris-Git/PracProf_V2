@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Administracion\**" />
     <Compile Remove="Alumnos\**" />
+    <Compile Remove="Alumno\**" />
+    <Compile Remove="Docente\**" />
     <Compile Remove="Profesores\**" />
+    <EmbeddedResource Remove="Administracion\**" />
     <EmbeddedResource Remove="Alumnos\**" />
+    <EmbeddedResource Remove="Alumno\**" />
+    <EmbeddedResource Remove="Docente\**" />
     <EmbeddedResource Remove="Profesores\**" />
+    <None Remove="Administracion\**" />
     <None Remove="Alumnos\**" />
+    <None Remove="Alumno\**" />
+    <None Remove="Docente\**" />
     <None Remove="Profesores\**" />
   </ItemGroup>
 
@@ -34,9 +43,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Alumno\" />
-    <Folder Include="Administracion\" />
-    <Folder Include="Docente\" />
+    <Folder Include="General\Admin\" />
+    <Folder Include="General\Alumnos\" />
+    <Folder Include="General\Profes\" />
   </ItemGroup>
 
 </Project>

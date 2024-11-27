@@ -7,6 +7,7 @@ using WebITSC.Admin.Server.Repositorio;
 using WebITSC.DB.Data.Entity;
 using WebITSC.DB.Data;
 using Microsoft.EntityFrameworkCore;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace Repositorio.General
 {
@@ -26,7 +27,7 @@ namespace Repositorio.General
 
         public async Task<int> GetByNombre(string nombreCarrera)
         {
-            var a = await context.Set<Carrera>().FindAsync(nombreCarrera);
+            var a = await context.Carreras.FirstOrDefaultAsync(u => u.Nombre == nombreCarrera);
             if (a != null)
             {
                 return a.Id;

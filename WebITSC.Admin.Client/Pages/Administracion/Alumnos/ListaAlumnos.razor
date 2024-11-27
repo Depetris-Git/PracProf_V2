@@ -1,4 +1,4 @@
-﻿@page "/lista-alumnos"
+﻿@page "/Administracion/ListaAlumnos"
 @using WebITSC.Shared.General.DTO.Alumnos
 @using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
 @using WebITSC.Shared.General.DTO.Carreraa
@@ -6,6 +6,8 @@
 @inject NavigationManager Navigation
 
 <h3>Lista de Alumnos</h3>
+
+<button class="btn btn-primary" @onclick="IrACargaAlumnos" style="position: fixed; top: 80px; right: 20px;"> Cargar + Alumnos</button>
 
 <!-- Filtros de búsqueda -->
 <div class="form-group">
@@ -19,10 +21,12 @@
         <option value="">Seleccione una carrera</option>
         @foreach (var carrera in availableCarreras)
         {
-            <option value="@carrera.Id">@carrera.Nombre</option>
+            <option value="@carrera.Nombre">@carrera.Nombre</option>
+            // Aquí cambiamos a "Nombre"
         }
     </InputSelect>
 </div>
+
 
 <div class="form-group">
     <label for="cohorteFilter">Filtrar por Cohorte</label>
@@ -50,6 +54,7 @@
             <th>Foto Carnet</th>
             <th>CUS</th>
             <th>Estado</th>
+            <th>Acciones</th> <!-- Nueva columna para acciones -->
         </tr>
     </thead>
     <tbody>
@@ -73,6 +78,9 @@
                 <td>@alumno.FotoCarnet</td>
                 <td>@alumno.Cus</td>
                 <td>@(alumno.EstadoAlumno ? "Activo" : "Inactivo")</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => IrAEditarAlumno(alumno.Documento)">Editar</button>
+                </td>
             </tr>
         }
     </tbody>
@@ -81,7 +89,7 @@
 @code {
     private List<BuscarAlumnoDTO> alumnos = new List<BuscarAlumnoDTO>();
     private List<GetCarreraDTO> availableCarreras = new List<GetCarreraDTO>(); // Carreras obtenidas del backend
-    private string selectedCarrera = string.Empty;  // Carrera seleccionada
+    private string selectedCarrera = null; // Carrera seleccionada
     private int? selectedCohorte = null;  // Cohorte seleccionado
     private string searchTerm = string.Empty;
 
@@ -144,5 +152,17 @@
         {
             Console.WriteLine($"Error al obtener los alumnos o carreras: {ex.Message}");
         }
+    }
+
+    private void IrACargaAlumnos()
+    {
+        // Redirige a la página de CargaAlumnos
+        Navigation.NavigateTo("/Administracion/CargaAlumnos");
+    }
+
+    private void IrAEditarAlumno(string documento)
+    {
+        // Redirige a la página de edición del alumno utilizando el documento
+        Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
     }
 }

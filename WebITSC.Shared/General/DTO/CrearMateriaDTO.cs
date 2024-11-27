@@ -29,4 +29,21 @@ namespace WebITSC.Shared.General.DTO
         [Required(ErrorMessage = "El año de la materia es necesario")]
         public int Anno { get; set; }
     }
+
+    public class GetMateriaDTO
+    {
+        [Required(ErrorMessage = "El nombre de la materia es necesario")]
+        [MaxLength(36, ErrorMessage = "Máximo número de caracteres {1}.")]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El año de la materia es necesario")]
+        public int Anno { get; set; }
+    }
+
+    public class PutNombreMateriaDTO 
+    {
+        [Required(ErrorMessage = "El nombre de la materia es necesario")]
+        [MaxLength(36, ErrorMessage = "Máximo número de caracteres {1}.")]
+        public string Nombre { get; set; }
+    }
 }

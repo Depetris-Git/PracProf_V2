@@ -49,7 +49,6 @@ namespace WebITSC.Admin.Server.Repositorio
             try
             {
                 return await context.PlanesEstudio
-                        .Include(u => u.Carrera)
                         .Where(u => u.CarreraId == carreraId && u.Anno == anno)
                         .FirstOrDefaultAsync();
             }

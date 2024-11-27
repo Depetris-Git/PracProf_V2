@@ -1,0 +1,254 @@
+﻿@page "/Administracion/EditarAlumnos/{documento}"
+@inject IHttpServicios http
+@inject NavigationManager Navigation
+@inject HttpClient HttpClient
+@using System.Net.Http.Json
+@using WebITSC.Shared.General.DTO.Alumnos
+@using Microsoft.AspNetCore.Components
+
+<h3>Editar Alumno</h3>
+
+<EditForm Model="editarAlumno" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="CarreraId">Carrera</label>
+        <InputSelect class="form-control" id="CarreraId" @bind-Value="editarAlumno.CarreraId">
+            <option value="">Seleccione...</option>
+            @foreach (var carrera in carreras)
+            {
+                <option value="@carrera.Id">@carrera.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="Nombre">Nombre</label>
+        <InputText class="form-control" id="Nombre" @bind-Value="editarAlumno.Nombre" />
+    </div>
+
+    <div class="form-group">
+        <label for="Apellido">Apellido</label>
+        <InputText class="form-control" id="Apellido" @bind-Value="editarAlumno.Apellido" />
+    </div>
+
+    <div class="form-group">
+        <label for="Documento">Documento</label>
+        <InputText class="form-control" id="Documento" @bind-Value="editarAlumno.Documento" />
+    </div>
+
+    <div class="form-group">
+        <label for="TipoDocumentoId">Tipo de Documento</label>
+        <InputSelect class="form-control" id="TipoDocumentoId" @bind-Value="editarAlumno.TipoDocumentoId">
+            <option value="">Seleccione...</option>
+            @foreach (var tipo in tiposDocumentos)
+            {
+                <option value="@tipo.Id">@tipo.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="Telefono">Teléfono</label>
+        <InputText class="form-control" id="Telefono" @bind-Value="editarAlumno.Telefono" />
+    </div>
+
+    <div class="form-group">
+        <label for="Domicilio">Domicilio</label>
+        <InputText class="form-control" id="Domicilio" @bind-Value="editarAlumno.Domicilio" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <InputText class="form-control" id="Email" @bind-Value="editarAlumno.Email" />
+    </div>
+
+    <div class="form-group">
+        <label for="Contrasena">Contraseña</label>
+        <InputText class="form-control" id="Contrasena" @bind-Value="editarAlumno.Contrasena" />
+    </div>
+
+    <div class="form-group">
+        <label for="Sexo">Sexo</label>
+        <InputText class="form-control" id="Sexo" @bind-Value="editarAlumno.Sexo" />
+    </div>
+
+    <div class="form-group">
+        <label for="FechaNacimiento">Fecha de Nacimiento</label>
+        <InputDate class="form-control" id="FechaNacimiento" @bind-Value="editarAlumno.FechaNacimiento" />
+    </div>
+
+    <div class="form-group">
+        <label for="Edad">Edad</label>
+        <InputNumber class="form-control" id="Edad" @bind-Value="editarAlumno.Edad" />
+    </div>
+
+    <div class="form-group">
+        <label for="Pais">País</label>
+        <InputText class="form-control" id="Pais" @bind-Value="editarAlumno.Pais" />
+    </div>
+
+    <div class="form-group">
+        <label for="Provincia">Provincia</label>
+        <InputText class="form-control" id="Provincia" @bind-Value="editarAlumno.Provincia" />
+    </div>
+
+    <div class="form-group">
+        <label for="Departamento">Departamento</label>
+        <InputText class="form-control" id="Departamento" @bind-Value="editarAlumno.Departamento" />
+    </div>
+
+    <div class="form-group">
+        <label for="CUIL">CUIL</label>
+        <InputText class="form-control" id="CUIL" @bind-Value="editarAlumno.CUIL" />
+    </div>
+
+    <div class="form-group">
+        <label for="TituloBase">Título Base</label>
+        <InputText class="form-control" id="TituloBase" @bind-Value="editarAlumno.TituloBase" />
+    </div>
+
+    <!-- Modificación de los checkboxes -->
+    <div class="form-group">
+        <label for="TieneFotocopiaDNI">Fotocopia de DNI</label>
+        <InputCheckbox class="form-check-input" id="TieneFotocopiaDNI" @bind-Value="FotocopiaDNIBool" />
+    </div>
+
+    <div class="form-group">
+        <label for="TieneConstanciaCUIL">Constancia CUIL</label>
+        <InputCheckbox class="form-check-input" id="TieneConstanciaCUIL" @bind-Value="ConstanciaCUILBool" />
+    </div>
+
+    <div class="form-group">
+        <label for="TienePartidaNacimiento">Partida de Nacimiento</label>
+        <InputCheckbox class="form-check-input" id="TienePartidaNacimiento" @bind-Value="PartidaNacimientoBool" />
+    </div>
+
+    <div class="form-group">
+        <label for="TieneAnalitico">Analítico</label>
+        <InputCheckbox class="form-check-input" id="TieneAnalitico" @bind-Value="AnaliticoBool" />
+    </div>
+
+    <div class="form-group">
+        <label for="TieneFotoCarnet">Foto Carnet</label>
+        <InputCheckbox class="form-check-input" id="TieneFotoCarnet" @bind-Value="FotoCarnetBool" />
+    </div>
+
+    <div class="form-group">
+        <label for="TieneCUS">CUS</label>
+        <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string documento { get; set; }
+
+    private EditarAlumnoDTO editarAlumno = new EditarAlumnoDTO();
+    private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
+    private List<Carrera> carreras = new List<Carrera>();
+
+    // Propiedades booleanas que se vinculan con los checkboxes
+    private bool FotocopiaDNIBool
+    {
+        get => editarAlumno.FotocopiaDNI == "Sí";
+        set => editarAlumno.FotocopiaDNI = value ? "Sí" : "No";
+    }
+
+    private bool ConstanciaCUILBool
+    {
+        get => editarAlumno.ConstanciaCUIL == "Sí";
+        set => editarAlumno.ConstanciaCUIL = value ? "Sí" : "No";
+    }
+
+    private bool PartidaNacimientoBool
+    {
+        get => editarAlumno.PartidaNacimiento == "Sí";
+        set => editarAlumno.PartidaNacimiento = value ? "Sí" : "No";
+    }
+
+    private bool AnaliticoBool
+    {
+        get => editarAlumno.Analitico == "Sí";
+        set => editarAlumno.Analitico = value ? "Sí" : "No";
+    }
+
+    private bool FotoCarnetBool
+    {
+        get => editarAlumno.FotoCarnet == "Sí";
+        set => editarAlumno.FotoCarnet = value ? "Sí" : "No";
+    }
+
+    private bool CUSBool
+    {
+        get => editarAlumno.CUS == "Sí";
+        set => editarAlumno.CUS = value ? "Sí" : "No";
+    }
+
+    // Este método se ejecuta al cargar la página
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Cargar tipos de documentos y carreras desde el API
+            var tiposDocumentosResponse = await http.Get<List<TipoDocumento>>("api/TipoDocumento");
+            if (!tiposDocumentosResponse.Error)
+            {
+                tiposDocumentos = tiposDocumentosResponse.Respuesta;
+            }
+
+            var carrerasResponse = await http.Get<List<Carrera>>("api/Carreras");
+            if (!carrerasResponse.Error)
+            {
+                carreras = carrerasResponse.Respuesta;
+            }
+
+            // Cargar datos del alumno a editar
+            var alumnoResponse = await http.Get<EditarAlumnoDTO>($"api/Alumnos/documento/{documento}");
+            if (!alumnoResponse.Error)
+            {
+                editarAlumno = alumnoResponse.Respuesta;
+            }
+            else
+            {
+                Console.WriteLine($"Error: No se encontró el alumno con documento {documento}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+    }
+
+    // Este método se ejecuta cuando el formulario es enviado y válido
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            // Enviar datos al backend para actualizar el alumno
+            var response = await http.Put($"api/Alumnos/documento/{documento}", editarAlumno);
+
+            if (!response.Error)
+            {
+                // Redirigir a la lista de alumnos o a una página de éxito
+                Navigation.NavigateTo("/Administracion/ListaAlumnos");
+            }
+            else
+            {
+                // Manejar el error, por ejemplo, mostrar un mensaje de error
+                var errorMessage = await response.HttpResponseMessage.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error: {errorMessage}");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar el error de conexión o cualquier otra excepción
+            Console.WriteLine($"Exception: {ex.Message}");
+        }
+    }
+}
+
+

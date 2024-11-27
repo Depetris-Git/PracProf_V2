@@ -6,6 +6,8 @@ namespace WebITSC.Admin.Server.Repositorio
 {
     public interface IAlumnoRepositorio: IRepositorio<Alumno>
     {
+        Task<Alumno> GetAlumnoPorDocumento(string documento);
+        Task<bool> Update(Alumno alumno);
         Task<ActionResult<IEnumerable<BuscarAlumnoDTO>>> BuscarAlumnos(string? nombre, string? apellido, string? documento, int? cohorte);
         Task<bool> Delete(int id);
         Task<bool> Existe(int id);

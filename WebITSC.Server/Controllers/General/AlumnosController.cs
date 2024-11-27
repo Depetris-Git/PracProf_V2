@@ -12,7 +12,7 @@ using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs;
 namespace WebITSC.Server.Controllers.General
 {
     [ApiController]
-    [Route("api/Alumnos")]
+    [Route("/api/Alumnos")]
     public class AlumnosController : ControllerBase
     {
         private readonly IAlumnoRepositorio eRepositorio;
@@ -83,7 +83,46 @@ namespace WebITSC.Server.Controllers.General
             return Ok(alumnos.Value);
         }
 
-        
+
+        //--------editar alumno------
+
+
+        [HttpGet("documento/{documento}")]
+        public async Task<ActionResult<EditarAlumnoDTO>> GetAlumnoPorDocumento(string documento)
+        {
+            var alumno = await eRepositorio.GetAlumnoPorDocumento(documento);
+
+            if (alumno == null)
+            {
+                return NotFound();
+            }
+
+            var dto = mapper.Map<EditarAlumnoDTO>(alumno);
+            return Ok(dto);
+        }
+
+        [HttpPut("documento/{documento}")]
+        public async Task<IActionResult> UpdateAlumno(string documento, EditarAlumnoDTO dto)
+        {
+            var alumno = await eRepositorio.GetAlumnoPorDocumento(documento);
+
+            if (alumno == null)
+            {
+                return NotFound();
+            }
+
+            // Actualizar los campos del alumno
+            mapper.Map(dto, alumno);
+            var result = await eRepositorio.Update(alumno);
+
+            if (!result)
+            {
+                return BadRequest("No se pudo actualizar el alumno.");
+            }
+
+            return NoContent();
+        }
+        //--------------------------------------------------------------------
 
         // Crear nuevo alumno
         [HttpPost]
@@ -170,6 +209,7 @@ namespace WebITSC.Server.Controllers.General
             // Retorna el nuevo alumno creado, con un código HTTP 201 (creado)
             return CreatedAtAction(nameof(GetById), new { id = alumno.Id }, getAlumnoDTO);
         }
+
 
         // Actualizar alumno
         [HttpPut("{id:int}")]

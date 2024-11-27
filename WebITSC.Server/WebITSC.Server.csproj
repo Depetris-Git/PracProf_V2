@@ -7,13 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Administracion\**" />
     <Compile Remove="Controllers\Alumnos\**" />
+    <Compile Remove="Controllers\Alumno\**" />
+    <Compile Remove="Controllers\Docente\**" />
     <Compile Remove="Controllers\Profesores\**" />
+    <Content Remove="Controllers\Administracion\**" />
     <Content Remove="Controllers\Alumnos\**" />
+    <Content Remove="Controllers\Alumno\**" />
+    <Content Remove="Controllers\Docente\**" />
     <Content Remove="Controllers\Profesores\**" />
+    <EmbeddedResource Remove="Controllers\Administracion\**" />
     <EmbeddedResource Remove="Controllers\Alumnos\**" />
+    <EmbeddedResource Remove="Controllers\Alumno\**" />
+    <EmbeddedResource Remove="Controllers\Docente\**" />
     <EmbeddedResource Remove="Controllers\Profesores\**" />
+    <None Remove="Controllers\Administracion\**" />
     <None Remove="Controllers\Alumnos\**" />
+    <None Remove="Controllers\Alumno\**" />
+    <None Remove="Controllers\Docente\**" />
     <None Remove="Controllers\Profesores\**" />
   </ItemGroup>
 
@@ -33,12 +45,6 @@
     <ProjectReference Include="..\WebITSC.Admin.Client\WebITSC.Admin.Client.csproj" />
     <ProjectReference Include="..\WebITSC.DB\WebITSC.DB.csproj" />
     <ProjectReference Include="..\WebITSC.Shared\WebITSC.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Administracion\" />
-    <Folder Include="Controllers\Docente\" />
-    <Folder Include="Controllers\Alumno\" />
   </ItemGroup>
 
 </Project>
