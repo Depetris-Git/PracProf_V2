@@ -16,6 +16,10 @@ namespace WebITSC.Admin.Server.UTIL
         public AutoMapperProfiles()
         {
             CreateMap<CrearAlumnoDTO, Alumno>();
+                                    //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
+                                    //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
+                                    //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
+                                    //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
 
 
             // Mapeo de CrearAlumnoDTO a Persona
@@ -75,16 +79,12 @@ namespace WebITSC.Admin.Server.UTIL
             //_TDOCUMENTO_____________________________________________________________________________________________________________________________________
             CreateMap<CrearTipoDocumentoDTO, TipoDocumento>();
             CreateMap<TipoDocumento, GetTipoDocumentoDTO>();
-
             CreateMap<CrearCertificadoAlumnoDTO, CertificadoAlumno>();
             CreateMap<CrearClaseDTO, Clase>();
             CreateMap<CrearClaseAsistenciaDTO, ClaseAsistencia>();
-            CreateMap<CrearCoordinadorDTO, Coordinador>();
             CreateMap<CrearCorrelatividadDTO, Correlatividad>();
-            CreateMap<CrearCUPOF_CoordinadorDTO, CUPOF_Coordinador>();
             CreateMap<CrearCursadoMateriaDTO, CursadoMateria>();
             CreateMap<CrearEvaluacionDTO, Evaluacion>();
-            CreateMap<CrearMABDTO, MAB>();
             CreateMap<CrearMateriaDTO, Materia>();
             CreateMap<CrearMateriaEnPlanEstudioDTO, MateriaEnPlanEstudio>();
             CreateMap<CrearNotaDTO, Nota>();

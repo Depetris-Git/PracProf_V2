@@ -12,8 +12,8 @@ using WebITSC.DB.Data;
 namespace WebITSC.DB.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241031215924_inicio")]
-    partial class inicio
+    [Migration("20241126153349_InicioNuevo")]
+    partial class InicioNuevo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,11 +49,7 @@ namespace WebITSC.DB.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
-                    b.Property<string>("Departamento")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<int>("Edad")
+                    b.Property<int>("DepartamentoId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Estado")
@@ -70,18 +66,18 @@ namespace WebITSC.DB.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
-                    b.Property<string>("Pais")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("LocalidadId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaisId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PartidaNacimiento")
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<string>("Provincia")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                    b.Property<int>("ProvinciaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Sexo")
                         .IsRequired()
@@ -89,6 +85,7 @@ namespace WebITSC.DB.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TituloBase")
+                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
@@ -97,81 +94,17 @@ namespace WebITSC.DB.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartamentoId");
+
+                    b.HasIndex("LocalidadId");
+
+                    b.HasIndex("PaisId");
+
+                    b.HasIndex("ProvinciaId");
+
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Alumnos");
-                });
-
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.CUPOF_Coordinador", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CUPOF")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<int>("CarreraId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CoordinadorId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Ocupado_Libre")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Sede")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarreraId");
-
-                    b.HasIndex("CoordinadorId");
-
-                    b.ToTable("CUPOFs_Coordinador");
-                });
-
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.CUPOF_Profesor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CUPOF")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Ocupado_Libre")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("TurnoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TurnoId");
-
-                    b.ToTable("CUPOFs_Profesor");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Carrera", b =>
@@ -280,32 +213,6 @@ namespace WebITSC.DB.Migrations
                     b.ToTable("ClaseAsistencias");
                 });
 
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.Coordinador", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CarreraId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarreraId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Coordinadores");
-                });
-
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Correlatividad", b =>
                 {
                     b.Property<int>("Id")
@@ -364,6 +271,28 @@ namespace WebITSC.DB.Migrations
                     b.HasIndex("TurnoId");
 
                     b.ToTable("CursadosMateria");
+                });
+
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Departamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvinciaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinciaId");
+
+                    b.ToTable("Departamentos");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Evaluacion", b =>
@@ -455,7 +384,7 @@ namespace WebITSC.DB.Migrations
                     b.ToTable("InscripcionesCarrera");
                 });
 
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.MAB", b =>
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Localidad", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -463,38 +392,18 @@ namespace WebITSC.DB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CUPOF_ProfesorId")
+                    b.Property<int>("DepartamentoId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaFin")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("FechaInicio")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IdMab")
+                    b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int>("ProfesorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SitRevista")
-                        .IsRequired()
-                        .HasMaxLength(45)
-                        .HasColumnType("nvarchar(45)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CUPOF_ProfesorId");
+                    b.HasIndex("DepartamentoId");
 
-                    b.HasIndex("ProfesorId");
-
-                    b.HasIndex(new[] { "IdMab" }, "MABUnico_UQ")
-                        .IsUnique();
-
-                    b.ToTable("MABs");
+                    b.ToTable("Localidades");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Materia", b =>
@@ -609,6 +518,23 @@ namespace WebITSC.DB.Migrations
                     b.ToTable("Notas");
                 });
 
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Pais", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Paises");
+                });
+
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Persona", b =>
                 {
                     b.Property<int>("Id")
@@ -710,6 +636,28 @@ namespace WebITSC.DB.Migrations
                     b.ToTable("Profesores");
                 });
 
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Provincia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaisId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaisId");
+
+                    b.ToTable("Provincias");
+                });
+
             modelBuilder.Entity("WebITSC.DB.Data.Entity.TipoDocumento", b =>
                 {
                     b.Property<int>("Id")
@@ -808,41 +756,45 @@ namespace WebITSC.DB.Migrations
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Alumno", b =>
                 {
+                    b.HasOne("WebITSC.DB.Data.Entity.Departamento", "Departamento")
+                        .WithMany()
+                        .HasForeignKey("DepartamentoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebITSC.DB.Data.Entity.Localidad", "Localidad")
+                        .WithMany()
+                        .HasForeignKey("LocalidadId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebITSC.DB.Data.Entity.Pais", "Pais")
+                        .WithMany()
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("WebITSC.DB.Data.Entity.Provincia", "Provincia")
+                        .WithMany()
+                        .HasForeignKey("ProvinciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("WebITSC.DB.Data.Entity.Usuario", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Departamento");
+
+                    b.Navigation("Localidad");
+
+                    b.Navigation("Pais");
+
+                    b.Navigation("Provincia");
+
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.CUPOF_Coordinador", b =>
-                {
-                    b.HasOne("WebITSC.DB.Data.Entity.Carrera", "Carrera")
-                        .WithMany()
-                        .HasForeignKey("CarreraId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("WebITSC.DB.Data.Entity.Coordinador", "Coordinador")
-                        .WithMany()
-                        .HasForeignKey("CoordinadorId");
-
-                    b.Navigation("Carrera");
-
-                    b.Navigation("Coordinador");
-                });
-
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.CUPOF_Profesor", b =>
-                {
-                    b.HasOne("WebITSC.DB.Data.Entity.Turno", "Turno")
-                        .WithMany()
-                        .HasForeignKey("TurnoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Turno");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.CertificadoAlumno", b =>
@@ -886,25 +838,6 @@ namespace WebITSC.DB.Migrations
                     b.Navigation("CursadoMateria");
                 });
 
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.Coordinador", b =>
-                {
-                    b.HasOne("WebITSC.DB.Data.Entity.Carrera", "Carrera")
-                        .WithMany()
-                        .HasForeignKey("CarreraId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("WebITSC.DB.Data.Entity.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Carrera");
-
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Correlatividad", b =>
                 {
                     b.HasOne("WebITSC.DB.Data.Entity.MateriaEnPlanEstudio", "MateriaCorrelativa")
@@ -943,6 +876,17 @@ namespace WebITSC.DB.Migrations
                     b.Navigation("Turno");
                 });
 
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Departamento", b =>
+                {
+                    b.HasOne("WebITSC.DB.Data.Entity.Provincia", "Provincia")
+                        .WithMany("Departamentos")
+                        .HasForeignKey("ProvinciaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Provincia");
+                });
+
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Evaluacion", b =>
                 {
                     b.HasOne("WebITSC.DB.Data.Entity.Turno", "Turno")
@@ -973,23 +917,15 @@ namespace WebITSC.DB.Migrations
                     b.Navigation("Carrera");
                 });
 
-            modelBuilder.Entity("WebITSC.DB.Data.Entity.MAB", b =>
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Localidad", b =>
                 {
-                    b.HasOne("WebITSC.DB.Data.Entity.CUPOF_Profesor", "CUPOF_Profesor")
-                        .WithMany()
-                        .HasForeignKey("CUPOF_ProfesorId")
+                    b.HasOne("WebITSC.DB.Data.Entity.Departamento", "Departamento")
+                        .WithMany("Localidades")
+                        .HasForeignKey("DepartamentoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WebITSC.DB.Data.Entity.Profesor", "Profesor")
-                        .WithMany()
-                        .HasForeignKey("ProfesorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CUPOF_Profesor");
-
-                    b.Navigation("Profesor");
+                    b.Navigation("Departamento");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.MateriaEnPlanEstudio", b =>
@@ -1063,6 +999,17 @@ namespace WebITSC.DB.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Provincia", b =>
+                {
+                    b.HasOne("WebITSC.DB.Data.Entity.Pais", "Pais")
+                        .WithMany("Provincias")
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Pais");
+                });
+
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Turno", b =>
                 {
                     b.HasOne("WebITSC.DB.Data.Entity.MateriaEnPlanEstudio", "MateriaEnPlanEstudio")
@@ -1112,9 +1059,24 @@ namespace WebITSC.DB.Migrations
                     b.Navigation("Notas");
                 });
 
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Departamento", b =>
+                {
+                    b.Navigation("Localidades");
+                });
+
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Evaluacion", b =>
                 {
                     b.Navigation("Notas");
+                });
+
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Pais", b =>
+                {
+                    b.Navigation("Provincias");
+                });
+
+            modelBuilder.Entity("WebITSC.DB.Data.Entity.Provincia", b =>
+                {
+                    b.Navigation("Departamentos");
                 });
 
             modelBuilder.Entity("WebITSC.DB.Data.Entity.Turno", b =>

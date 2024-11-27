@@ -67,14 +67,13 @@ builder.Services.AddScoped<IAlumnoRepositorio, AlumnoRepositorio>();
 builder.Services.AddScoped<IRepositorio<CertificadoAlumno>, Repositorio<CertificadoAlumno>>();
 builder.Services.AddScoped<IRepositorio<Clase>, Repositorio<Clase>>();
 builder.Services.AddScoped<IRepositorio<ClaseAsistencia>, Repositorio<ClaseAsistencia>>();
-builder.Services.AddScoped<IRepositorio<Coordinador>, Repositorio<Coordinador>>();
+
 builder.Services.AddScoped<IRepositorio<Correlatividad>, Repositorio<Correlatividad>>();
-builder.Services.AddScoped<IRepositorio<CUPOF_Coordinador>, Repositorio<CUPOF_Coordinador>>();
-builder.Services.AddScoped<IRepositorio<CUPOF_Profesor>, Repositorio<CUPOF_Profesor>>();
+
 builder.Services.AddScoped<ICursadoMateriaRepositorio, CursadoMateriaRepositorio>();
 builder.Services.AddScoped<IEvaluacionRepositorio, EvaluacionRepositorio>();
 builder.Services.AddScoped<IInscripcionCarreraRepositorio, InscripcionCarreraRepositorio>();
-builder.Services.AddScoped<IRepositorio<MAB>, Repositorio<MAB>>();
+
 builder.Services.AddScoped<IRepositorio<Materia>, Repositorio<Materia>>();
 builder.Services.AddScoped<IMateriaEnPlanEstudioRepositorio, MateriaEnPlanEstudioRepositorio>();
 builder.Services.AddScoped<INotaRepositorio, NotaRepositorio>();

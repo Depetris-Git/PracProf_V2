@@ -73,11 +73,12 @@ namespace WebITSC.Admin.Server.Repositorio
                 EstadoUsuario = a.Usuario.Estado,
                 Sexo = a.Sexo,
                 FechaNacimiento = a.FechaNacimiento,
-                Edad = a.Edad,
+                Edad = CalcularEdad(a.FechaNacimiento),
                 Cuil = a.CUIL,
-                Pais = a.Pais,
-                Provincia = a.Provincia,
-                Departamento = a.Departamento,
+                Pais = a.Pais.Nombre,
+                Provincia = a.Provincia.Nombre,
+                Departamento = a.Departamento.Nombre,
+                Localidad = a.Localidad.Nombre,
                 TituloBase = a.TituloBase,
                 FotocopiaDNI = a.FotocopiaDNI,
                 ConstanciaCUIL = a.ConstanciaCUIL,
@@ -183,6 +184,14 @@ namespace WebITSC.Admin.Server.Repositorio
 
             }
 
-        } 
+        }
+
+        private int CalcularEdad(DateTime fechaCumple)
+        {
+            int edad = DateTime.Now.Year - fechaCumple.Year;
+            if (DateTime.Now.DayOfYear < fechaCumple.DayOfYear)
+                edad--;
+            return edad;
+        }
     }
 }

@@ -26,22 +26,12 @@ namespace WebITSC.DB.Data.Entity
         [Required(ErrorMessage = "La fecha de nacimiento del alumno es necesario")]
         public DateTime FechaNacimiento { get; set; }
 
-        [Required(ErrorMessage = "La edad del alumno es necesario")]
-        public int Edad { get; set; }
-
         [MaxLength(16, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string? CUIL { get; set; }
 
 
         [Required(ErrorMessage = "El país de nacimiento del alumno es necesario")]
-        [MaxLength(30, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string Pais { get; set; }
-
-        [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string? Provincia { get; set; }
-
-        [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string? Departamento { get; set; }
+        
 
         [MaxLength(60, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string? TituloBase { get; set; }
@@ -66,6 +56,23 @@ namespace WebITSC.DB.Data.Entity
 
         public bool Estado { get; set; } = true; //si está activo o no el alumno, para bloquear o dar acceso
                                                  //al usuario en su calidad de alumno
+
+        [Required(ErrorMessage = "El país de nacimiento del alumno es necesario")]
+        public int PaisId { get; set; }
+        public Pais Pais { get; set; }
+
+        [Required(ErrorMessage = "La provincia de nacimiento del alumno es necesario")]
+        public int ProvinciaId { get; set; }
+        public Provincia Provincia { get; set; }
+
+        [Required(ErrorMessage = "El departamento de nacimiento del alumno es necesario")]
+        public int DepartamentoId { get; set; }
+        public Departamento Departamento { get; set; }
+
+        [Required(ErrorMessage = "la localidad de nacimiento del alumno es necesario")]
+        public int LocalidadId { get; set; }
+        public Localidad Localidad { get; set; }
+
         public List<CertificadoAlumno> CertificadosAlumno { get; set; } = new List<CertificadoAlumno>();
         public List<CursadoMateria> MateriasCursadas {  get; set; } = new List<CursadoMateria>();
         public List<InscripcionCarrera> InscripcionesCarreras { get; set; } = new List<InscripcionCarrera>();

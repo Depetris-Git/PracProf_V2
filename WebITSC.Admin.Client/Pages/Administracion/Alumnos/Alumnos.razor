@@ -1,4 +1,4 @@
-﻿@page "/Alumnos-si"
+﻿@* @page "/Alumnos-si"
 @inject IHttpServicios http
 @inject HttpClient http
 @inject NavigationManager Navigation
@@ -134,84 +134,84 @@
     <InputNumber class="form-control" id="Edad" @bind-Value="crearAlumno.Cohorte" />
     </div>  *@
 
-    <button type="submit" class="btn btn-primary">Crear Alumno</button>
-</EditForm>
+    @* <button type="submit" class="btn btn-primary">Crear Alumno</button>
+</EditForm>  *@ 
 
 @code {
-    private CrearAlumnoDTO crearAlumno = new CrearAlumnoDTO();
-    private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
-    private List<Carrera> carreras = new List<Carrera>();
+    // private CrearAlumnoDTO crearAlumno = new CrearAlumnoDTO();
+    // private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
+    // private List<Carrera> carreras = new List<Carrera>();
 
-    // Propiedades booleanas que se vinculan con los checkboxes
-    private bool FotocopiaDNIBool
-    {
-        get => crearAlumno.FotocopiaDNI == "Sí";
-        set => crearAlumno.FotocopiaDNI = value ? "Sí" : "No";
-    }
+    // // Propiedades booleanas que se vinculan con los checkboxes
+    // private bool FotocopiaDNIBool
+    // {
+    //     get => crearAlumno.FotocopiaDNI == "Sí";
+    //     set => crearAlumno.FotocopiaDNI = value ? "Sí" : "No";
+    // }
 
-    private bool ConstanciaCUILBool
-    {
-        get => crearAlumno.ConstanciaCUIL == "Sí";
-        set => crearAlumno.ConstanciaCUIL = value ? "Sí" : "No";
-    }
+    // private bool ConstanciaCUILBool
+    // {
+    //     get => crearAlumno.ConstanciaCUIL == "Sí";
+    //     set => crearAlumno.ConstanciaCUIL = value ? "Sí" : "No";
+    // }
 
-    private bool PartidaNacimientoBool
-    {
-        get => crearAlumno.PartidaNacimiento == "Sí";
-        set => crearAlumno.PartidaNacimiento = value ? "Sí" : "No";
-    }
+    // private bool PartidaNacimientoBool
+    // {
+    //     get => crearAlumno.PartidaNacimiento == "Sí";
+    //     set => crearAlumno.PartidaNacimiento = value ? "Sí" : "No";
+    // }
 
-    private bool AnaliticoBool
-    {
-        get => crearAlumno.Analitico == "Sí";
-        set => crearAlumno.Analitico = value ? "Sí" : "No";
-    }
+    // private bool AnaliticoBool
+    // {
+    //     get => crearAlumno.Analitico == "Sí";
+    //     set => crearAlumno.Analitico = value ? "Sí" : "No";
+    // }
 
-    private bool FotoCarnetBool
-    {
-        get => crearAlumno.FotoCarnet == "Sí";
-        set => crearAlumno.FotoCarnet = value ? "Sí" : "No";
-    }
+    // private bool FotoCarnetBool
+    // {
+    //     get => crearAlumno.FotoCarnet == "Sí";
+    //     set => crearAlumno.FotoCarnet = value ? "Sí" : "No";
+    // }
 
-    private bool CUSBool
-    {
-        get => crearAlumno.CUS == "Sí";
-        set => crearAlumno.CUS = value ? "Sí" : "No";
-    }
+    // private bool CUSBool
+    // {
+    //     get => crearAlumno.CUS == "Sí";
+    //     set => crearAlumno.CUS = value ? "Sí" : "No";
+    // }
 
 
-    // Este método se ejecuta al cargar la página
-    protected override async Task OnInitializedAsync()
-    {
-        // Cargar tipos de documentos y carreras desde el API
-        tiposDocumentos = await http.GetFromJsonAsync<List<TipoDocumento>>("api/TipoDocumento");
-        carreras = await http.GetFromJsonAsync<List<Carrera>>("api/Carreras");
-    }
+    // // Este método se ejecuta al cargar la página
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     // Cargar tipos de documentos y carreras desde el API
+    //     tiposDocumentos = await http.GetFromJsonAsync<List<TipoDocumento>>("api/TipoDocumento");
+    //     carreras = await http.GetFromJsonAsync<List<Carrera>>("api/Carreras");
+    // }
 
-    // Este método se ejecuta cuando el formulario es enviado y válido
-    private async Task HandleValidSubmit()
-    {
-        try
-        {
-            // Enviar datos al backend para crear el alumno
-            var response = await http.PostAsJsonAsync("api/Alumnos", crearAlumno);
+    // // Este método se ejecuta cuando el formulario es enviado y válido
+    // private async Task HandleValidSubmit()
+    // {
+    //     try
+    //     {
+    //         // Enviar datos al backend para crear el alumno
+    //         var response = await http.PostAsJsonAsync("api/Alumnos", crearAlumno);
 
-            if (response.IsSuccessStatusCode)
-            {
-                // Redirigir a la lista de alumnos o a una página de éxito
-                Navigation.NavigateTo("/lista-alumnos");
-            }
-            else
-            {
-                // Manejar el error, por ejemplo, mostrar un mensaje de error
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Error: {errorMessage}");
-            }
-        }
-        catch (Exception ex)
-        {
-            // Manejar el error de conexión o cualquier otra excepción
-            Console.WriteLine($"Exception: {ex.Message}");
-        }
-    }
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             // Redirigir a la lista de alumnos o a una página de éxito
+    //             Navigation.NavigateTo("/lista-alumnos");
+    //         }
+    //         else
+    //         {
+    //             // Manejar el error, por ejemplo, mostrar un mensaje de error
+    //             var errorMessage = await response.Content.ReadAsStringAsync();
+    //             Console.WriteLine($"Error: {errorMessage}");
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         // Manejar el error de conexión o cualquier otra excepción
+    //         Console.WriteLine($"Exception: {ex.Message}");
+    //     }
+    // }
 }

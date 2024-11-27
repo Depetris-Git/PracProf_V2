@@ -39,6 +39,9 @@ namespace WebITSC.Shared.General.DTO.Alumnos
         [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string? Departamento { get; set; }
 
+        [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
+        public string? Localidad { get; set; }
+
         [MaxLength(60, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string? TituloBase { get; set; }
 

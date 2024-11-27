@@ -23,6 +23,7 @@ namespace WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
         public string Pais { get; set; }
         public string Provincia { get; set; }
         public string Departamento { get; set; }
+        public string Localidad { get; set; }
         public string TituloBase { get; set; }
         public string FotocopiaDNI { get; set; }
         public string ConstanciaCUIL { get; set; }

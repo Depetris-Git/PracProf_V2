@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebITSC.DB.Migrations
 {
     /// <inheritdoc />
-    public partial class inicio : Migration
+    public partial class InicioNuevo : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,6 +44,19 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Paises",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Paises", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TiposDocumento",
                 columns: table => new
                 {
@@ -75,6 +88,26 @@ namespace WebITSC.DB.Migrations
                         name: "FK_PlanesEstudio_Carreras_CarreraId",
                         column: x => x.CarreraId,
                         principalTable: "Carreras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Provincias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaisId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Provincias", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Provincias_Paises_PaisId",
+                        column: x => x.PaisId,
+                        principalTable: "Paises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -135,6 +168,26 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departamentos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProvinciaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departamentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departamentos_Provincias_ProvinciaId",
+                        column: x => x.ProvinciaId,
+                        principalTable: "Provincias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -183,62 +236,21 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Alumnos",
+                name: "Localidades",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false),
-                    Sexo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Edad = table.Column<int>(type: "int", nullable: false),
-                    CUIL = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
-                    Pais = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Provincia = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    Departamento = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    TituloBase = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
-                    FotocopiaDNI = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
-                    ConstanciaCUIL = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
-                    PartidaNacimiento = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    Analitico = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    FotoCarnet = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CUS = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DepartamentoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Alumnos", x => x.Id);
+                    table.PrimaryKey("PK_Localidades", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Alumnos_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Coordinadores",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false),
-                    CarreraId = table.Column<int>(type: "int", nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coordinadores", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Coordinadores_Carreras_CarreraId",
-                        column: x => x.CarreraId,
-                        principalTable: "Carreras",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Coordinadores_Usuarios_UsuarioId",
-                        column: x => x.UsuarioId,
-                        principalTable: "Usuarios",
+                        name: "FK_Localidades_Departamentos_DepartamentoId",
+                        column: x => x.DepartamentoId,
+                        principalTable: "Departamentos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -261,6 +273,92 @@ namespace WebITSC.DB.Migrations
                         principalTable: "Usuarios",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Alumnos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Sexo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CUIL = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    TituloBase = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    FotocopiaDNI = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    ConstanciaCUIL = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: true),
+                    PartidaNacimiento = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    Analitico = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    FotoCarnet = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CUS = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    PaisId = table.Column<int>(type: "int", nullable: false),
+                    ProvinciaId = table.Column<int>(type: "int", nullable: false),
+                    DepartamentoId = table.Column<int>(type: "int", nullable: false),
+                    LocalidadId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Alumnos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Departamentos_DepartamentoId",
+                        column: x => x.DepartamentoId,
+                        principalTable: "Departamentos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Localidades_LocalidadId",
+                        column: x => x.LocalidadId,
+                        principalTable: "Localidades",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Paises_PaisId",
+                        column: x => x.PaisId,
+                        principalTable: "Paises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Provincias_ProvinciaId",
+                        column: x => x.ProvinciaId,
+                        principalTable: "Provincias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Alumnos_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Turnos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MateriaEnPlanEstudioId = table.Column<int>(type: "int", nullable: false),
+                    ProfesorId = table.Column<int>(type: "int", nullable: true),
+                    Sede = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
+                    Horario = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    AnnoCicloLectivo = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Turnos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Turnos_MateriasEnPlanEstudio_MateriaEnPlanEstudioId",
+                        column: x => x.MateriaEnPlanEstudioId,
+                        principalTable: "MateriasEnPlanEstudio",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Turnos_Profesores_ProfesorId",
+                        column: x => x.ProfesorId,
+                        principalTable: "Profesores",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -315,63 +413,6 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CUPOFs_Coordinador",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CarreraId = table.Column<int>(type: "int", nullable: false),
-                    CoordinadorId = table.Column<int>(type: "int", nullable: true),
-                    CUPOF = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Ocupado_Libre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false),
-                    Sede = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CUPOFs_Coordinador", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CUPOFs_Coordinador_Carreras_CarreraId",
-                        column: x => x.CarreraId,
-                        principalTable: "Carreras",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CUPOFs_Coordinador_Coordinadores_CoordinadorId",
-                        column: x => x.CoordinadorId,
-                        principalTable: "Coordinadores",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Turnos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MateriaEnPlanEstudioId = table.Column<int>(type: "int", nullable: false),
-                    ProfesorId = table.Column<int>(type: "int", nullable: true),
-                    Sede = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
-                    Horario = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    AnnoCicloLectivo = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Turnos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Turnos_MateriasEnPlanEstudio_MateriaEnPlanEstudioId",
-                        column: x => x.MateriaEnPlanEstudioId,
-                        principalTable: "MateriasEnPlanEstudio",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Turnos_Profesores_ProfesorId",
-                        column: x => x.ProfesorId,
-                        principalTable: "Profesores",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Clases",
                 columns: table => new
                 {
@@ -385,28 +426,6 @@ namespace WebITSC.DB.Migrations
                     table.PrimaryKey("PK_Clases", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Clases_Turnos_TurnoId",
-                        column: x => x.TurnoId,
-                        principalTable: "Turnos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CUPOFs_Profesor",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TurnoId = table.Column<int>(type: "int", nullable: false),
-                    CUPOF = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    Ocupado_Libre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CUPOFs_Profesor", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CUPOFs_Profesor_Turnos_TurnoId",
                         column: x => x.TurnoId,
                         principalTable: "Turnos",
                         principalColumn: "Id",
@@ -468,36 +487,6 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MABs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfesorId = table.Column<int>(type: "int", nullable: false),
-                    CUPOF_ProfesorId = table.Column<int>(type: "int", nullable: false),
-                    IdMab = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    SitRevista = table.Column<string>(type: "nvarchar(45)", maxLength: 45, nullable: false),
-                    FechaInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaFin = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MABs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MABs_CUPOFs_Profesor_CUPOF_ProfesorId",
-                        column: x => x.CUPOF_ProfesorId,
-                        principalTable: "CUPOFs_Profesor",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MABs_Profesores_ProfesorId",
-                        column: x => x.ProfesorId,
-                        principalTable: "Profesores",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ClaseAsistencias",
                 columns: table => new
                 {
@@ -554,6 +543,26 @@ namespace WebITSC.DB.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Alumnos_DepartamentoId",
+                table: "Alumnos",
+                column: "DepartamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alumnos_LocalidadId",
+                table: "Alumnos",
+                column: "LocalidadId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alumnos_PaisId",
+                table: "Alumnos",
+                column: "PaisId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Alumnos_ProvinciaId",
+                table: "Alumnos",
+                column: "ProvinciaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Alumnos_UsuarioId",
                 table: "Alumnos",
                 column: "UsuarioId");
@@ -590,16 +599,6 @@ namespace WebITSC.DB.Migrations
                 column: "TurnoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Coordinadores_CarreraId",
-                table: "Coordinadores",
-                column: "CarreraId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Coordinadores_UsuarioId",
-                table: "Coordinadores",
-                column: "UsuarioId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Correlatividades_MateriaCorrelativaId",
                 table: "Correlatividades",
                 column: "MateriaCorrelativaId");
@@ -610,21 +609,6 @@ namespace WebITSC.DB.Migrations
                 column: "MateriaEnPlanEstudioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CUPOFs_Coordinador_CarreraId",
-                table: "CUPOFs_Coordinador",
-                column: "CarreraId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CUPOFs_Coordinador_CoordinadorId",
-                table: "CUPOFs_Coordinador",
-                column: "CoordinadorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CUPOFs_Profesor_TurnoId",
-                table: "CUPOFs_Profesor",
-                column: "TurnoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CursadosMateria_AlumnoId",
                 table: "CursadosMateria",
                 column: "AlumnoId");
@@ -633,6 +617,11 @@ namespace WebITSC.DB.Migrations
                 name: "IX_CursadosMateria_TurnoId",
                 table: "CursadosMateria",
                 column: "TurnoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departamentos_ProvinciaId",
+                table: "Departamentos",
+                column: "ProvinciaId");
 
             migrationBuilder.CreateIndex(
                 name: "EvaluacionesDeUnTurnoIDX",
@@ -661,20 +650,9 @@ namespace WebITSC.DB.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_MABs_CUPOF_ProfesorId",
-                table: "MABs",
-                column: "CUPOF_ProfesorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MABs_ProfesorId",
-                table: "MABs",
-                column: "ProfesorId");
-
-            migrationBuilder.CreateIndex(
-                name: "MABUnico_UQ",
-                table: "MABs",
-                column: "IdMab",
-                unique: true);
+                name: "IX_Localidades_DepartamentoId",
+                table: "Localidades",
+                column: "DepartamentoId");
 
             migrationBuilder.CreateIndex(
                 name: "Materia_UQ",
@@ -746,6 +724,11 @@ namespace WebITSC.DB.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Provincias_PaisId",
+                table: "Provincias",
+                column: "PaisId");
+
+            migrationBuilder.CreateIndex(
                 name: "TDocumentoUnico_UQ",
                 table: "TiposDocumento",
                 column: "Codigo",
@@ -786,25 +769,13 @@ namespace WebITSC.DB.Migrations
                 name: "Correlatividades");
 
             migrationBuilder.DropTable(
-                name: "CUPOFs_Coordinador");
-
-            migrationBuilder.DropTable(
                 name: "InscripcionesCarrera");
-
-            migrationBuilder.DropTable(
-                name: "MABs");
 
             migrationBuilder.DropTable(
                 name: "Notas");
 
             migrationBuilder.DropTable(
                 name: "Clases");
-
-            migrationBuilder.DropTable(
-                name: "Coordinadores");
-
-            migrationBuilder.DropTable(
-                name: "CUPOFs_Profesor");
 
             migrationBuilder.DropTable(
                 name: "CursadosMateria");
@@ -819,10 +790,16 @@ namespace WebITSC.DB.Migrations
                 name: "Turnos");
 
             migrationBuilder.DropTable(
+                name: "Localidades");
+
+            migrationBuilder.DropTable(
                 name: "MateriasEnPlanEstudio");
 
             migrationBuilder.DropTable(
                 name: "Profesores");
+
+            migrationBuilder.DropTable(
+                name: "Departamentos");
 
             migrationBuilder.DropTable(
                 name: "Materias");
@@ -834,10 +811,16 @@ namespace WebITSC.DB.Migrations
                 name: "Usuarios");
 
             migrationBuilder.DropTable(
+                name: "Provincias");
+
+            migrationBuilder.DropTable(
                 name: "Carreras");
 
             migrationBuilder.DropTable(
                 name: "Personas");
+
+            migrationBuilder.DropTable(
+                name: "Paises");
 
             migrationBuilder.DropTable(
                 name: "TiposDocumento");
