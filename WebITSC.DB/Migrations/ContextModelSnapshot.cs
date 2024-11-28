@@ -551,6 +551,7 @@ namespace WebITSC.DB.Migrations
                         .HasColumnType("nvarchar(16)");
 
                     b.Property<string>("Domicilio")
+                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
@@ -560,6 +561,7 @@ namespace WebITSC.DB.Migrations
                         .HasColumnType("nvarchar(80)");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasMaxLength(18)
                         .HasColumnType("nvarchar(18)");
 

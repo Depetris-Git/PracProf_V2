@@ -30,10 +30,10 @@ namespace WebITSC.DB.Data.Entity
         public TipoDocumento TipoDocumento { get; set; }
 
         [MaxLength(18, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string? Telefono { get; set; }
+        public string Telefono { get; set; }
 
         [MaxLength(60, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string? Domicilio { get; set; }
+        public string Domicilio { get; set; }
 
         //para el mapper
         public InscripcionCarrera inscripcion_Carrera;

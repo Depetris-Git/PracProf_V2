@@ -18,11 +18,23 @@ namespace WebITSC.Admin.Server.Repositorio
 
         public async Task<List<Alumno>> FullGetAll()
         {
-            return await context.Alumnos
-                .Include(a => a.Usuario)              // Asegúrate de incluir el Usuario
-                .ThenInclude(u => u.Persona)          // Y también incluir Persona dentro de Usuario
-                .ToListAsync();
+            var alumnos = await context.Alumnos
+                    .Include(a => a.Usuario)                       // Incluye la relación Usuario
+                    .ThenInclude(u => u.Persona)                   // Incluye la relación Persona dentro de Usuario
+                    .Include(a => a.InscripcionesCarreras)         // Incluye las inscripciones de carreras
+                    .ThenInclude(ic => ic.Carrera)                 //  la carrera asociada a cada inscripción
+                            .ToListAsync();
+
+            // Verifica si los datos de Persona están siendo cargados correctamente
+            foreach (var alumno in alumnos)
+            {
+                Console.WriteLine($"Alumno: {alumno.Usuario.Persona.Nombre} {alumno.Usuario.Persona.Apellido}, " +
+                                  $"Telefono: {alumno.Usuario.Persona.Telefono}, Domicilio: {alumno.Usuario.Persona.Domicilio}");
+            }
+
+            return alumnos;
         }
+
 
         public async Task<Alumno> FullGetById(int id)
         {

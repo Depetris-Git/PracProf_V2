@@ -37,8 +37,8 @@ namespace WebITSC.Shared.General.DTO.Alumnos
 
 
 
-            // Datos de Usuario
-            [Required(ErrorMessage = "El email de la persona es necesario")]
+        // Datos de Usuario
+        [Required(ErrorMessage = "El email de la persona es necesario")]
             [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
             public string Email { get; set; }
 

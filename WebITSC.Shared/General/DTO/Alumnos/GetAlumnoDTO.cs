@@ -11,13 +11,40 @@ namespace WebITSC.Shared.General.DTO.Alumnos
     public class GetAlumnoDTO
     {
         public int Id { get; set; }
+        //public int CarreraId { get; set; }  // Carrera en la que se va a inscribir
+        //public string NombrePersona { get; set; }
+        //public string ApellidoPersona { get; set; }
+        //public string DocumentoPersona { get; set; }
+        //public string? TelefonoPersona { get; set; }
+        //public string DomicilioPersona { get; set; }
+
         public int CarreraId { get; set; }  // Carrera en la que se va a inscribir
         public string NameCarrera { get; set; }
-        public string NombrePersona { get; set; }
-        public string ApellidoPersona { get; set; }
-        public string DocumentoPersona { get; set; }
-        public string? TelefonoPersona { get; set; }
-        public string DomicilioPersona { get; set; }
+
+        // Datos de Persona
+        [Required(ErrorMessage = "El nombre de la persona es necesario")]
+        [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Nombre { get; set; }
+
+        [Required(ErrorMessage = "El apellido de la persona es necesario")]
+        [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Apellido { get; set; }
+
+        [Required(ErrorMessage = "El número de documento de la persona es necesario")]
+        [MaxLength(16, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Documento { get; set; }
+
+
+        [Required(ErrorMessage = "El número de telefono de la persona es necesario")]
+        [MaxLength(16, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Telefono { get; set; }
+
+        [Required(ErrorMessage = "El Domicilio de la persona es necesario")]
+        [MaxLength(16, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Domicilio { get; set; }
+
+
+
         public string Sexo { get; set; }
 
         [Required(ErrorMessage = "La fecha de nacimiento del alumno es necesario")]

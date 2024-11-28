@@ -54,9 +54,12 @@ namespace WebITSC.Server.Controllers.General
 
             // Devolver la respuesta mapeada
             return Ok(alumnosDTO);
+           
         }
-            // Obtener alumno por ID
-            [HttpGet("{id:int}")]
+            
+        // Obtener alumno por ID
+        
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<GetAlumnoDTO>> GetById(int id)
         {
             var alumno = await eRepositorio.FullGetById(id);
@@ -151,7 +154,10 @@ namespace WebITSC.Server.Controllers.General
                 Nombre = crearAlumnoDTO.Nombre,
                 Apellido = crearAlumnoDTO.Apellido,
                 Documento = crearAlumnoDTO.Documento,
-                TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId
+                TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId,
+                Domicilio = crearAlumnoDTO.Domicilio,
+                Telefono = crearAlumnoDTO.Telefono,
+                
             };
 
             // Usamos el repositorio de Persona para agregarla a la base de datos
@@ -205,6 +211,7 @@ namespace WebITSC.Server.Controllers.General
 
             // Mapea el Alumno a GetAlumnoDTO para la respuesta
             var getAlumnoDTO = mapper.Map<GetAlumnoDTO>(alumno);
+
 
             // Retorna el nuevo alumno creado, con un código HTTP 201 (creado)
             return CreatedAtAction(nameof(GetById), new { id = alumno.Id }, getAlumnoDTO);
