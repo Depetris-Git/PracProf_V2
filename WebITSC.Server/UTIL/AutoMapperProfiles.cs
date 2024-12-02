@@ -37,11 +37,11 @@ namespace WebITSC.Admin.Server.UTIL
 
 
             CreateMap<Alumno, Shared.General.DTO.Alumnos.GetAlumnoDTO>()
-                                           .ForMember(dest => dest.NombrePersona, opt => opt.MapFrom(src => src.Usuario.Persona.Nombre))
-                                           .ForMember(dest => dest.ApellidoPersona, opt => opt.MapFrom(src => src.Usuario.Persona.Apellido))
-                                           .ForMember(dest => dest.DocumentoPersona, opt => opt.MapFrom(src => src.Usuario.Persona.Documento))
-                                           .ForMember(dest => dest.TelefonoPersona, opt => opt.MapFrom(src => src.Usuario.Persona.Telefono))
-                                           .ForMember(dest => dest.DomicilioPersona, opt => opt.MapFrom(src => src.Usuario.Persona.Domicilio))
+                                           .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Usuario.Persona.Nombre))
+                                           .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Usuario.Persona.Apellido))
+                                           .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Usuario.Persona.Documento))
+                                           .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Usuario.Persona.Telefono))
+                                           .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Usuario.Persona.Domicilio))
                                            .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado)) // Si deseas incluir Estado también
                                            .ForMember(dest => dest.Cohorte, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Cohorte))
                                            .ForMember(dest => dest.CarreraId, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Id))
