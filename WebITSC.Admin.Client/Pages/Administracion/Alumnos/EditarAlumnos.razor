@@ -12,7 +12,7 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div class="form-group">
+@*     <div class="form-group">
         <label for="CarreraId">Carrera</label>
         <InputSelect class="form-control" id="CarreraId" @bind-Value="editarAlumno.CarreraId">
             <option value="">Seleccione...</option>
@@ -21,7 +21,7 @@
                 <option value="@carrera.Id">@carrera.Nombre</option>
             }
         </InputSelect>
-    </div>
+    </div> *@
 
     <div class="form-group">
         <label for="Nombre">Nombre</label>
@@ -80,24 +80,49 @@
     </div>
 
     <div class="form-group">
-        <label for="Edad">Edad</label>
-        <InputNumber class="form-control" id="Edad" @bind-Value="editarAlumno.Edad" />
-    </div>
-
-     <div class="form-group">
-        <label for="Pais">País</label>
-        <InputNumber class="form-control" id="Pais" @bind-Value="editarAlumno.PaisId" />
-    </div>
-
-    <div class="form-group">
-        <label for="Provincia">Provincia</label>
-        <InputNumber class="form-control" id="Provincia" @bind-Value="editarAlumno.ProvinciaId" />
+        <label for="PaisId">País</label>
+        <InputSelect class="form-control" id="PaisId" @bind-Value="editarAlumno.PaisId">
+            <option value="">Seleccione...</option>
+            @foreach (var pais in paises)
+            {
+                <option value="@pais.Id">@pais.Nombre</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-group">
-        <label for="Departamento">Departamento</label>
-        <InputNumber class="form-control" id="Departamento" @bind-Value="editarAlumno.DepartamentoId" />
+        <label for="ProvinciaId">Provincia</label>
+        <InputSelect class="form-control" id="ProvinciaId" @bind-Value="editarAlumno.ProvinciaId">
+            <option value="">Seleccione...</option>
+            @foreach (var provincia in provincias)
+            {
+                <option value="@provincia.Id">@provincia.Nombre</option>
+            }
+        </InputSelect>
     </div>
+
+    <div class="form-group">
+        <label for="DepartamentoId">Departamento</label>
+        <InputSelect class="form-control" id="DepartamentoId" @bind-Value="editarAlumno.DepartamentoId">
+            <option value="">Seleccione...</option>
+            @foreach (var departamento in departamentos)
+            {
+                <option value="@departamento.Id">@departamento.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label for="LocalidadId">Localidad</label>
+        <InputSelect class="form-control" id="LocalidadId" @bind-Value="editarAlumno.LocalidadId">
+            <option value="">Seleccione...</option>
+            @foreach (var localidad in localidades)
+            {
+                <option value="@localidad.Id">@localidad.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+
  
     <div class="form-group">
         <label for="CUIL">CUIL</label>
@@ -150,6 +175,10 @@
     private EditarAlumnoDTO editarAlumno = new EditarAlumnoDTO();
     private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
     private List<Carrera> carreras = new List<Carrera>();
+    private List<Pais> paises = new List<Pais>();
+    private List<Provincia> provincias = new List<Provincia>();
+    private List<Departamento> departamentos = new List<Departamento>();
+    private List<Localidad> localidades = new List<Localidad>();
 
     // Propiedades booleanas que se vinculan con los checkboxes
     private bool FotocopiaDNIBool
@@ -201,9 +230,33 @@
             }
 
             var carrerasResponse = await http.Get<List<Carrera>>("api/Carreras");
-            if (!carrerasResponse.Error)
+            if (!carrerasResponse.Error) 
             {
                 carreras = carrerasResponse.Respuesta;
+            }
+
+            var paisesResponse = await http.Get<List<Pais>>("api/Paises");
+            if (!paisesResponse.Error) 
+            { 
+                paises = paisesResponse.Respuesta; 
+            }
+
+            var provinciasResponse = await http.Get<List<Provincia>>("api/Provincias");
+            if (!provinciasResponse.Error) 
+            {
+                provincias = provinciasResponse.Respuesta;
+            }
+
+            var departamentosResponse = await http.Get<List<Departamento>>("api/Departamentos");
+            if (!departamentosResponse.Error) 
+            {
+                departamentos = departamentosResponse.Respuesta;
+            }
+
+            var localidadesResponse = await http.Get<List<Localidad>>("api/Localidades");
+            if (!localidadesResponse.Error) 
+            {
+                localidades = localidadesResponse.Respuesta;
             }
 
             // Cargar datos del alumno a editar

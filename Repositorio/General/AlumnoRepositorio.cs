@@ -217,7 +217,7 @@ namespace WebITSC.Admin.Server.Repositorio
 
         }
 
-        private int CalcularEdad(DateTime fechaCumple)
+        private static int CalcularEdad(DateTime fechaCumple)
         {
             int edad = DateTime.Now.Year - fechaCumple.Year;
             if (DateTime.Now.DayOfYear < fechaCumple.DayOfYear)
