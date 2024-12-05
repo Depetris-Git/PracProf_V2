@@ -61,16 +61,16 @@ namespace WebITSC.Shared.General.DTO.Alumnos
             public string? CUIL { get; set; }
 
             [Required(ErrorMessage = "El país de nacimiento del alumno es necesario")]
-            public int PaisId { get; set; } = 0;
+            public int PaisId { get; set; } 
 
             [Required(ErrorMessage = "La provincia de nacimiento del alumno es necesario")]
-            public int ProvinciaId { get; set; } = 0;
+            public int ProvinciaId { get; set; } 
 
         [Required(ErrorMessage = "El departamento de nacimiento del alumno es necesario")]
-            public int DepartamentoId { get; set; } = 0;
+            public int DepartamentoId { get; set; } 
 
         [Required(ErrorMessage = "la localidad de nacimiento del alumno es necesario")]
-            public int LocalidadId { get; set; } = 0;
+            public int LocalidadId { get; set; } 
 
         // Otros campos opcionales
         [MaxLength(60, ErrorMessage = "Máximo número de caracteres {100}.")]

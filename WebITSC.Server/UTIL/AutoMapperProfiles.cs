@@ -18,10 +18,10 @@ namespace WebITSC.Admin.Server.UTIL
         public AutoMapperProfiles()
         {
             CreateMap<CrearAlumnoDTO, Alumno>();
-                                    //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
-                                    //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
-                                    //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
-                                    //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
+            //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
+            //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
+            //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
+            //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
 
             CreateMap<CrearAlumnoDTO, Persona>()
                                     .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
@@ -31,7 +31,8 @@ namespace WebITSC.Admin.Server.UTIL
                                     .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
                                     .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
 
-            
+
+
             // Mapeo de CrearAlumnoDTO a Usuario (también podrías hacerlo si la lógica de tu usuario depende del DTO)
             CreateMap<CrearAlumnoDTO, Usuario>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
@@ -76,7 +77,11 @@ namespace WebITSC.Admin.Server.UTIL
                                            .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado)) // Si deseas incluir Estado también
                                            .ForMember(dest => dest.Cohorte, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Cohorte))
                                            .ForMember(dest => dest.CarreraId, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Id))
-                                           .ForMember(dest => dest.NameCarrera, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Nombre));
+                                           .ForMember(dest => dest.NameCarrera, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Nombre))
+                                           .ForMember(dest => dest.Pais, opt => opt.MapFrom(src => src.Pais.Nombre))
+                                           .ForMember(dest => dest.Provincia, opt => opt.MapFrom(src => src.Provincia.Nombre))
+                                           .ForMember(dest => dest.Departamento, opt => opt.MapFrom(src => src.Departamento.Nombre))
+                                           .ForMember(dest => dest.Localidad, opt => opt.MapFrom(src => src.Localidad.Nombre));
 
 
 
@@ -119,6 +124,12 @@ namespace WebITSC.Admin.Server.UTIL
             //PAIS_____________________________________________________________________________________________________________________________________________
             CreateMap<CrearPaisDTO, Pais>();
             CreateMap<Pais, GetPaisDTO>();
+            //CreateMap<CrearAlumnoDTO, Pais>().ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.PaisId));
+
+            //CreateMap<Pais, GetAlumnoDTO>().ForMember(dest => dest.Pais, opt => opt.MapFrom(src => src.Nombre));
+
+
+
 
             //Provincia___________________________________________________________________________________________________________________________________________
             CreateMap<CrearProvinciaDTO, Provincia>();
