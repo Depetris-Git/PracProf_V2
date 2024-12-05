@@ -4,7 +4,9 @@ using WebITSC.Shared.General.DTO;
 using WebITSC.Shared.General.DTO.Alumnos;
 using WebITSC.Shared.General.DTO.Carreraa;
 using WebITSC.Shared.General.DTO.InscripcionCarrera;
+using WebITSC.Shared.General.DTO.PaisesDTO;
 using WebITSC.Shared.General.DTO.Persona;
+using WebITSC.Shared.General.DTO.ProvinciaDptoLocal;
 using WebITSC.Shared.General.DTO.TipoDocumento;
 using WebITSC.Shared.General.DTO.UsuariosDTO;
 
@@ -84,6 +86,25 @@ namespace WebITSC.Admin.Server.UTIL
             //_TDOCUMENTO_____________________________________________________________________________________________________________________________________
             CreateMap<CrearTipoDocumentoDTO, TipoDocumento>();
             CreateMap<TipoDocumento, GetTipoDocumentoDTO>();
+
+            //PAIS_____________________________________________________________________________________________________________________________________________
+            CreateMap<CrearPaisDTO, Pais>();
+            CreateMap<Pais, GetPaisDTO>();
+
+            //Provincia___________________________________________________________________________________________________________________________________________
+            CreateMap<CrearProvinciaDTO, Provincia>();
+            CreateMap<Provincia, GetProvinciaDTO>();
+            
+            //Departamento___________________________________________________________________________________________________________________________________________
+            CreateMap<CrearDepartamentosDTO, Departamento>();
+            CreateMap<Departamento, GetDepartamentosDTO>();
+
+            //Localidad___________________________________________________________________________________________________________________________________________
+            CreateMap<CrearLocalidadesDTO, Localidad>();
+            CreateMap<Localidad, GetLocalidadesDTO>();
+
+
+
             CreateMap<CrearCertificadoAlumnoDTO, CertificadoAlumno>();
             CreateMap<CrearClaseDTO, Clase>();
             CreateMap<CrearClaseAsistenciaDTO, ClaseAsistencia>();
