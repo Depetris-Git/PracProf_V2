@@ -1,0 +1,219 @@
+﻿@page "/Administracion/ListaAlumnos"
+@using WebITSC.Shared.General.DTO.Alumnos
+@using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
+@using WebITSC.Shared.General.DTO.Carreraa
+@inject HttpClient http
+@inject NavigationManager Navigation
+
+<!-- Menú de navegación fijo -->
+@* <nav class="navbar navbar-expand-lg navbar-dark bg-dark position-fixed w-100" style="top: 0; z-index: 1000;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Mi Aplicación</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Alumnos</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Carreras</a></li>
+            </ul>
+        </div>
+    </div>
+</nav> *@
+<div>
+    <h3>Listado de Alumnos</h3>
+
+    <!-- Botón de "Cargar + Alumnos" fijo en la esquina superior derecha -->
+    <button class="btn btn-primary position-fixed" style="top: 80px; right: 20px; z-index: 9999;" @onclick="IrACargaAlumnos">Cargar + Alumnos</button>
+
+    <!-- Filtros de búsqueda -->
+    <div class="form-group">
+        <label for="search">Buscar</label>
+        <InputText class="form-control" id="search" @bind-Value="searchTerm" placeholder="Buscar por nombre, apellido, documento, etc..." />
+    </div>
+
+    <div class="form-group">
+        <label for="carreraFilter">Filtrar por Carrera</label>
+        <InputSelect class="form-control" id="carreraFilter" @bind-Value="selectedCarrera">
+            <option value="">Seleccione una carrera</option>
+            @foreach (var carrera in availableCarreras)
+            {
+                <option value="@carrera.Nombre">@carrera.Nombre</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="table-container">
+    <!-- Tabla de Alumnos -->
+    <table class="table table-hover table-striped shadow-lg rounded" style="width: 100%; table-layout: fixed;">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Carrera</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Nombre</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Apellido</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Documento</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Cohorte</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">CUIL</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">País</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Provincia</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Departamento</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Localidad</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Título Base</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Fotocopia DNI</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Constancia CUIL</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Partida de Nacimiento</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Analítico</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Foto Carnet</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">CUS</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Estado</th>
+                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1;">Acciones</th>
+                </tr>
+            </thead>
+        <tbody>
+            @foreach (var alumno in FilteredAlumnos)
+            {
+                <tr>
+                    <td>@alumno.InscripcionesEnCarreras.FirstOrDefault()?.NombreCarrera</td>
+                    <td>@alumno.Nombre</td>
+                    <td>@alumno.Apellido</td>
+                    <td>@alumno.Documento</td>
+                    <td>@(alumno.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString() ?? "Sin cohorte")</td>
+                    <td>@alumno.Cuil</td>
+                    <td>@alumno.Pais</td>
+                    <td>@alumno.Provincia</td>
+                    <td>@alumno.Departamento</td>
+                    <td>@alumno.Localidad</td>
+                    <td>@alumno.TituloBase</td>
+                    <td>@alumno.FotocopiaDNI</td>
+                    <td>@alumno.ConstanciaCUIL</td>
+                    <td>@alumno.PartidaNacimiento</td>
+                    <td>@alumno.Analitico</td>
+                    <td>@alumno.FotoCarnet</td>
+                    <td>@alumno.Cus</td>
+                    <td>@(alumno.EstadoAlumno ? "Activo" : "Inactivo")</td>
+                    <td>
+                        <button class="btn btn-info btn-sm mx-1" @onclick="() => IrAEditarAlumno(alumno.Documento)">Editar</button>
+                        <button class="btn btn-danger btn-sm mx-1" @onclick="() => EliminarAlumno(alumno.Documento)">Eliminar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</div>
+
+@code {
+    private List<BuscarAlumnoDTO> alumnos = new List<BuscarAlumnoDTO>();
+    private List<GetCarreraDTO> availableCarreras = new List<GetCarreraDTO>(); // Carreras obtenidas del backend
+    private string selectedCarrera = null; // Carrera seleccionada
+    private int? selectedCohorte = null;  // Cohorte seleccionado
+    private string searchTerm = string.Empty;
+
+    // Propiedad calculada para obtener los alumnos filtrados
+    private IEnumerable<BuscarAlumnoDTO> FilteredAlumnos
+    {
+        get
+        {
+            var filtered = alumnos.AsEnumerable();
+
+            // Filtrar por el término de búsqueda
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                filtered = filtered.Where(a =>
+                    a.Nombre.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    a.Apellido.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                    a.Documento.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+            }
+
+            // Filtrar por Carrera seleccionada
+            if (!string.IsNullOrWhiteSpace(selectedCarrera))
+            {
+                filtered = filtered.Where(a => a.InscripcionesEnCarreras
+                    .Any(ic => ic.NombreCarrera.Contains(selectedCarrera, StringComparison.OrdinalIgnoreCase)));
+            }
+
+            // Filtrar por Cohorte seleccionado
+            if (selectedCohorte.HasValue)
+            {
+                filtered = filtered.Where(a => a.InscripcionesEnCarreras
+                    .Any(ic => ic.Cohorte == selectedCohorte.Value));
+            }
+
+            return filtered;
+        }
+    }
+
+    // Este método se ejecuta al cargar la página
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Obtener la lista de alumnos del API
+            alumnos = await http.GetFromJsonAsync<List<BuscarAlumnoDTO>>("api/alumnos/buscar");
+
+            // Obtener las carreras disponibles del API
+            availableCarreras = await http.GetFromJsonAsync<List<GetCarreraDTO>>("api/carreras");
+
+            // Si no obtenemos datos, asignamos una lista vacía
+            if (alumnos == null)
+            {
+                alumnos = new List<BuscarAlumnoDTO>();
+            }
+            if (availableCarreras == null)
+            {
+                availableCarreras = new List<GetCarreraDTO>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al obtener los alumnos o carreras: {ex.Message}");
+        }
+    }
+
+    private void IrACargaAlumnos()
+    {
+        // Redirige a la página de CargaAlumnos
+        Navigation.NavigateTo("/Administracion/CargaAlumnos");
+    }
+
+    private void IrAEditarAlumno(string documento)
+    {
+        // Redirige a la página de edición del alumno utilizando el documento
+        Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
+    }
+
+    private async Task EliminarAlumno(string documento)
+    {
+        try
+        {
+            // Buscar el alumno por su documento (asumimos que el documento es único)
+            var alumnoAEliminar = alumnos.FirstOrDefault(a => a.Documento == documento);
+
+            if (alumnoAEliminar == null)
+            {
+                // Si el alumno no se encuentra en la lista, mostrar un mensaje de error.
+                Console.WriteLine($"Alumno con documento {documento} no encontrado.");
+                return;
+            }
+
+            // Hacer la solicitud HTTP DELETE al backend
+            var response = await http.DeleteAsync($"api/Alumnos/{alumnoAEliminar.Id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Si la eliminación fue exitosa, eliminamos al alumno de la lista local
+                alumnos.Remove(alumnoAEliminar);
+                StateHasChanged(); // Forzar la actualización de la UI
+                Console.WriteLine($"Alumno con documento {documento} eliminado correctamente.");
+            }
+            else
+            {
+                // En caso de error, mostramos un mensaje de error
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Error al eliminar el alumno: {errorMessage}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ocurrió un error al intentar eliminar el alumno: {ex.Message}");
+        }
+    }
+}
+
