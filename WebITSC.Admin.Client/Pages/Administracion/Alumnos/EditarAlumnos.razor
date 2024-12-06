@@ -7,8 +7,6 @@
 @using Microsoft.AspNetCore.Components
 
 <h3>Editar Alumno</h3>
-<button class="btn btn-primary position-fixed" style="top: 80px; right: 20px; z-index: 9999;" @onclick="IrAListadoAlumnos">Guardar Cambios</button>
-
 
 <EditForm Model="editarAlumno" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -114,7 +112,7 @@
         </InputSelect>
     </div>
 
- 
+
     <div class="form-group">
         <label for="CUIL">CUIL</label>
         <InputText class="form-control" id="CUIL" @bind-Value="editarAlumno.CUIL" />
@@ -156,6 +154,7 @@
         <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
     </div>
 
+    <button type="submit" class="btn btn-primary position-fixed" style="top: 80px; right: 20px; z-index: 9999;">Guardar Cambios</button>
 </EditForm>
 
 @code {
@@ -264,12 +263,6 @@
             Console.WriteLine($"Exception: {ex.Message}");
         }
     }
-    private void IrAListadoAlumnos()
-    {
-        // Redirige a la página de CargaAlumnos
-        Navigation.NavigateTo("/Administracion/ListaAlumnos");
-    }
-
 
     // Este método se ejecuta cuando el formulario es enviado y válido
     private async Task HandleValidSubmit()
