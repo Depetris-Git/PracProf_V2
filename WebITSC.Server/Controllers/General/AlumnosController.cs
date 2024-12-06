@@ -107,6 +107,7 @@ namespace WebITSC.Server.Controllers.General
         [HttpPut("documento/{documento}")]
         public async Task<IActionResult> UpdateAlumno(string documento, EditarAlumnoDTO dto)
         {
+            // Obtener el alumno por documento utilizando el repositorio
             var alumno = await eRepositorio.GetAlumnoPorDocumento(documento);
 
             if (alumno == null)
@@ -114,8 +115,16 @@ namespace WebITSC.Server.Controllers.General
                 return NotFound();
             }
 
-            // Actualizar los campos del alumno
+            // Asegurarse de cargar las entidades relacionadas
+            alumno.Usuario = await usuarioRepositorio.FullGetById(alumno.UsuarioId);
+            alumno.Usuario.Persona = await personaRepositorio.FullGetById(alumno.Usuario.PersonaId);
+
+            // Actualizar los campos del alumno, usuario y persona
             mapper.Map(dto, alumno);
+            mapper.Map(dto, alumno.Usuario.Persona);
+            mapper.Map(dto, alumno.Usuario);
+
+            // Actualizar el alumno en el repositorio
             var result = await eRepositorio.Update(alumno);
 
             if (!result)
@@ -125,6 +134,8 @@ namespace WebITSC.Server.Controllers.General
 
             return NoContent();
         }
+
+
         //--------------------------------------------------------------------
 
         // Crear nuevo alumno

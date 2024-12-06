@@ -65,6 +65,22 @@ namespace WebITSC.Admin.Server.UTIL
      .ForMember(dest => dest.FotoCarnet, opt => opt.MapFrom(src => src.FotoCarnet))
      .ForMember(dest => dest.CUS, opt => opt.MapFrom(src => src.CUS));
 
+
+            // mapeo de EditarAlumnoDTO a Persona
+            CreateMap<EditarAlumnoDTO, Persona>()
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))
+                .ForMember(dest => dest.Documento, opt => opt.MapFrom(src => src.Documento))
+                .ForMember(dest => dest.TipoDocumentoId, opt => opt.MapFrom(src => src.TipoDocumentoId))
+                .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
+                .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
+
+            // Nuevo mapeo de EditarAlumnoDTO a Usuario
+            CreateMap<EditarAlumnoDTO, Usuario>()
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+                .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Contrasena));
+
+
             //----------------------------
 
 
