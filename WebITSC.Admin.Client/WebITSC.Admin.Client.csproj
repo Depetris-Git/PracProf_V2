@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Pages\Docentes\**" />
+    <Compile Remove="Pages\Profesores\**" />
     <Content Remove="Pages\Docentes\**" />
+    <Content Remove="Pages\Profesores\**" />
     <EmbeddedResource Remove="Pages\Docentes\**" />
+    <EmbeddedResource Remove="Pages\Profesores\**" />
     <None Remove="Pages\Docentes\**" />
+    <None Remove="Pages\Profesores\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +34,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WebITSC.DB\WebITSC.DB.csproj" />
     <ProjectReference Include="..\WebITSC.Shared\WebITSC.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Profesores\" />
   </ItemGroup>
 
 </Project>

@@ -5,21 +5,36 @@
 @inject HttpClient http
 @inject NavigationManager Navigation
 
+<style>
+    .custom-margin-right {
+        margin-right: 30px; /* Espacio máximo de 30px */
+    }
+</style>
+
 <div>
     <h3>Listado de Alumnos</h3>
 
-    <!-- Botón de "Cargar + Alumnos" fijo en la esquina superior derecha -->
     <button class="btn position-fixed rounded-circle" style="top: 80px; right: 20px; z-index: 9999; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; background-color: #00bfff;" @onclick="IrACargaAlumnos">
-        <i class="bi bi-person-plus" style="color: white; font-size: 30px;"></i> <!-- Ícono de persona con + -->
+        <i class="bi bi-person-plus" style="color: white; font-size: 30px;"></i>
     </button>
 
-
-    <!-- Filtros de búsqueda -->
-    <div class="form-group">
-        <label for="search">Buscar</label>
-        <InputText class="form-control" id="search" @bind-Value="searchTerm" placeholder="Buscar por nombre, apellido, documento, etc..." />
+    <!-- Fila de búsqueda con espacio ajustado -->
+    <div class="d-flex align-items-end mb-3">
+        <div class="custom-margin-right">
+            <label for="searchNombre">Buscar por Nombre</label>
+            <InputText class="form-control" id="searchNombre" @bind-Value="searchNombre" placeholder="Buscar por nombre" />
+        </div>
+        <div class="custom-margin-right">
+            <label for="searchApellido">Buscar por Apellido</label>
+            <InputText class="form-control" id="searchApellido" @bind-Value="searchApellido" placeholder="Buscar por apellido" />
+        </div>
+        <div>
+            <label for="searchDocumento">Buscar por Documento</label>
+            <InputText class="form-control" id="searchDocumento" @bind-Value="searchDocumento" placeholder="Buscar por documento" />
+        </div>
     </div>
 
+    <!-- Filtrar por Carrera -->
     <div class="form-group">
         <label for="carreraFilter">Filtrar por Carrera</label>
         <InputSelect class="form-control" id="carreraFilter" @bind-Value="selectedCarrera">
@@ -31,45 +46,56 @@
         </InputSelect>
     </div>
 
-    <div class="table-container" style="height: 400px; overflow-y: auto; border: 1px solid #ddd;">
-        <!-- Tabla de Alumnos -->
-        <table class="table table-hover table-striped shadow-lg rounded" style="width: 100%; table-layout: fixed;">
-            <thead class="bg-primary text-white">
-                <tr>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Carrera</th>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Cohorte</th>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Nombre</th>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Apellido</th>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Documento</th>
-                    <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var alumno in FilteredAlumnos)
-                {
-                    <tr>
-                        <td style="text-align: center;">@alumno.InscripcionesEnCarreras.FirstOrDefault()?.NombreCarrera</td>
-                        <td style="text-align: center;">@(alumno.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString())</td>
-                        <td style="text-align: center;">@alumno.Nombre</td>
-                        <td style="text-align: center;">@alumno.Apellido</td>
-                        <td style="text-align: center;">@alumno.Documento</td>
-                        <td style="text-align: center;">
-                            <button class="btn btn-info btn-sm mx-1" @onclick="() => VerDetalles(alumno)">
-                                <i class="bi bi-search"></i> <!-- Lupa de Bootstrap -->
-                            </button>
-                            <button class="btn btn-info btn-sm mx-1" @onclick="() => IrAEditarAlumno(alumno.Documento)">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm mx-1" @onclick="() => EliminarAlumno(alumno.Documento)">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <!-- Filtrar por Cohorte -->
+    <div class="form-group">
+        <label for="cohorteFilter">Filtrar por Cohorte</label>
+        <InputNumber class="form-control" id="cohorteFilter" @bind-Value="selectedCohorte" placeholder="Ingrese el número de cohorte..." />
     </div>
-    <!-- Modal de confirmación de eliminación -->
+
+    <button class="btn btn-primary" @onclick="BuscarAlumnos">Buscar</button>
+
+    @if (alumnos.Any())
+    {
+        <div class="table-container" style="height: 400px; overflow-y: auto; border: 1px solid #ddd;">
+            <table class="table table-hover table-striped shadow-lg rounded" style="width: 100%; table-layout: fixed;">
+                <thead class="bg-primary text-white">
+                    <tr>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Carrera</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Cohorte</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Nombre</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Apellido</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Documento</th>
+                        <th style="position: sticky; top: 0; background-color: #007bff; z-index: 1; text-align: center; text-transform: uppercase;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var alumno in FilteredAlumnos)
+                    {
+                        <tr>
+                            <td style="text-align: center;">@alumno.InscripcionesEnCarreras.FirstOrDefault()?.NombreCarrera</td>
+                            <td style="text-align: center;">@(alumno.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString())</td>
+                            <td style="text-align: center;">@alumno.Nombre</td>
+                            <td style="text-align: center;">@alumno.Apellido</td>
+                            <td style="text-align: center;">@alumno.Documento</td>
+                            <td style="text-align: center;">
+                                <button class="btn btn-info btn-sm mx-1" @onclick="() => VerDetalles(alumno)">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                                <button class="btn btn-info btn-sm mx-1" @onclick="() => IrAEditarAlumno(alumno.Documento)">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm mx-1" @onclick="() => EliminarAlumno(alumno.Documento)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <!-- Modales -->
     @if (EliminarExitoso)
     {
         <div class="modal fade show" style="display:block;" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -88,7 +114,6 @@
                 </div>
             </div>
         </div>
-
         <div class="modal-backdrop fade show" @onclick="CerrarModalEliminar"></div>
     }
 
@@ -126,18 +151,20 @@
                 </div>
             </div>
         </div>
-
         <div class="modal-backdrop fade show" @onclick="CerrarModal"></div>
     }
 </div>
 
+
 @code {
     private List<BuscarAlumnoDTO> alumnos = new List<BuscarAlumnoDTO>();
-    private List<GetCarreraDTO> availableCarreras = new List<GetCarreraDTO>(); // Carreras obtenidas del backend
-    private string selectedCarrera = null; // Carrera seleccionada
-    private int? selectedCohorte = null;  // Cohorte seleccionado
-    private string searchTerm = string.Empty;
-    private bool EliminarExitoso { get; set; } = false; // Variable para controlar la visibilidad del modal
+    private List<GetCarreraDTO> availableCarreras = new List<GetCarreraDTO>();
+    private string searchNombre = string.Empty;
+    private string searchApellido = string.Empty;
+    private string searchDocumento = string.Empty;
+    private string selectedCarrera = null;
+    private int? selectedCohorte = null;
+    private bool EliminarExitoso { get; set; } = false;
     private bool ModalVisible { get; set; } = false;
     private BuscarAlumnoDTO AlumnoSeleccionado { get; set; }
 
@@ -149,12 +176,19 @@
             var filtered = alumnos.AsEnumerable();
 
             // Filtrar por el término de búsqueda
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(searchNombre))
             {
-                filtered = filtered.Where(a =>
-                    a.Nombre.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    a.Apellido.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    a.Documento.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+                filtered = filtered.Where(a => a.Nombre.Contains(searchNombre, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchApellido))
+            {
+                filtered = filtered.Where(a => a.Apellido.Contains(searchApellido, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchDocumento))
+            {
+                filtered = filtered.Where(a => a.Documento.Contains(searchDocumento, StringComparison.OrdinalIgnoreCase));
             }
 
             // Filtrar por Carrera seleccionada
@@ -175,22 +209,13 @@
         }
     }
 
-    // Este método se ejecuta al cargar la página
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // Obtener la lista de alumnos del API
-            alumnos = await http.GetFromJsonAsync<List<BuscarAlumnoDTO>>("api/Alumnos/buscar");
-
             // Obtener las carreras disponibles del API
             availableCarreras = await http.GetFromJsonAsync<List<GetCarreraDTO>>("api/Carreras");
 
-            // Si no obtenemos datos, asignamos una lista vacía
-            if (alumnos == null)
-            {
-                alumnos = new List<BuscarAlumnoDTO>();
-            }
             if (availableCarreras == null)
             {
                 availableCarreras = new List<GetCarreraDTO>();
@@ -198,7 +223,58 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al obtener los alumnos o carreras: {ex.Message}");
+            Console.WriteLine($"Error al obtener las carreras: {ex.Message}");
+        }
+    }
+
+    private async Task BuscarAlumnos()
+    {
+        try
+        {
+            var queryParams = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(searchNombre))
+            {
+                queryParams.Add($"nombre={searchNombre}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchApellido))
+            {
+                queryParams.Add($"apellido={searchApellido}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchDocumento))
+            {
+                queryParams.Add($"documento={searchDocumento}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(selectedCarrera))
+            {
+                queryParams.Add($"carrera={selectedCarrera}");
+            }
+
+            if (selectedCohorte.HasValue)
+            {
+                queryParams.Add($"cohorte={selectedCohorte.Value}");
+            }
+
+            string url = "api/Alumnos/buscar";
+            if (queryParams.Any())
+            {
+                url += "?" + string.Join("&", queryParams);
+            }
+
+            // Obtener la lista de alumnos del API
+            alumnos = await http.GetFromJsonAsync<List<BuscarAlumnoDTO>>(url);
+
+            if (alumnos == null)
+            {
+                alumnos = new List<BuscarAlumnoDTO>();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al buscar los alumnos: {ex.Message}");
         }
     }
 
@@ -214,7 +290,6 @@
         Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
     }
 
-    // Método para eliminar alumno
     private async Task EliminarAlumno(string documento)
     {
         try
@@ -231,7 +306,6 @@
             }
             else
             {
-                // Si ocurre un error, puedes manejarlo aquí (mostrar mensaje de error)
                 Console.WriteLine("Error al eliminar el alumno.");
             }
         }
@@ -241,10 +315,9 @@
         }
     }
 
-    // Método para cerrar el modal
     private void CerrarModalEliminar()
     {
-        EliminarExitoso = false; // Ocultar el modal
+        EliminarExitoso = false;
     }
 
     private void VerDetalles(BuscarAlumnoDTO alumno)
@@ -259,4 +332,3 @@
         AlumnoSeleccionado = null;
     }
 }
-

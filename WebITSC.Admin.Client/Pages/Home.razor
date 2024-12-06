@@ -4,21 +4,21 @@
 @inject NavigationManager Navigation
 
 <div class="center-text">
-    <h3><b>SELECCIONA TU ROL</b></h3>
+    <h3><b>Bienvenidos</b></h3>
 </div>
 
 <!-- Definimos variables que contienen el valor del rol -->
 @{
     var administrador = "Administrador";
-    var alumnos = "Alumnos";
-    var profesores = "Profesores";
+    // var alumnos = "Alumnos";
+    // var profesores = "Profesores";
 }
 
 <!-- Botones para seleccionar el rol -->
 <div class="role-selection">
     <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(administrador)">Administradores</button>
-    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(alumnos)">Alumnos</button>
-    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(profesores)">Profesores</button>
+@*     <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(alumnos)">Alumnos</button>
+    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(profesores)">Profesores</button> *@
 </div>
 
 
