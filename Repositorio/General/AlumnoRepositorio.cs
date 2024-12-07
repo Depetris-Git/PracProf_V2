@@ -119,7 +119,7 @@ namespace WebITSC.Admin.Server.Repositorio
                 MateriasQueCursa = a.MateriasCursadas.Select(mqc => new MateriasCursadasDTO
                 {
                     NombreMateria = mqc.Turno.MateriaEnPlanEstudio.Materia.Nombre,
-                    ResolucionMinisterial = mqc.Turno.MateriaEnPlanEstudio.Materia.ResolucionMinisterial,
+                    ResolucionMinisterial = mqc.Turno.MateriaEnPlanEstudio.PlanEstudio.ResolucionMinisterial,
                     FechaInscripcion = mqc.FechaInscripcion,
                     Anno = mqc.Turno.MateriaEnPlanEstudio.Materia.Anno,
                     Formacion = mqc.Turno.MateriaEnPlanEstudio.Materia.Formacion,

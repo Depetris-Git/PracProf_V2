@@ -38,7 +38,7 @@ namespace WebITSC.Server.Controllers.General
             this.usuarioRepositorio = usuarioRepositorio;
             this.inscripcionCarreraRepositorio = inscripcionCarreraRepositorio;
             this.carreraRepositorio = carreraRepositorio;
-            this.tipoDocumentoRepositorio = tipoDocumentoRepositorio;   
+            this.tipoDocumentoRepositorio = tipoDocumentoRepositorio;
 
         }
 
@@ -54,11 +54,11 @@ namespace WebITSC.Server.Controllers.General
 
             // Devolver la respuesta mapeada
             return Ok(alumnosDTO);
-           
+
         }
-            
+
         // Obtener alumno por ID
-        
+
         [HttpGet("{id:int}")]
         public async Task<ActionResult<GetAlumnoDTO>> GetById(int id)
         {
@@ -66,7 +66,7 @@ namespace WebITSC.Server.Controllers.General
             if (alumno == null) return NotFound();
             return Ok(alumno);
         }
-        
+
 
         //GET: api/alumnos/buscar
         [HttpGet("buscar")]
@@ -157,7 +157,7 @@ namespace WebITSC.Server.Controllers.General
                 TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId,
                 Domicilio = crearAlumnoDTO.Domicilio,
                 Telefono = crearAlumnoDTO.Telefono,
-                
+
             };
 
             // Usamos el repositorio de Persona para agregarla a la base de datos
@@ -200,11 +200,11 @@ namespace WebITSC.Server.Controllers.General
             {
                 AlumnoId = alumno.Id,
                 CarreraId = crearAlumnoDTO.CarreraId,
-                Cohorte = DateTime.Now.Year , // O la fecha que sea adecuada
+                Cohorte = DateTime.Now.Year, // O la fecha que sea adecuada
                 EstadoAlumno = "Activo",
                 Legajo = "legajo",
                 LibroMatriz = "Libro Matriz",
-                NroOrdenAlumno ="NumOrdenAlumno"
+                NroOrdenAlumno = "NumOrdenAlumno"
             };
 
             await inscripcionCarreraRepositorio.Insert(inscripcionCarrera); // Inscribir al alumno en la carrera

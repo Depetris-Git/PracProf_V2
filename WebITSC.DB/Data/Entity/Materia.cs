@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace WebITSC.DB.Data.Entity  //Lean == Realiza controller de la entidad (Materia) (No borrar mis comentarios) !!
 {
-    [Index(nameof(Nombre), nameof(ResolucionMinisterial), Name = "Materia_UQ", IsUnique = true)]
     [Index(nameof(Nombre), Name = "MateriasPorNombreIDX", IsUnique = false)]
     public class Materia : EntityBase
     {
@@ -23,10 +22,6 @@ namespace WebITSC.DB.Data.Entity  //Lean == Realiza controller de la entidad (Ma
         [Required(ErrorMessage = "La formación de la materia es necesaria")]
         [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string Formacion { get; set; }
-
-        [Required(ErrorMessage = "La resolución ministerial de la materia es necesaria")]
-        [MaxLength(36, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string ResolucionMinisterial { get; set; }
 
         [Required(ErrorMessage = "El año de la materia es necesario")]
         public int Anno { get; set; } //Año donde "se crea la materia", usualmente corresponde con el año del Plan de Estudio en donde aparece por primera vez.

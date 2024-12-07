@@ -16,10 +16,10 @@ namespace WebITSC.Admin.Server.UTIL
         public AutoMapperProfiles()
         {
             CreateMap<CrearAlumnoDTO, Alumno>();
-                                    //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
-                                    //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
-                                    //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
-                                    //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
+            //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
+            //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
+            //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
+            //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
 
             CreateMap<CrearAlumnoDTO, Persona>()
                                     .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
@@ -29,7 +29,7 @@ namespace WebITSC.Admin.Server.UTIL
                                     .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Telefono))
                                     .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Domicilio));
 
-            
+
             // Mapeo de CrearAlumnoDTO a Usuario (también podrías hacerlo si la lógica de tu usuario depende del DTO)
             CreateMap<CrearAlumnoDTO, Usuario>()
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
@@ -57,11 +57,11 @@ namespace WebITSC.Admin.Server.UTIL
                                             .ForMember(dest => dest.DocumentoPersona, opt => opt.MapFrom(src => src.Persona.Documento))
                                             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                                             .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Contrasena));
-       
+
             //_persona_____________________________________________________________________________________________________________________________________
             CreateMap<CrearPersonaDTO, Persona>().ForPath(dest => dest.TipoDocumento.Nombre, opt => opt.MapFrom(src => src.TipoDocumentoId));
             CreateMap<Persona, GetPersonaDTO>().ForMember(dest => dest.Cohorte, opt => opt.MapFrom(src => DateTime.Now.Year)); // Si "Cohorte" es parte de "Inscripcion_Carrera" en Persona
-                                               
+
 
 
             //_carrera_____________________________________________________________________________________________________________________________________
@@ -96,7 +96,7 @@ namespace WebITSC.Admin.Server.UTIL
             CreateMap<CrearPlanEstudioDTO, PlanEstudio>();
             CreateMap<CrearProfesorDTO, Profesor>();
             CreateMap<CrearTurnoDTO, Turno>();
-            
+
         }
     }
 }

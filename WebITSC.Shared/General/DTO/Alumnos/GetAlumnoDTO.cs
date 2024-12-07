@@ -89,15 +89,15 @@ namespace WebITSC.Shared.General.DTO.Alumnos
 
         [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string? CUS { get; set; }
-        
+
         public bool Estado { get; set; } = true;
 
         //_persona_____________________________________________________________________ 
         //public string PersonaId { get; set; }
 
         //_cohorte_____________________________________________________________________
-       public int Cohorte { get; set; }
-       public List<InscripcionesCarrerasDTO> InscripcionesEnCarreras { get; set; } = new List<InscripcionesCarrerasDTO>();
+        public int Cohorte { get; set; }
+        public List<InscripcionesCarrerasDTO> InscripcionesEnCarreras { get; set; } = new List<InscripcionesCarrerasDTO>();
 
     }
 }

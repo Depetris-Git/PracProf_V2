@@ -18,7 +18,7 @@ namespace WebITSC.DB.Data.Entity
 
         [Required(ErrorMessage = "El nombre del plan es necesario")]
         [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string Nombre { get; set; }
+        public string ResolucionMinisterial { get; set; }
 
         [Required(ErrorMessage = "El año del plan es necesario")]
         public int Anno { get; set; }
