@@ -15,30 +15,35 @@
     <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="/Inicio" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Inicio-Admin 
+                <NavLink class="nav-link d-flex align-items-center" href="/Inicio" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill me-2" aria-hidden="true"></span> Inicio
                 </NavLink>
             </div>
+
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="/Administracion/ListaAlumnos">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Alumnos
+                <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ListaAlumnos">
+                    <span class="bi bi-person-lines-fill me-2" aria-hidden="true"></span> Alumnos
                 </NavLink>
             </div>
+
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="api/Nota">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Notas Finales
+                <NavLink class="nav-link d-flex align-items-center" href="api/Nota">
+                    <span class="bi bi-file-earmark-text me-2" aria-hidden="true"></span> Notas Finales
                 </NavLink>
             </div>
+
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="/GenerarCertificado">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Generar Certificado
+                <NavLink class="nav-link d-flex align-items-center" href="/GenerarCertificado">
+                    <span class="bi bi-file-earmark-check me-2" aria-hidden="true"></span> Generar Certificado
                 </NavLink>
             </div>
+
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="/MateriasPlanEstudio">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Materias en P.Estudio
+                <NavLink class="nav-link d-flex align-items-center" href="/MateriasPlanEstudio">
+                    <span class="bi bi-book me-2" aria-hidden="true"></span> Materias en P.Estudio
                 </NavLink>
             </div>
+
             <!-- Enlace Swagger -->
           @*   <div class="nav-item px-3">
                 <NavLink class="nav-link" href="https://localhost:7118/swagger" target="_blank">

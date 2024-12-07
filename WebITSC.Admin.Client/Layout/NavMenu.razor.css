@@ -64,6 +64,17 @@
     background-color: rgba(255,255,255,0.1);
     color: white;
 }
+.nav-link {
+    display: flex;
+    align-items: center; /* Alinea el contenido verticalmente en el centro */
+    height: 70px; /* Establecer una altura fija si es necesario */
+}
+
+    .nav-link span {
+        font-size: 1rem; /* Tamaño del ícono */
+        margin-right: 10px; /* Espacio entre el ícono y el texto */
+        line-height: 1; /* Asegura que el ícono y el texto estén centrados */
+    }
 
 @media (min-width: 641px) {
     .navbar-toggler {
@@ -81,3 +92,4 @@
         overflow-y: auto;
     }
 }
+

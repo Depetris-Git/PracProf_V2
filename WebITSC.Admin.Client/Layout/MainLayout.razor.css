@@ -89,4 +89,20 @@ table {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
     }
+
+    <style >
+    /* Estilo personalizado para el InputSelect */
+    .custom-select {
+        font-size: 0.85rem; /* Reduce el tamaño del texto */
+        padding: 0.25rem 0.5rem; /* Ajusta el espaciado */
+        height: 35px; /* Reduce la altura */
+    }
+
+    /* Estilo para el menú desplegable */
+    .custom-select option {
+        font-size: 0.85rem; /* Ajusta el tamaño del texto de las opciones */
+    }
+
+
+
 }
