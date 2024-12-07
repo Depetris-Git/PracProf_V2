@@ -13,17 +13,6 @@
     <ValidationSummary />
 
     <div class="form-group">
-        <label for="CarreraId">Carrera</label>
-        <InputSelect class="form-control" id="CarreraId" @bind-Value="editarAlumno.CarreraId">
-            <option value="">Seleccione...</option>
-            @foreach (var carrera in carreras)
-            {
-                <option value="@carrera.Id">@carrera.Nombre</option>
-            }
-        </InputSelect>
-    </div>
-
-    <div class="form-group">
         <label for="Nombre">Nombre</label>
         <InputText class="form-control" id="Nombre" @bind-Value="editarAlumno.Nombre" />
     </div>
@@ -80,24 +69,49 @@
     </div>
 
     <div class="form-group">
-        <label for="Edad">Edad</label>
-        <InputNumber class="form-control" id="Edad" @bind-Value="editarAlumno.Edad" />
+        <label for="PaisId">País</label>
+        <InputSelect class="form-control" id="PaisId" @bind-Value="editarAlumno.PaisId">
+            <option value="">Seleccione...</option>
+            @foreach (var pais in paises)
+            {
+                <option value="@pais.Id">@pais.Nombre</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-group">
-        <label for="Pais">País</label>
-        <InputText class="form-control" id="Pais" @bind-Value="editarAlumno.Pais" />
+        <label for="ProvinciaId">Provincia</label>
+        <InputSelect class="form-control" id="ProvinciaId" @bind-Value="editarAlumno.ProvinciaId">
+            <option value="">Seleccione...</option>
+            @foreach (var provincia in provincias)
+            {
+                <option value="@provincia.Id">@provincia.Nombre</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-group">
-        <label for="Provincia">Provincia</label>
-        <InputText class="form-control" id="Provincia" @bind-Value="editarAlumno.Provincia" />
+        <label for="DepartamentoId">Departamento</label>
+        <InputSelect class="form-control" id="DepartamentoId" @bind-Value="editarAlumno.DepartamentoId">
+            <option value="">Seleccione...</option>
+            @foreach (var departamento in departamentos)
+            {
+                <option value="@departamento.Id">@departamento.Nombre</option>
+            }
+        </InputSelect>
     </div>
 
     <div class="form-group">
-        <label for="Departamento">Departamento</label>
-        <InputText class="form-control" id="Departamento" @bind-Value="editarAlumno.Departamento" />
+        <label for="LocalidadId">Localidad</label>
+        <InputSelect class="form-control" id="LocalidadId" @bind-Value="editarAlumno.LocalidadId">
+            <option value="">Seleccione...</option>
+            @foreach (var localidad in localidades)
+            {
+                <option value="@localidad.Id">@localidad.Nombre</option>
+            }
+        </InputSelect>
     </div>
+
 
     <div class="form-group">
         <label for="CUIL">CUIL</label>
@@ -140,7 +154,7 @@
         <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <button type="submit" class="btn btn-primary position-fixed" style="top: 80px; right: 20px; z-index: 9999;">Guardar Cambios</button>
 </EditForm>
 
 @code {
@@ -150,6 +164,10 @@
     private EditarAlumnoDTO editarAlumno = new EditarAlumnoDTO();
     private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
     private List<Carrera> carreras = new List<Carrera>();
+    private List<Pais> paises = new List<Pais>();
+    private List<Provincia> provincias = new List<Provincia>();
+    private List<Departamento> departamentos = new List<Departamento>();
+    private List<Localidad> localidades = new List<Localidad>();
 
     // Propiedades booleanas que se vinculan con los checkboxes
     private bool FotocopiaDNIBool
@@ -188,12 +206,11 @@
         set => editarAlumno.CUS = value ? "Sí" : "No";
     }
 
-    // Este método se ejecuta al cargar la página
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // Cargar tipos de documentos y carreras desde el API
+            // Cargar tipos de documentos y carreras
             var tiposDocumentosResponse = await http.Get<List<TipoDocumento>>("api/TipoDocumento");
             if (!tiposDocumentosResponse.Error)
             {
@@ -204,6 +221,30 @@
             if (!carrerasResponse.Error)
             {
                 carreras = carrerasResponse.Respuesta;
+            }
+
+            var paisesResponse = await http.Get<List<Pais>>("api/Paises");
+            if (!paisesResponse.Error)
+            {
+                paises = paisesResponse.Respuesta;
+            }
+
+            var provinciasResponse = await http.Get<List<Provincia>>("api/Provincias");
+            if (!provinciasResponse.Error)
+            {
+                provincias = provinciasResponse.Respuesta;
+            }
+
+            var departamentosResponse = await http.Get<List<Departamento>>("api/Departamentos");
+            if (!departamentosResponse.Error)
+            {
+                departamentos = departamentosResponse.Respuesta;
+            }
+
+            var localidadesResponse = await http.Get<List<Localidad>>("api/Localidades");
+            if (!localidadesResponse.Error)
+            {
+                localidades = localidadesResponse.Respuesta;
             }
 
             // Cargar datos del alumno a editar
@@ -250,5 +291,3 @@
         }
     }
 }
-
-

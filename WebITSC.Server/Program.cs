@@ -7,6 +7,7 @@ using WebITSC.Admin.Client.Servicios;
 using System.Text.Json;
 using Repositorio.General;
 using WebITSC.Server.Controllers.General;
+using Repositorio.General.Repos_Genericos.Residencia;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,6 @@ builder.Services.AddControllers();
 
 //servicio Client
 builder.Services.AddRazorPages();
-builder.Services.AddScoped<IHttpServicios, HttpServicios>();
 builder.Services.AddHttpClient();
 
 //SERVICIO DE MAPPER
@@ -50,6 +50,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //SERVICIO DE ROLES FRONT
 builder.Services.AddSingleton<ServicioRol>();
+
 
 
 builder.Services.AddControllersWithViews();
@@ -86,9 +87,15 @@ builder.Services.AddScoped<ICertificadoAlumnoRepositorio, CertificadoAlumnoRepos
 builder.Services.AddScoped<IUsuarioRepositorio, UsuarioRepositorio>();
 builder.Services.AddScoped<IPersonaRepositorio, PersonaRepositorio>();
 builder.Services.AddScoped<ICarreraRepositorio, CarreraRepositorio>();
-builder.Services.AddScoped<ITipoDocumentoRepositorio, TipoDocumentoRepositorio>();   
+builder.Services.AddScoped<ITipoDocumentoRepositorio, TipoDocumentoRepositorio>();
 
-builder.Services.AddScoped< IHttpServicios, HttpServicios>();
+builder.Services.AddScoped<IPaisRepositorio, PaisRepositorio>();
+builder.Services.AddScoped<IProvinciaRepositorio, ProvinciaRepositorio>();
+builder.Services.AddScoped<IDepartamentoRepositorio, DepartamentoRepositorio>();
+builder.Services.AddScoped<ILocalidadRepositorio, LocalidadRepositorio>();
+
+// Registrar HttpServicios
+builder.Services.AddScoped<IHttpServicios, HttpServicios>();
 
 var app = builder.Build();
 

@@ -146,9 +146,14 @@ namespace WebITSC.Admin.Server.Repositorio
 
         public async Task<bool> Update(Alumno alumno)
         {
+            // Actualizar la entidad Alumno y sus entidades relacionadas
             context.Alumnos.Update(alumno);
+            context.Usuarios.Update(alumno.Usuario);
+            context.Personas.Update(alumno.Usuario.Persona);
+
             return await context.SaveChangesAsync() > 0;
         }
+
 
         //---------------------------------------------------
 
@@ -217,7 +222,7 @@ namespace WebITSC.Admin.Server.Repositorio
 
         }
 
-        private int CalcularEdad(DateTime fechaCumple)
+        private static int CalcularEdad(DateTime fechaCumple)
         {
             int edad = DateTime.Now.Year - fechaCumple.Year;
             if (DateTime.Now.DayOfYear < fechaCumple.DayOfYear)

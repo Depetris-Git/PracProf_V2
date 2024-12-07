@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebITSC.DB.Data;
 
@@ -11,9 +12,11 @@ using WebITSC.DB.Data;
 namespace WebITSC.DB.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20241202213623_inicio")]
+    partial class inicio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,11 +114,6 @@ namespace WebITSC.DB.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Abreviatura")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("DuracionCarrera")
                         .IsRequired()
@@ -604,7 +602,7 @@ namespace WebITSC.DB.Migrations
                     b.Property<bool>("EstadoPlan")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ResolucionMinisterial")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
