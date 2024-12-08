@@ -20,6 +20,8 @@ namespace WebITSC.Shared.General.DTO.Alumnos
 
         public int CarreraId { get; set; }  // Carrera en la que se va a inscribir
         public string NameCarrera { get; set; }
+        public string AbreviaturaCarrera { get; set; }
+
 
         // Datos de Persona
         [Required(ErrorMessage = "El nombre de la persona es necesario")]

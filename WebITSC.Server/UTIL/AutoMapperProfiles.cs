@@ -94,6 +94,7 @@ namespace WebITSC.Admin.Server.UTIL
                                            .ForMember(dest => dest.Cohorte, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Cohorte))
                                            .ForMember(dest => dest.CarreraId, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Id))
                                            .ForMember(dest => dest.NameCarrera, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Nombre))
+                                           .ForMember(dest => dest.AbreviaturaCarrera, opt => opt.MapFrom(src => src.InscripcionesCarreras.FirstOrDefault().Carrera.Abreviatura))
                                            .ForMember(dest => dest.Pais, opt => opt.MapFrom(src => src.Pais.Nombre))
                                            .ForMember(dest => dest.Provincia, opt => opt.MapFrom(src => src.Provincia.Nombre))
                                            .ForMember(dest => dest.Departamento, opt => opt.MapFrom(src => src.Departamento.Nombre))

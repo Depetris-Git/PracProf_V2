@@ -12,7 +12,7 @@ using WebITSC.DB.Data;
 namespace WebITSC.DB.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241202213623_inicio")]
+    [Migration("20241208154022_inicio")]
     partial class inicio
     {
         /// <inheritdoc />
@@ -114,6 +114,11 @@ namespace WebITSC.DB.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Abreviatura")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("DuracionCarrera")
                         .IsRequired()
@@ -432,15 +437,7 @@ namespace WebITSC.DB.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("ResolucionMinisterial")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Nombre", "ResolucionMinisterial" }, "Materia_UQ")
-                        .IsUnique();
 
                     b.HasIndex(new[] { "Nombre" }, "MateriasPorNombreIDX");
 
@@ -602,7 +599,7 @@ namespace WebITSC.DB.Migrations
                     b.Property<bool>("EstadoPlan")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Nombre")
+                    b.Property<string>("ResolucionMinisterial")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");

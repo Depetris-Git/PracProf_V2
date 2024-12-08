@@ -25,7 +25,7 @@
             <option value="">Seleccione una carrera</option>
             @foreach (var carrera in availableCarreras)
             {
-                <option value="@carrera.Nombre">@carrera.Nombre</option>
+                <option value="@carrera.Abreviatura">@carrera.Nombre</option>
             }
         </InputSelect>
     </div>
@@ -63,7 +63,7 @@
                     @foreach (var alumno in FilteredAlumnos)
                     {
                         <tr>
-                            <td style="text-align: center;">@alumno.InscripcionesEnCarreras.FirstOrDefault()?.NombreCarrera</td>
+                            <td style="text-align: center;">@alumno.InscripcionesEnCarreras.FirstOrDefault()?.AbreviaturaCarrera</td>
                             <td style="text-align: center;">@(alumno.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString())</td>
                             <td style="text-align: center;">@alumno.Nombre</td>
                             <td style="text-align: center;">@alumno.Apellido</td>
@@ -125,9 +125,12 @@
                     <div class="modal-body">
                         <p><strong>Nombre:</strong> @AlumnoSeleccionado.Nombre</p>
                         <p><strong>Apellido:</strong> @AlumnoSeleccionado.Apellido</p>
-                        <p><strong>Cohorte:</strong> @AlumnoSeleccionado.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString() ?? "Sin cohorte"</p>
+                        <p><strong>Cohorte:</strong> @AlumnoSeleccionado.InscripcionesEnCarreras.FirstOrDefault()?.Cohorte.ToString() </p>
                         <p><strong>Documento:</strong> @AlumnoSeleccionado.Documento</p>
                         <p><strong>CUIL:</strong> @AlumnoSeleccionado.Cuil</p>
+                        <p><strong>Edad:</strong> @AlumnoSeleccionado.Edad</p>
+                        <p><strong>Email:</strong> @AlumnoSeleccionado.Email</p>
+                        <p><strong>Sexo:</strong> @AlumnoSeleccionado.Sexo</p>
                         <p><strong>País:</strong> @AlumnoSeleccionado.Pais</p>
                         <p><strong>Provincia:</strong> @AlumnoSeleccionado.Provincia</p>
                         <p><strong>Departamento:</strong> @AlumnoSeleccionado.Departamento</p>
@@ -189,7 +192,7 @@
             if (!string.IsNullOrWhiteSpace(selectedCarrera))
             {
                 filtered = filtered.Where(a => a.InscripcionesEnCarreras
-                    .Any(ic => ic.NombreCarrera.Contains(selectedCarrera, StringComparison.OrdinalIgnoreCase)));
+                    .Any(ic => ic.AbreviaturaCarrera.Contains(selectedCarrera, StringComparison.OrdinalIgnoreCase)));
             }
 
             // Filtrar por Cohorte seleccionado

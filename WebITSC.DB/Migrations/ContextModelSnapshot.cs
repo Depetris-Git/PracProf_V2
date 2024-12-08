@@ -434,15 +434,7 @@ namespace WebITSC.DB.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("ResolucionMinisterial")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Nombre", "ResolucionMinisterial" }, "Materia_UQ")
-                        .IsUnique();
 
                     b.HasIndex(new[] { "Nombre" }, "MateriasPorNombreIDX");
 

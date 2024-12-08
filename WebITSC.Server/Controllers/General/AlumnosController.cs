@@ -167,7 +167,7 @@ namespace WebITSC.Server.Controllers.General
                 Documento = crearAlumnoDTO.Documento,
                 TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId,
                 Domicilio = crearAlumnoDTO.Domicilio,
-                Telefono = crearAlumnoDTO.Telefono,
+                Telefono = crearAlumnoDTO.Telefono
 
             };
 

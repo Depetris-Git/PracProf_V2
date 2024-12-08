@@ -50,6 +50,7 @@ namespace WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
     public class InscripcionesCarrerasDTO
     {
         public string NombreCarrera { get; set; }
+        public string AbreviaturaCarrera { get; set; }
         public int Cohorte { get; set; }
         public string Legajo { get; set; }
         public string LibroMatriz { get; set; }

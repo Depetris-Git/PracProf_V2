@@ -15,6 +15,10 @@ namespace WebITSC.Shared.General.DTO.Carreraa
         [MaxLength(40, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string Nombre { get; set; }
 
+        [Required(ErrorMessage = "El nombre de la carrera es necesario")]
+        [MaxLength(10, ErrorMessage = "Máximo número de caracteres {10}.")]
+        public string Abreviatura { get; set; }
+
         [Required(ErrorMessage = "La duración de la carrera (en años) es necesaria")]
         [MaxLength(20, ErrorMessage = "Máximo número de caracteres {1}.")]
         public string DuracionCarrera { get; set; }

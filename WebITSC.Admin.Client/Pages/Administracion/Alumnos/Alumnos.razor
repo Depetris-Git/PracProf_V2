@@ -13,7 +13,7 @@
 <EditForm Model="crearAlumno" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
+    <b>
     <div class="form-group">
         <label for="CarreraId">Carrera</label>
         <InputSelect class="form-control" id="CarreraId" @bind-Value="crearAlumno.CarreraId">
@@ -64,6 +64,7 @@
             }
         </InputSelect>
     </div>
+    </b>
 
     <button type="submit" class="btn btn-primary">Crear Alumno</button>
 </EditForm>

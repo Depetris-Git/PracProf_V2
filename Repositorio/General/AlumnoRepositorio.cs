@@ -108,7 +108,7 @@ namespace WebITSC.Admin.Server.Repositorio
                 }).ToList(),
                 InscripcionesEnCarreras = a.InscripcionesCarreras.Select(ic => new InscripcionesCarrerasDTO
                 {
-                    NombreCarrera = ic.Carrera.Nombre,
+                    AbreviaturaCarrera = ic.Carrera.Abreviatura,
                     Cohorte = ic.Cohorte,
                     Legajo = ic.Legajo,
                     LibroMatriz = ic.LibroMatriz,

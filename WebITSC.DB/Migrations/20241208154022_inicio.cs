@@ -18,6 +18,7 @@ namespace WebITSC.DB.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    Abreviatura = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     DuracionCarrera = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Modalidad = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
@@ -35,7 +36,6 @@ namespace WebITSC.DB.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Formato = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Formacion = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ResolucionMinisterial = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Anno = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -77,7 +77,7 @@ namespace WebITSC.DB.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarreraId = table.Column<int>(type: "int", nullable: false),
-                    Nombre = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    ResolucionMinisterial = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Anno = table.Column<int>(type: "int", nullable: false),
                     EstadoPlan = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -653,12 +653,6 @@ namespace WebITSC.DB.Migrations
                 name: "IX_Localidades_DepartamentoId",
                 table: "Localidades",
                 column: "DepartamentoId");
-
-            migrationBuilder.CreateIndex(
-                name: "Materia_UQ",
-                table: "Materias",
-                columns: new[] { "Nombre", "ResolucionMinisterial" },
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "MateriasPorNombreIDX",

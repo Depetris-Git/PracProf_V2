@@ -11,7 +11,7 @@
 <EditForm Model="editarAlumno" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
+    <b>
     <div class="form-group">
         <label for="Nombre">Nombre</label>
         <InputText class="form-control" id="Nombre" @bind-Value="editarAlumno.Nombre" />
@@ -53,10 +53,10 @@
         <InputText class="form-control" id="Email" @bind-Value="editarAlumno.Email" />
     </div>
 
-    <div class="form-group">
+  @*   <div class="form-group">
         <label for="Contrasena">Contraseña</label>
         <InputText class="form-control" id="Contrasena" @bind-Value="editarAlumno.Contrasena" />
-    </div>
+    </div> *@
 
     <div class="form-group">
         <label for="Sexo">Sexo</label>
@@ -153,7 +153,7 @@
         <label for="TieneCUS">CUS</label>
         <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
     </div>
-
+    </b>
     <button type="submit" class="btn position-fixed" style="top: 80px; right: 20px; z-index: 9999; background-color: #00bfff; display: flex; align-items: center; padding: 10px 20px; border-radius: 30px;">
         <i class="bi bi-save" style="color: white; font-size: 20px; margin-right: 8px;"></i> <!-- Ícono de disquete (guardar) -->
         Guardar Cambios
