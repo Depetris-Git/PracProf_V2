@@ -1,10 +1,15 @@
-﻿using WebITSC.Admin.Server.Repositorio;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebITSC.Admin.Server.Repositorio;
 using WebITSC.DB.Data.Entity;
+using WebITSC.Shared.General.DTO.ProvinciaDptoLocal;
 
 namespace Repositorio.General.Repos_Genericos.Residencia
 {
     public interface IPaisRepositorio : IRepositorio<Pais>
     {
+        //Task<List<Pais>> SelectPaisesAsync(int PaisId);
+        //Task SelectProvinciasPorPaisAsync(int paisId);
+        //Task<ActionResult<List<GetProvinciaDTO>>> GetProvinciasPorPais(int PaisId);
         Task<List<Pais>> SelectPaisesAsync(int PaisId);
         //Task<List<Departamento>> ObtenerDepartamentosPorProvinciaAsync(int ProvinciaId);
         //Task<List<Localidad>> ObtenerLocalidadesPorDepartamentoAsync(int DepartamentoId);

@@ -70,7 +70,7 @@ namespace WebITSC.Admin.Server.Controllers
             }
 
             // Llamamos al repositorio para obtener las provincias asociadas
-            var provincias = await eRepositorio.SelectProvinciasPorPaisAsync(PaisId);
+            var provincias = await eRepositorio.SelectPaisesAsync(PaisId);
 
             // Si no hay provincias, devolvemos una lista vacía
             if (provincias == null || !provincias.Any())
