@@ -28,8 +28,8 @@
     <div class="form-group">
         <label for="PaisId">País</label>
         <InputSelect class="form-control" id="PaisId"
-        ValueExpression="@(() => crearAlumno.PaisId)"
-        ValueChanged="@((int PaisId) => ActualizarProvincias(PaisId))">
+                     ValueExpression="@(() => crearAlumno.PaisId)"
+                     ValueChanged="@((int PaisId) => ActualizarProvincias(PaisId))">
             <option value="">Seleccione...</option>
             @foreach (var pais in paises)
             {
@@ -45,23 +45,22 @@
         ValueExpression="@(() => crearAlumno.ProvinciaId)"
         ValueChanged="@((int ProvinciaId) => ActualizarDepartamentos(ProvinciaId))">
             <option value="">Seleccione...</option>
-            @foreach (var prov in provincias)
+            @foreach (var prov in provincia)
             {
                 <option value="@prov.Id">@prov.Nombre</option>
             }
         </InputSelect>
     </div>
 
-
+ 
 
     <div class="form-group">
         <label for="LocalidadId">Localidad</label>
-        <InputSelect class="form-control" id="LocalidadId"
-        @bind-Value="crearAlumno.LocalidadId">
+        <InputSelect class="form-control" id="LocalidadId" @bind-Value="crearAlumno.LocalidadId">
             <option value="">Seleccione...</option>
-            @foreach (var dept in departamentos)
+            @foreach (var local in localidad)
             {
-                <option value="@dept.Id">@dept.Nombre</option>
+                <option value="@local.Id">@local.Nombre</option>
             }
         </InputSelect>
     </div>
@@ -74,9 +73,9 @@
     private CrearAlumnoDTO crearAlumno = new CrearAlumnoDTO();
     private List<TipoDocumento> tiposDocumentos = new List<TipoDocumento>();
     private List<Pais> paises = new List<Pais>();
-    private List<Provincia> provincias = new List<Provincia>();
-    private List<Departamento> departamentos = new List<Departamento>();
-    private List<Localidad> localidades = new List<Localidad>();
+    private List<Provincia> provincia = new List<Provincia>();
+    private List<Departamento> departamento = new List<Departamento>();
+    private List<Localidad> localidad = new List<Localidad>();
     private List<Carrera> carreras = new List<Carrera>();
 
     // Este método se ejecuta al cargar la página
@@ -91,39 +90,61 @@
     // Actualiza las provincias cuando se selecciona un país
     private async Task ActualizarProvincias(int PaisId)
     {
-        if (PaisId > 0)
+        Console.WriteLine($"Pais seleccionado: {PaisId}");
+        Console.WriteLine($"Consultando provincias para el país ID: {PaisId}");
+
+        // Llama a la API para obtener las provincias correspondientes al país seleccionado
+        provincia = await http.SelectProvinciasPorPaisAsync(PaisId);
+
+        // Forzar la actualización de la interfaz
+        StateHasChanged();
+
+        if (provincia == null || !provincia.Any())
         {
-            provincias = await http.SelectProvinciasPorPaisAsync(PaisId);
-            departamentos.Clear(); // Reiniciar departamentos si cambia el país
-            localidades.Clear(); // // Reiniciar localidades si cambia el país
+            Console.WriteLine("No se encontraron provincias.");
         }
         else
         {
-            provincias.Clear();
+            Console.WriteLine($"Se cargaron {provincia.Count} provincias.");
         }
-        // Forzar la actualizacion de la interfaz
-        StateHasChanged();
     }
 
 
-    // Actualiza los departamentos cuando se selecciona una provincia
-    private async Task ActualizarDepartamentos(int ProvinciaId)
+   // Actualiza los departamentos cuando se selecciona una provincia
+    private async Task ActualizarDepartamentos(int provinciaId)
     {
-        if (ProvinciaId > 0)
+        Console.WriteLine($"Consultando departamentos para la provincia ID: {provinciaId}");
+
+        // Llama a la API para obtener los departamentos correspondientes a la provincia seleccionada
+        departamento = await http.SelectDepartamentosPorProvinciaAsync(provinciaId);
+
+        if (departamento == null || !departamento.Any())
         {
-            departamentos = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
-            localidades.Clear();
+            Console.WriteLine("No se encontraron departamentos.");
         }
         else
         {
-            departamentos.Clear();
+            Console.WriteLine($"Se cargaron {departamento.Count} departamentos.");
         }
-
-        StateHasChanged();
     }
 
     // // Actualiza las localidades cuando se selecciona un departamento
-    
+    // private async Task ActualizarLocalidades(int departamentoId)
+    // {
+    //     Console.WriteLine($"Consultando localidades para el departamento ID: {departamentoId}");
+
+    //     // Llama a la API para obtener las localidades correspondientes al departamento seleccionado
+    //     localidad = await http.SelectLocalidadesPorDepartamentoAsync(departamentoId);
+
+    //     if (localidad == null || !localidad.Any())
+    //     {
+    //         Console.WriteLine("No se encontraron localidades.");
+    //     }
+    //     else
+    //     {
+    //         Console.WriteLine($"Se cargaron {localidad.Count} localidades.");
+    //     }
+    // }
 
     // Este método se ejecuta cuando el formulario es enviado y válido
     private async Task HandleValidSubmit()

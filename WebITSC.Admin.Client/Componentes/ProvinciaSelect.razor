@@ -10,8 +10,8 @@
 
 @code {
 	private List<Provincia> Provincias = new List<Provincia>();
-	
-	[Parameter] 
+
+	[Parameter]
 	public int PaisId { get; set; }
 
 	[Parameter]
@@ -19,7 +19,7 @@
 
 	protected override async Task OnParametersSetAsync()
 	{
-		if (PaisId > 0) 
+		if (PaisId > 0)
 		{
 			Provincias = await http.SelectProvinciasPorPaisAsync(PaisId);
 		}
@@ -27,7 +27,7 @@
 
 	private async Task OnProvinciaChanged(ChangeEventArgs e)
 	{
-		int selectedProvinciaId = int.Parse(e.Value.ToString()); 
+		int selectedProvinciaId = int.Parse(e.Value.ToString());
 		await OnProvinciaSelected.InvokeAsync(selectedProvinciaId);
 	}
 }
