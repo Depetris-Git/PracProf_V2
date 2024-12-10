@@ -17,14 +17,17 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
     padding-top: 1.1rem;
 }
 
-.valid.modified:not([type=checkbox]) {
+.valid.modified:not([type=checkbox]
+
+
+{
     outline: 1px solid #26b050;
 }
 
@@ -139,8 +142,8 @@ body, html {
 
 
 .page-background {
-/*    background-image: url('../itsc1.png');
-*/    background-image: url('../its1.png');
+    /*    background-image: url('../itsc1.png');
+*/ background-image: url('../its1.png');
     background-size: 380px 350px; /* Ajusta el tamaño de la imagen (ancho x alto) */
     background-position: center; /* Centra la imagen en el contenedor */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -150,6 +153,7 @@ body, html {
     align-items: center; /* Centra el contenido verticalmente */
     text-align: center; /* Centra el texto dentro del contenedor */
 }
+
 body, html {
     margin: 0;
     padding: 0;
@@ -171,7 +175,7 @@ body, html {
     font-size: 0.95rem; /* Fuente ligeramente más pequeña */
     border-collapse: separate;
     border-spacing: 0 10px; /* Espacio entre las filas */
-    
+
     width: 100%;
     table-layout: fixed;
 }
@@ -233,7 +237,7 @@ body, html {
     }
 
 /*   home diseño __________________________________________________________________
-*//* Cambia el fondo del contenedor */
+*/ /* Cambia el fondo del contenedor */
 .background-container {
     background-color: #f0f0f0; /* El color de fondo */
     padding: 80px; /* Un poco de espacio alrededor */
@@ -242,8 +246,8 @@ body, html {
 /* Fondo atractivo para el home */
 /*.background-home {
     background: linear-gradient(135deg, #00bfff, #00d4ff);*/ /* Degradado azul */
-    /*height: 100vh;*/ /* Ocupa toda la altura de la pantalla */
-    /*display: flex;
+/*height: 100vh;*/ /* Ocupa toda la altura de la pantalla */
+/*display: flex;
     justify-content: center;
     align-items: center;
 }*/
@@ -264,22 +268,19 @@ body, html {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Sombra y animación para los botones */
-.btn-custom:hover {
-    background-color: #00a1e6;
-    transform: translateY(-5px); /* Animación de elevación */
-}
+    /* Sombra y animación para los botones */
+    .btn-custom:hover {
+        background-color: #00a1e6;
+        transform: translateY(-5px); /* Animación de elevación */
+    }
 
-/* Espacio entre botones */
-.btn-custom + .btn-custom {
-    margin-top: 15px;
-}
+    /* Espacio entre botones */
+    .btn-custom + .btn-custom {
+        margin-top: 15px;
+    }
 
-/* Estilos para los íconos dentro de los botones */
-.btn-custom i {
-    margin-right: 10px; /* Espacio entre el icono y el texto */
-    font-size: 1.5rem;
-}
-
-
-
+    /* Estilos para los íconos dentro de los botones */
+    .btn-custom i {
+        margin-right: 10px; /* Espacio entre el icono y el texto */
+        font-size: 1.5rem;
+    }

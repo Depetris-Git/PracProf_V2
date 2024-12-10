@@ -9,7 +9,11 @@ main {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, rgb(5, 39, 103
+    
+    
+    
+    0%, #3a0647 70%);
 }
 
 
@@ -90,18 +94,18 @@ table {
         padding-right: 1.5rem !important;
     }
 
-    <style >
+    /*<style >*/
     /* Estilo personalizado para el InputSelect */
-    .custom-select {
-        font-size: 0.85rem; /* Reduce el tamaño del texto */
-        padding: 0.25rem 0.5rem; /* Ajusta el espaciado */
-        height: 35px; /* Reduce la altura */
-    }
+    /*.custom-select {
+        font-size: 0.85rem;*/ /* Reduce el tamaño del texto */
+        /*padding: 0.25rem 0.5rem;*/ /* Ajusta el espaciado */
+        /*height: 35px;*/ /* Reduce la altura */
+    /*}*/
 
     /* Estilo para el menú desplegable */
-    .custom-select option {
-        font-size: 0.85rem; /* Ajusta el tamaño del texto de las opciones */
-    }
+    /*.custom-select option {
+        font-size: 0.85rem;*/ /* Ajusta el tamaño del texto de las opciones */
+    /*}*/
 
 
 

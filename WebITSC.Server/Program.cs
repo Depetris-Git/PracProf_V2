@@ -9,6 +9,9 @@ using Repositorio.General;
 using WebITSC.Server.Controllers.General;
 using Repositorio.General.Repos_Genericos.Residencia;
 
+using Microsoft.JSInterop;
+using System.ComponentModel;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(
     x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -51,6 +55,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 //SERVICIO DE ROLES FRONT
 builder.Services.AddSingleton<ServicioRol>();
 
+//builder.Services.AddScoped<IJSRuntime, JSRuntime>();
 
 
 builder.Services.AddControllersWithViews();
@@ -97,6 +102,7 @@ builder.Services.AddScoped<ILocalidadRepositorio, LocalidadRepositorio>();
 // Registrar HttpServicios
 builder.Services.AddScoped<IHttpServicios, HttpServicios>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -125,3 +131,4 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+

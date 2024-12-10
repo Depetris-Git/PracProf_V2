@@ -1,10 +1,9 @@
 ﻿@inherits LayoutComponentBase
 @inject ServicioRol ServicioRol
 
-
 <div class="page">
     <div class="sidebar">
-        <!-- Pasamos el rol al componente NavMenu. Usamos el método ObtenerRol() para obtener el rol actualizado. -->
+        <!-- Pasamos el rol al componente NavMenu. -->
         <NavMenu Role="@ServicioRol.ObtenerRol()" />
     </div>
 
