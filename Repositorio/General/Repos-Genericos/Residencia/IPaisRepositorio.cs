@@ -5,7 +5,8 @@ namespace Repositorio.General.Repos_Genericos.Residencia
 {
     public interface IPaisRepositorio : IRepositorio<Pais>
     {
-        Task<List<Pais>> SelectPaisesAsync(int PaisId);
+        //Task<List<Pais>> SelectPaisesAsync(int PaisId);
+        Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId);
         //Task<List<Departamento>> ObtenerDepartamentosPorProvinciaAsync(int ProvinciaId);
         //Task<List<Localidad>> ObtenerLocalidadesPorDepartamentoAsync(int DepartamentoId);
         //Task<List<Provincia>> ObtenerProvinciasPorPaisAsync(int PaisId);

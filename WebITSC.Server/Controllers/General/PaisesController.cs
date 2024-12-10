@@ -58,31 +58,31 @@ namespace WebITSC.Admin.Server.Controllers
             return existe;
         }
 
-        // Obtener las provincias por país
-        [HttpGet("{PaisId}/Provincias")]
-        public async Task<ActionResult<List<GetProvinciaDTO>>> GetProvinciasPorPais(int PaisId)
-        {
-            // Verificamos si el país existe
-            var pais = await eRepositorio.SelectById(PaisId);
-            if (pais == null)
-            {
-                return NotFound($"No se encontró el país con ID {PaisId}");
-            }
+        //// Obtener las provincias por país
+        //[HttpGet("{PaisId}/Provincias")]
+        //public async Task<ActionResult<List<GetProvinciaDTO>>> GetProvinciasPorPais(int PaisId)
+        //{
+        //    // Verificamos si el país existe
+        //    var pais = await eRepositorio.SelectById(PaisId);
+        //    if (pais == null)
+        //    {
+        //        return NotFound($"No se encontró el país con ID {PaisId}");
+        //    }
 
-            // Llamamos al repositorio para obtener las provincias asociadas
-            var provincias = await eRepositorio.SelectProvinciasPorPaisAsync(PaisId);
+        //    // Llamamos al repositorio para obtener las provincias asociadas
+        //    var provincias = await eRepositorio.SelectProvinciasPorPaisAsync(PaisId);
 
-            // Si no hay provincias, devolvemos una lista vacía
-            if (provincias == null || !provincias.Any())
-            {
-                return Ok(new List<GetProvinciaDTO>());
-            }
+        //    // Si no hay provincias, devolvemos una lista vacía
+        //    if (provincias == null || !provincias.Any())
+        //    {
+        //        return Ok(new List<GetProvinciaDTO>());
+        //    }
 
-            // Mapeamos las provincias a un DTO
-            var provinciasDto = mapper.Map<List<GetProvinciaDTO>>(provincias);
+        //    // Mapeamos las provincias a un DTO
+        //    var provinciasDto = mapper.Map<List<GetProvinciaDTO>>(provincias);
 
-            return Ok(provinciasDto);
-        }
+        //    return Ok(provinciasDto);
+        //}
 
 
         // Crear un nuevo pais
