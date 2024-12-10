@@ -9,11 +9,7 @@ main {
 }
 
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103
-    
-    
-    
-    0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
 }
 
 
@@ -32,11 +28,11 @@ table {
     color: white; /* Color de texto blanco */
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.top-row ::deep a, .top-row ::deep .btn-link {
+    white-space: nowrap;
+    margin-left: 1.5rem;
+    text-decoration: none;
+}
 
     .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
         text-decoration: underline;
@@ -52,9 +48,9 @@ table {
         justify-content: space-between;
     }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+        .top-row ::deep a, .top-row ::deep .btn-link {
+            margin-left: 0;
+        }
 }
 
 @media (min-width: 641px) {
@@ -79,15 +75,13 @@ table {
         height: 3.5rem;
         display: flex;
         align-items: center;
-
-       
     }
 
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: %100;
-    }
+        .top-row.auth ::deep a:first-child {
+            flex: 1;
+            text-align: right;
+            width: %100;
+        }
 
     .top-row, article {
         padding-left: 2rem !important;
@@ -98,8 +92,8 @@ table {
     /* Estilo personalizado para el InputSelect */
     /*.custom-select {
         font-size: 0.85rem;*/ /* Reduce el tamaño del texto */
-        /*padding: 0.25rem 0.5rem;*/ /* Ajusta el espaciado */
-        /*height: 35px;*/ /* Reduce la altura */
+    /*padding: 0.25rem 0.5rem;*/ /* Ajusta el espaciado */
+    /*height: 35px;*/ /* Reduce la altura */
     /*}*/
 
     /* Estilo para el menú desplegable */
