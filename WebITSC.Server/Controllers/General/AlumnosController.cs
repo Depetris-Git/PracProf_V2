@@ -314,29 +314,25 @@ namespace WebITSC.Server.Controllers.General
             }
         }
 
-        // Eliminar alumno
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        // ---------------Eliminar alumno------------------------
+        [HttpDelete("{documento}")]
+        public async Task<IActionResult> DeleteAlumno(string documento)
         {
-            // Verifica si el alumno existe
-            var alumnoExistente = await eRepositorio.FullGetById(id);
-            if (alumnoExistente == null)
+            var alumno = await eRepositorio.GetAlumnoPorDocumento(documento);
+            if (alumno == null)
             {
-                return NotFound($"El alumno con ID {id} no existe.");
+                return NotFound();
             }
 
-            // Llamamos al repositorio para eliminar el alumno
-            var resultado = await eRepositorio.EliminarAlumno(id);
+            var result = await eRepositorio.EliminarAlumno(alumno.Id);
+            if (!result)
+            {
+                return BadRequest("No se pudo eliminar el alumno.");
+            }
 
-            if (resultado)
-            {
-                return Ok($"El alumno con ID {id} fue eliminado correctamente.");
-            }
-            else
-            {
-                return BadRequest("No se pudo eliminar el alumno. Ocurrió un error.");
-            }
+            return NoContent();
         }
+
 
 
     }
