@@ -12,5 +12,6 @@ namespace WebITSC.Admin.Client.Servicios
         Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId);
         Task<HttpRespuesta<object>> Post<O>(string url, O entidad);
         Task<HttpRespuesta<object>> Put<O>(string url, O entidad);
+        Task<HttpRespuesta<object>> Delete(string url);
     }
 }

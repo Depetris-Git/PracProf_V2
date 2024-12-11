@@ -138,5 +138,18 @@ namespace WebITSC.Admin.Client.Servicios
             }
         }
 
+        public async Task<HttpRespuesta<object>> Delete(string url)
+        {
+            var response = await http.DeleteAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return new HttpRespuesta<object>(null, false, response);
+            }
+            else
+            {
+                return new HttpRespuesta<object>(default, true, response);
+            }
+        }
     }
 }

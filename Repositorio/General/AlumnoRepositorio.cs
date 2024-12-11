@@ -163,64 +163,58 @@ namespace WebITSC.Admin.Server.Repositorio
             {
                 try
                 {
-                    // 1. Eliminar las inscripciones en carreras relacionadas con el alumno
+                    // Eliminar inscripciones en carreras relacionadas con el alumno
                     var inscripciones = await context.InscripcionesCarrera
                         .Where(i => i.AlumnoId == alumnoId)
                         .ToListAsync();
-
                     if (inscripciones.Any())
                     {
-                        context.InscripcionesCarrera.RemoveRange(inscripciones);  // Eliminar todas las inscripciones
-                        await context.SaveChangesAsync();  // Guardar cambios
+                        context.InscripcionesCarrera.RemoveRange(inscripciones);
+                        await context.SaveChangesAsync();
                     }
 
-                    // 2. Eliminar el alumno
+                    // Eliminar el alumno
                     var alumno = await context.Alumnos
                         .Where(a => a.Id == alumnoId)
                         .FirstOrDefaultAsync();
-
                     if (alumno != null)
                     {
-                        context.Alumnos.Remove(alumno);  // Eliminar el alumno
-                        await context.SaveChangesAsync();  // Guardar cambios
+                        context.Alumnos.Remove(alumno);
+                        await context.SaveChangesAsync();
                     }
 
-                    // 3. Eliminar el usuario asociado al alumno
+                    // Eliminar el usuario asociado al alumno
                     var usuario = await context.Usuarios
                         .Where(u => u.Id == alumno.UsuarioId)
                         .FirstOrDefaultAsync();
-
                     if (usuario != null)
                     {
-                        context.Usuarios.Remove(usuario);  // Eliminar el usuario
-                        await context.SaveChangesAsync();  // Guardar cambios
+                        context.Usuarios.Remove(usuario);
+                        await context.SaveChangesAsync();
                     }
 
-                    // 4. Eliminar la persona asociada al usuario
+                    // Eliminar la persona asociada al usuario
                     var persona = await context.Personas
                         .Where(p => p.Id == usuario.PersonaId)
                         .FirstOrDefaultAsync();
-
                     if (persona != null)
                     {
-                        context.Personas.Remove(persona);  // Eliminar la persona
-                        await context.SaveChangesAsync();  // Guardar cambios
+                        context.Personas.Remove(persona);
+                        await context.SaveChangesAsync();
                     }
 
-                    // Confirmar la transacción
                     await transaction.CommitAsync();
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync();  // Revertir los cambios en caso de error
-                                                        // Loguear el error si es necesario
+                    await transaction.RollbackAsync();
+                    Console.WriteLine($"Error: {ex.Message}");
                     return false;
                 }
-
             }
-
         }
+
 
         private static int CalcularEdad(DateTime fechaCumple)
         {

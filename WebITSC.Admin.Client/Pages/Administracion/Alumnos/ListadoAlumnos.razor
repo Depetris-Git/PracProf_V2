@@ -264,18 +264,13 @@
         try
         {
             var response = await http.DeleteAsync($"api/Alumnos/{documento}");
-
             if (response.IsSuccessStatusCode)
             {
-                // Si la eliminación es exitosa, actualiza la lista o elimina el alumno localmente
                 alumnos = alumnos.Where(a => a.Documento != documento).ToList();
-
-                // Mostrar el mensaje de éxito
                 EliminarExitoso = true;
             }
             else
             {
-                // Si ocurre un error, puedes manejarlo aquí (mostrar mensaje de error)
                 Console.WriteLine("Error al eliminar el alumno.");
             }
         }
@@ -284,6 +279,7 @@
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
+
 
     // Método para cerrar el modal
     private void CerrarModalEliminar()
