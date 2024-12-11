@@ -13,26 +13,30 @@ namespace Repositorio.General.Repos_Genericos.Residencia
         {
             _context = context;
         }
-
-        public async Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId)
+        public async Task<Pais> GetByIdAsync(int id)
         {
-            try
-            {
-                if (PaisId == 0)
-                {
-                    return new List<Provincia>();  // Retorna una lista vacía si no hay país seleccionado
-                }
-
-                return await _context.Provincias
-                                      .Where(p => p.PaisId == PaisId)
-                                      .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                // Loguea el error
-                Console.WriteLine($"Error al obtener provincias: {ex.Message}");
-                return new List<Provincia>();  // Devuelve una lista vacía en caso de error
-            }
+            return await _context.Set<Pais>().FindAsync(id);
         }
+
+        //public async Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId)
+        //{
+        //    try
+        //    {
+        //        if (PaisId == 0)
+        //        {
+        //            return new List<Provincia>();  // Retorna una lista vacía si no hay país seleccionado
+        //        }
+
+        //        return await _context.Provincias
+        //                              .Where(p => p.PaisId == PaisId)
+        //                              .ToListAsync();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Loguea el error
+        //        Console.WriteLine($"Error al obtener provincias: {ex.Message}");
+        //        return new List<Provincia>();  // Devuelve una lista vacía en caso de error
+        //    }
+        //}
     }
 }

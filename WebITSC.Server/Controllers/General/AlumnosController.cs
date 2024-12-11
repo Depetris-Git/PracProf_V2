@@ -7,6 +7,7 @@ using WebITSC.Shared.General.DTO.Persona;
 using WebITSC.Shared.General.DTO.UsuariosDTO;
 using Repositorio.General;
 using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs;
+using Repositorio.General.Repos_Genericos.Residencia;
 
 
 namespace WebITSC.Server.Controllers.General
@@ -22,6 +23,10 @@ namespace WebITSC.Server.Controllers.General
         private readonly IInscripcionCarreraRepositorio inscripcionCarreraRepositorio;
         private readonly ICarreraRepositorio carreraRepositorio;
         private readonly ITipoDocumentoRepositorio tipoDocumentoRepositorio;
+        private readonly IPaisRepositorio paisRepositorio;
+        private readonly IProvinciaRepositorio provinciaRepositorio;
+        private readonly IDepartamentoRepositorio departamentoRepositorio;
+        private readonly ILocalidadRepositorio localidadRepositorio;
 
         // Constructor
         public AlumnosController(IAlumnoRepositorio eRepositorio,
@@ -30,7 +35,11 @@ namespace WebITSC.Server.Controllers.General
                                   IUsuarioRepositorio usuarioRepositorio,
                                   IInscripcionCarreraRepositorio inscripcionCarreraRepositorio,
                                   ICarreraRepositorio carreraRepositorio,
-                                  ITipoDocumentoRepositorio tipoDocumentoRepositorio)
+                                  ITipoDocumentoRepositorio tipoDocumentoRepositorio,
+                                  IPaisRepositorio paisRepositorio,
+                                  IProvinciaRepositorio provinciaRepositorio,
+                                  IDepartamentoRepositorio departamentoRepositorio,
+                                  ILocalidadRepositorio localidadRepositorio)
         {
             this.eRepositorio = eRepositorio;
             this.mapper = mapper;
@@ -39,6 +48,11 @@ namespace WebITSC.Server.Controllers.General
             this.inscripcionCarreraRepositorio = inscripcionCarreraRepositorio;
             this.carreraRepositorio = carreraRepositorio;
             this.tipoDocumentoRepositorio = tipoDocumentoRepositorio;
+            this.paisRepositorio = paisRepositorio;
+            this.provinciaRepositorio = provinciaRepositorio;
+            this.departamentoRepositorio = departamentoRepositorio;
+            this.localidadRepositorio = localidadRepositorio;
+
 
         }
 
@@ -119,10 +133,11 @@ namespace WebITSC.Server.Controllers.General
             alumno.Usuario = await usuarioRepositorio.FullGetById(alumno.UsuarioId);
             alumno.Usuario.Persona = await personaRepositorio.FullGetById(alumno.Usuario.PersonaId);
 
-            // Actualizar los campos del alumno, usuario y persona
-            mapper.Map(dto, alumno);
-            mapper.Map(dto, alumno.Usuario.Persona);
-            mapper.Map(dto, alumno.Usuario);
+            // Mapeo solo de las propiedades necesarias para actualizar
+            // Aquí aseguramos que no estamos modificando las claves de Usuario ni Persona
+            mapper.Map(dto, alumno);  // Solo mapeamos el alumno
+            mapper.Map(dto, alumno.Usuario.Persona);  // Solo mapeamos Persona
+            mapper.Map(dto, alumno.Usuario);  // Solo mapeamos Usuario, sin cambiar el Id
 
             // Actualizar el alumno en el repositorio
             var result = await eRepositorio.Update(alumno);
@@ -136,9 +151,100 @@ namespace WebITSC.Server.Controllers.General
         }
 
 
+
         //--------------------------------------------------------------------
 
         // Crear nuevo alumno
+        //[HttpPost]
+        //public async Task<ActionResult<int>> Post([FromBody] CrearAlumnoDTO crearAlumnoDTO)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
+
+        //    // Paso 1: Validar que la carrera exista
+        //    var carrera = await carreraRepositorio.GetCarreraByIdAsync(crearAlumnoDTO.CarreraId);
+        //    if (carrera == null)
+        //    {
+        //        return BadRequest("La carrera especificada no existe.");
+        //    }
+        //    ////  Validar que el TipoDocumentoId sea válido
+        //    var tipoDocumento = await tipoDocumentoRepositorio.GetByIdAsync(crearAlumnoDTO.TipoDocumentoId);
+        //    if (tipoDocumento == null)
+        //    {
+        //        return BadRequest("El tipo de documento especificado no existe.");
+        //    }
+        //    // Paso 2: Crear la Persona
+        //    var persona = new Persona
+        //    {
+        //        Nombre = crearAlumnoDTO.Nombre,
+        //        Apellido = crearAlumnoDTO.Apellido,
+        //        Documento = crearAlumnoDTO.Documento,
+        //        TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId,
+        //        Domicilio = crearAlumnoDTO.Domicilio,
+        //        Telefono = crearAlumnoDTO.Telefono
+
+        //    };
+
+        //    // Usamos el repositorio de Persona para agregarla a la base de datos
+        //    await personaRepositorio.Insert(persona);
+
+        //    // Paso 3: Crear el Usuario
+        //    var crearUsuarioDTO = new CrearUsuarioDTO
+        //    {
+        //        Email = crearAlumnoDTO.Email,
+        //        Contrasena = crearAlumnoDTO.Contrasena // Asegúrate de encriptar la contraseña
+
+        //    };
+
+        //    var usuario = new Usuario
+        //    {
+        //        Email = crearUsuarioDTO.Email,
+        //        Contrasena = crearUsuarioDTO.Contrasena, // Asegúrate de encriptar la contraseña antes de guardar
+        //        PersonaId = persona.Id, // Asociamos la Persona al Usuario
+        //        //Estado = crearUsuarioDTO.Estado = true
+        //    };
+
+        //    // Usamos el repositorio de Usuario para agregarlo a la base de datos
+        //    await usuarioRepositorio.Insert(usuario);
+
+        //    // Paso 4: Crear el Alumno
+        //    var alumno = mapper.Map<Alumno>(crearAlumnoDTO);
+        //    alumno.UsuarioId = usuario.Id;  // Asignamos el UsuarioId después de crear el Usuario
+        //    await eRepositorio.Insert(alumno); // Usamos el repositorio de Alumno para agregarlo a la base de datos
+
+        //    // Paso 5: Validar si el alumno ya está inscrito en esta carrera
+        //    var inscripcionExistente = await inscripcionCarreraRepositorio
+        //        .GetInscripcionByAlumnoYCarrera(alumno.Id, crearAlumnoDTO.CarreraId);
+
+        //    if (inscripcionExistente != null)
+        //    {
+        //        return BadRequest("El alumno ya está inscrito en esta carrera.");
+        //    }
+
+        //    // Paso 6: Inscribir al alumno en la carrera
+        //    var inscripcionCarrera = new InscripcionCarrera
+        //    {
+        //        AlumnoId = alumno.Id,
+        //        CarreraId = crearAlumnoDTO.CarreraId,
+        //        Cohorte = DateTime.Now.Year, // O la fecha que sea adecuada
+        //        EstadoAlumno = "Activo",
+        //        Legajo = "legajo",
+        //        LibroMatriz = "Libro Matriz",
+        //        NroOrdenAlumno = "NumOrdenAlumno"
+        //    };
+
+        //    await inscripcionCarreraRepositorio.Insert(inscripcionCarrera); // Inscribir al alumno en la carrera
+
+        //    // Mapea el Alumno a GetAlumnoDTO para la respuesta
+        //    var getAlumnoDTO = mapper.Map<GetAlumnoDTO>(alumno);
+
+
+        //    // Retorna el nuevo alumno creado, con un código HTTP 201 (creado)
+        //    return CreatedAtAction(nameof(GetById), new { id = alumno.Id }, getAlumnoDTO);
+        //}
+
         [HttpPost]
         public async Task<ActionResult<int>> Post([FromBody] CrearAlumnoDTO crearAlumnoDTO)
         {
@@ -153,13 +259,40 @@ namespace WebITSC.Server.Controllers.General
             {
                 return BadRequest("La carrera especificada no existe.");
             }
-            ////  Validar que el TipoDocumentoId sea válido
+
+            // Paso 2: Validar que el TipoDocumentoId sea válido
             var tipoDocumento = await tipoDocumentoRepositorio.GetByIdAsync(crearAlumnoDTO.TipoDocumentoId);
             if (tipoDocumento == null)
             {
                 return BadRequest("El tipo de documento especificado no existe.");
             }
-            // Paso 2: Crear la Persona
+
+            // Validar que las entidades de país, provincia, departamento y localidad existan
+            var pais = await paisRepositorio.GetByIdAsync(crearAlumnoDTO.PaisId);
+            if (pais == null)
+            {
+                return BadRequest("El país especificado no existe.");
+            }
+
+            var provincia = await provinciaRepositorio.GetByIdAsync(crearAlumnoDTO.ProvinciaId);
+            if (provincia == null)
+            {
+                return BadRequest("La provincia especificada no existe.");
+            }
+
+            var departamento = await departamentoRepositorio.GetByIdAsync(crearAlumnoDTO.DepartamentoId);
+            if (departamento == null)
+            {
+                return BadRequest("El departamento especificado no existe.");
+            }
+
+            var localidad = await localidadRepositorio.GetByIdAsync(crearAlumnoDTO.LocalidadId);
+            if (localidad == null)
+            {
+                return BadRequest("La localidad especificada no existe.");
+            }
+
+            // Paso 3: Crear la Persona
             var persona = new Persona
             {
                 Nombre = crearAlumnoDTO.Nombre,
@@ -168,13 +301,12 @@ namespace WebITSC.Server.Controllers.General
                 TipoDocumentoId = crearAlumnoDTO.TipoDocumentoId,
                 Domicilio = crearAlumnoDTO.Domicilio,
                 Telefono = crearAlumnoDTO.Telefono
-
             };
 
             // Usamos el repositorio de Persona para agregarla a la base de datos
             await personaRepositorio.Insert(persona);
 
-            // Paso 3: Crear el Usuario
+            // Paso 4: Crear el Usuario
             var crearUsuarioDTO = new CrearUsuarioDTO
             {
                 Email = crearAlumnoDTO.Email,
@@ -185,19 +317,26 @@ namespace WebITSC.Server.Controllers.General
             {
                 Email = crearUsuarioDTO.Email,
                 Contrasena = crearUsuarioDTO.Contrasena, // Asegúrate de encriptar la contraseña antes de guardar
-                PersonaId = persona.Id, // Asociamos la Persona al Usuario
-                //Estado = crearUsuarioDTO.Estado = true
+                PersonaId = persona.Id // Asociamos la Persona al Usuario
             };
 
             // Usamos el repositorio de Usuario para agregarlo a la base de datos
             await usuarioRepositorio.Insert(usuario);
 
-            // Paso 4: Crear el Alumno
+            // Paso 5: Crear el Alumno
             var alumno = mapper.Map<Alumno>(crearAlumnoDTO);
             alumno.UsuarioId = usuario.Id;  // Asignamos el UsuarioId después de crear el Usuario
-            await eRepositorio.Insert(alumno); // Usamos el repositorio de Alumno para agregarlo a la base de datos
 
-            // Paso 5: Validar si el alumno ya está inscrito en esta carrera
+            // Asociar los IDs de país, provincia, departamento y localidad al alumno
+            alumno.PaisId = crearAlumnoDTO.PaisId;
+            alumno.ProvinciaId = crearAlumnoDTO.ProvinciaId;
+            alumno.DepartamentoId = crearAlumnoDTO.DepartamentoId;
+            alumno.LocalidadId = crearAlumnoDTO.LocalidadId;
+
+            // Usamos el repositorio de Alumno para agregarlo a la base de datos
+            await eRepositorio.Insert(alumno);
+
+            // Paso 6: Validar si el alumno ya está inscrito en esta carrera
             var inscripcionExistente = await inscripcionCarreraRepositorio
                 .GetInscripcionByAlumnoYCarrera(alumno.Id, crearAlumnoDTO.CarreraId);
 
@@ -206,7 +345,7 @@ namespace WebITSC.Server.Controllers.General
                 return BadRequest("El alumno ya está inscrito en esta carrera.");
             }
 
-            // Paso 6: Inscribir al alumno en la carrera
+            // Paso 7: Inscribir al alumno en la carrera
             var inscripcionCarrera = new InscripcionCarrera
             {
                 AlumnoId = alumno.Id,
@@ -223,10 +362,10 @@ namespace WebITSC.Server.Controllers.General
             // Mapea el Alumno a GetAlumnoDTO para la respuesta
             var getAlumnoDTO = mapper.Map<GetAlumnoDTO>(alumno);
 
-
             // Retorna el nuevo alumno creado, con un código HTTP 201 (creado)
             return CreatedAtAction(nameof(GetById), new { id = alumno.Id }, getAlumnoDTO);
         }
+
 
 
         // Actualizar alumno

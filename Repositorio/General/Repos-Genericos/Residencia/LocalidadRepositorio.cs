@@ -18,7 +18,12 @@ namespace Repositorio.General.Repos_Genericos.Residencia
         {
             _context = context;
         }
-        public async Task<List<Localidad>> ObtenerLocalidadesPorDepartamentoAsync(int DepartamentoId)
+
+        public async Task<Localidad> GetByIdAsync(int id)
+        {
+            return await _context.Set<Localidad>().FindAsync(id);
+        }
+        public async Task<List<Localidad>> SelectLocalidadesPorDepartamentoAsync(int DepartamentoId)
         {
             return await _context.Localidades
                                  .Where(l => l.DepartamentoId == DepartamentoId)

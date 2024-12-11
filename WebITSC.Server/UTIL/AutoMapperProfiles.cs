@@ -17,11 +17,13 @@ namespace WebITSC.Admin.Server.UTIL
     {
         public AutoMapperProfiles()
         {
-            CreateMap<CrearAlumnoDTO, Alumno>();
-            //.ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
-            //.ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
-            //.ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
-            //.ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
+            CreateMap<CrearAlumnoDTO, Alumno>()
+            .ForMember(dest => dest.PaisId, opt => opt.MapFrom(src => src.PaisId))
+            .ForMember(dest => dest.ProvinciaId, opt => opt.MapFrom(src => src.ProvinciaId))
+            .ForMember(dest => dest.DepartamentoId, opt => opt.MapFrom(src => src.DepartamentoId))
+            .ForMember(dest => dest.LocalidadId, opt => opt.MapFrom(src => src.LocalidadId));
+                      
+
 
             CreateMap<CrearAlumnoDTO, Persona>()
                                     .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))
@@ -53,7 +55,7 @@ namespace WebITSC.Admin.Server.UTIL
      .ForMember(dest => dest.Telefono, opt => opt.MapFrom(src => src.Usuario.Persona.Telefono))
      .ForMember(dest => dest.Domicilio, opt => opt.MapFrom(src => src.Usuario.Persona.Domicilio))
      .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Usuario.Email))
-     .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Usuario.Contrasena))
+     //.ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Usuario.Contrasena))
      .ForMember(dest => dest.Sexo, opt => opt.MapFrom(src => src.Sexo))
      .ForMember(dest => dest.FechaNacimiento, opt => opt.MapFrom(src => src.FechaNacimiento))
      .ForMember(dest => dest.CUIL, opt => opt.MapFrom(src => src.CUIL))
@@ -80,6 +82,15 @@ namespace WebITSC.Admin.Server.UTIL
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Contrasena, opt => opt.MapFrom(src => src.Contrasena));
 
+            CreateMap<EditarAlumnoDTO, Alumno>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());  // Ignorar la clave primaria de Alumno
+
+            CreateMap<EditarAlumnoDTO, Usuario>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())  // Ignorar la clave primaria de Usuario
+                .ForMember(dest => dest.PersonaId, opt => opt.Ignore());  // Ignorar la relación con Persona
+
+            CreateMap<EditarAlumnoDTO, Persona>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());  // Ignorar la clave primaria de Persona
 
             //----------------------------
 

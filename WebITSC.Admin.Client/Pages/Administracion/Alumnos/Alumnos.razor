@@ -14,56 +14,176 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <b>
-    <div class="form-group">
-        <label for="CarreraId">Carrera</label>
-        <InputSelect class="form-control" id="CarreraId" @bind-Value="crearAlumno.CarreraId">
-            <option value="">Seleccione...</option>
-            @foreach (var carrera in carreras)
-            {
-                <option value="@carrera.Id">@carrera.Nombre</option>
-            }
-        </InputSelect>
-    </div>
 
-    <div class="form-group">
-        <label for="PaisId">País</label>
-        <InputSelect class="form-control" id="PaisId"
-                     ValueExpression="@(() => crearAlumno.PaisId)"
-                     ValueChanged="@((int PaisId) => ActualizarProvincias(PaisId))">
-            <option value="">Seleccione...</option>
-            @foreach (var pais in paises)
-            {
-                <option value="@pais.Id">@pais.Nombre</option>
-            }
-        </InputSelect>
-    </div>
+        <div class="form-group">
+            <label for="CarreraId">Carrera</label>
+            <InputSelect class="form-control" id="CarreraId" @bind-Value="crearAlumno.CarreraId">
+                <option value="">Seleccione...</option>
+                @foreach (var carrera in carreras)
+                {
+                    <option value="@carrera.Id">@carrera.Nombre</option>
+                }
+            </InputSelect>
+        </div>
 
+        <div class="form-group">
+            <label for="Nombre">Nombre</label>
+            <InputText class="form-control" id="Nombre" @bind-Value="crearAlumno.Nombre" />
+        </div>
 
-    <div class="form-group">
-        <label for="ProvinciaId">Provincia</label>
-        <InputSelect class="form-control" id="ProvinciaId"
-        ValueExpression="@(() => crearAlumno.ProvinciaId)"
-        ValueChanged="@((int ProvinciaId) => ActualizarDepartamentos(ProvinciaId))">
-            <option value="">Seleccione...</option>
-            @foreach (var prov in provincia)
-            {
-                <option value="@prov.Id">@prov.Nombre</option>
-            }
-        </InputSelect>
-    </div>
+        <div class="form-group">
+            <label for="Apellido">Apellido</label>
+            <InputText class="form-control" id="Apellido" @bind-Value="crearAlumno.Apellido" />
+        </div>
 
- 
+        <div class="form-group">
+            <label for="Documento">Documento</label>
+            <InputText class="form-control" id="Documento" @bind-Value="crearAlumno.Documento" />
+        </div>
 
-    <div class="form-group">
-        <label for="LocalidadId">Localidad</label>
-        <InputSelect class="form-control" id="LocalidadId" @bind-Value="crearAlumno.LocalidadId">
-            <option value="">Seleccione...</option>
-            @foreach (var local in localidad)
-            {
-                <option value="@local.Id">@local.Nombre</option>
-            }
-        </InputSelect>
-    </div>
+        <div class="form-group">
+            <label for="TipoDocumentoId">Tipo de Documento</label>
+            <InputSelect class="form-control" id="TipoDocumentoId" @bind-Value="crearAlumno.TipoDocumentoId">
+                <option value="">Seleccione...</option>
+                @foreach (var tipo in tiposDocumentos)
+                {
+                    <option value="@tipo.Id">@tipo.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="Telefono">Teléfono</label>
+            <InputText class="form-control" id="Telefono" @bind-Value="crearAlumno.Telefono" />
+        </div>
+
+        <div class="form-group">
+            <label for="Domicilio">Domicilio</label>
+            <InputText class="form-control" id="Domicilio" @bind-Value="crearAlumno.Domicilio" />
+        </div>
+
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <InputText class="form-control" id="Email" @bind-Value="crearAlumno.Email" @onblur="AddGmailDomain" />
+        </div>
+
+       @*  <div class="form-group">
+            <label for="Contrasena">Contraseña</label>
+            <InputText class="form-control" id="Contrasena" @bind-Value="crearAlumno.Contrasena" />
+        </div>
+ *@
+        <div class="form-group">
+            <label for="Sexo">Sexo</label>
+            <InputText class="form-control" id="Sexo" @bind-Value="crearAlumno.Sexo" />
+        </div>
+
+        <div class="form-group">
+            <label for="FechaNacimiento">Fecha de Nacimiento</label>
+            <InputDate class="form-control" id="FechaNacimiento" @bind-Value="crearAlumno.FechaNacimiento" />
+        </div>
+
+      @*   <div class="form-group">
+            <label for="Edad">Edad</label>
+            <InputNumber class="form-control" id="Edad" @bind-Value="crearAlumno.Edad" />
+        </div> *@
+
+        <div class="form-group">
+            <label for="PaisId">País</label>
+            <InputSelect class="form-control" id="PaisId"
+                         ValueExpression="@(() => crearAlumno.PaisId)"
+                         ValueChanged="@((int PaisId) => OnPaisChanged(PaisId))">
+                <option value="">Seleccione...</option>
+                @foreach (var pais in paises)
+                {
+                    <option value="@pais.Id">@pais.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="ProvinciaId">Provincia</label>
+            <InputSelect class="form-control" id="ProvinciaId"
+                         ValueExpression="@(() => crearAlumno.ProvinciaId)"
+                         ValueChanged="@((int ProvinciaId) => OnProvinciaChanged(ProvinciaId))">
+                <option value="">Seleccione...</option>
+                @foreach (var prov in provincia)
+                {
+                    <option value="@prov.Id">@prov.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="DepartamentoId">Departamento</label>
+            <InputSelect class="form-control" id="DepartamentoId"
+                         ValueExpression="@(() => crearAlumno.DepartamentoId)"
+                         ValueChanged="@((int DepartamentoId) => OnDepartamentoChanged(DepartamentoId))">
+                <option value="">Seleccione...</option>
+                @foreach (var depto in departamento)
+                {
+                    <option value="@depto.Id">@depto.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            <label for="LocalidadId">Localidad</label>
+            <InputSelect class="form-control" id="LocalidadId" @bind-Value="crearAlumno.LocalidadId">
+                <option value="">Seleccione...</option>
+                @foreach (var local in localidad)
+                {
+                    <option value="@local.Id">@local.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+
+        @*  <____________________________________________________________________________________ *@
+
+        <div class="form-group">
+            <label for="CUIL">CUIL</label>
+            <InputText class="form-control" id="CUIL" @bind-Value="crearAlumno.CUIL" />
+        </div>
+
+        <div class="form-group">
+            <label for="Titulo Base">TituloBase</label>
+            <InputText class="form-control" id="CUIL" @bind-Value="crearAlumno.TituloBase" />
+        </div>
+
+        <!-- Modificación de los checkboxes -->
+        <div class="form-group">
+            <label for="TieneFotocopiaDNI">Fotocopia de DNI</label>
+            <InputCheckbox class="form-check-input" id="TieneFotocopiaDNI" @bind-Value="FotocopiaDNIBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneConstanciaCUIL">Constancia CUIL</label>
+            <InputCheckbox class="form-check-input" id="TieneConstanciaCUIL" @bind-Value="ConstanciaCUILBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TienePartidaNacimiento">Partida de Nacimiento</label>
+            <InputCheckbox class="form-check-input" id="TienePartidaNacimiento" @bind-Value="PartidaNacimientoBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneAnalitico">Analítico</label>
+            <InputCheckbox class="form-check-input" id="TieneAnalitico" @bind-Value="AnaliticoBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneFotoCarnet">Foto Carnet</label>
+            <InputCheckbox class="form-check-input" id="TieneFotoCarnet" @bind-Value="FotoCarnetBool" />
+        </div>
+
+        <div class="form-group">
+            <label for="TieneCUS">CUS</label>
+            <InputCheckbox class="form-check-input" id="TieneCUS" @bind-Value="CUSBool" />
+        </div>
+
+        @*  <div class="form-group">
+    <label for="Cohorte">Cohorte</label>
+    <InputNumber class="form-control" id="Edad" @bind-Value="crearAlumno.Cohorte" />
+    </div>   *@
     </b>
 
     <button type="submit" class="btn btn-primary">Crear Alumno</button>
@@ -84,93 +204,212 @@
         tiposDocumentos = await _http.GetFromJsonAsync<List<TipoDocumento>>("api/TipoDocumento");
         carreras = await _http.GetFromJsonAsync<List<Carrera>>("api/Carreras");
         paises = await http.SelectPaisesAsync();
-
+        provincia = new List<Provincia>();  // Inicializar lista vacía
+        departamento = new List<Departamento>();  // Inicializar lista vacía
+        localidad = new List<Localidad>(); 
+    }
+    // Método que se ejecuta cuando el campo pierde el foco
+    private void AddGmailDomain()
+    {
+        if (!string.IsNullOrEmpty(crearAlumno.Email))
+        {
+            // Si el email no tiene un dominio, lo añadimos
+            if (!crearAlumno.Email.Contains("@"))
+            {
+                crearAlumno.Email = crearAlumno.Email + "@gmail.com";
+            }
+        }
     }
 
-    // Actualiza las provincias cuando se selecciona un país
+    private void OnPaisChanged(int paisId)
+    {
+        // Asignamos el nuevo PaisId a crearAlumno
+        crearAlumno.PaisId = paisId;
+
+        // Actualizamos las provincias basadas en el país seleccionado
+        ActualizarProvincias(paisId);
+    }
+
+    private void OnProvinciaChanged(int provinciaId)
+    {
+        // Asignamos el nuevo ProvinciaId a crearAlumno
+        crearAlumno.ProvinciaId = provinciaId;
+
+        // Actualizamos los departamentos basados en la provincia seleccionada
+        ActualizarDepartamentos(provinciaId);
+    }
+
+    private void OnDepartamentoChanged(int departamentoId)
+    {
+        // Asignamos el nuevo DepartamentoId a crearAlumno
+        crearAlumno.DepartamentoId = departamentoId;
+
+        // Actualizamos las localidades basadas en el departamento seleccionado
+        ActualizarLocalidades(departamentoId);
+    }
+
+
     private async Task ActualizarProvincias(int PaisId)
     {
         Console.WriteLine($"Pais seleccionado: {PaisId}");
-        Console.WriteLine($"Consultando provincias para el país ID: {PaisId}");
-
-        // Llama a la API para obtener las provincias correspondientes al país seleccionado
-        provincia = await http.SelectProvinciasPorPaisAsync(PaisId);
-
-        // Forzar la actualización de la interfaz
-        StateHasChanged();
-
-        if (provincia == null || !provincia.Any())
+        if (PaisId > 0)
         {
-            Console.WriteLine("No se encontraron provincias.");
-        }
-        else
-        {
-            Console.WriteLine($"Se cargaron {provincia.Count} provincias.");
+            // Actualiza la lista de provincias dependiendo del país seleccionado
+            provincia = await http.SelectProvinciasPorPaisAsync(PaisId);
+
+            // Si ya hay un valor seleccionado de provincia, asegúrate de que esté en la lista
+            if (crearAlumno.ProvinciaId != 0 && !provincia.Any(p => p.Id == crearAlumno.ProvinciaId))
+            {
+                crearAlumno.ProvinciaId = 0;  // Resetea la provincia si no está en la nueva lista
+            }
+
+            StateHasChanged();  // Para actualizar la UI
         }
     }
 
-
-   // Actualiza los departamentos cuando se selecciona una provincia
-    private async Task ActualizarDepartamentos(int provinciaId)
+    private async Task ActualizarDepartamentos(int ProvinciaId)
     {
-        Console.WriteLine($"Consultando departamentos para la provincia ID: {provinciaId}");
-
-        // Llama a la API para obtener los departamentos correspondientes a la provincia seleccionada
-        departamento = await http.SelectDepartamentosPorProvinciaAsync(provinciaId);
-
-        if (departamento == null || !departamento.Any())
+        Console.WriteLine($"Provincia seleccionada: {ProvinciaId}");
+        if (ProvinciaId > 0)
         {
-            Console.WriteLine("No se encontraron departamentos.");
-        }
-        else
-        {
-            Console.WriteLine($"Se cargaron {departamento.Count} departamentos.");
+            // Actualiza la lista de departamentos dependiendo de la provincia seleccionada
+            departamento = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
+
+            // Si ya hay un valor seleccionado de departamento, asegúrate de que esté en la lista
+            if (crearAlumno.DepartamentoId != 0 && !departamento.Any(d => d.Id == crearAlumno.DepartamentoId))
+            {
+                crearAlumno.DepartamentoId = 0;  // Resetea el departamento si no está en la nueva lista
+            }
+
+            StateHasChanged();  // Actualiza la UI
         }
     }
 
-    // // Actualiza las localidades cuando se selecciona un departamento
-    // private async Task ActualizarLocalidades(int departamentoId)
+    private async Task ActualizarLocalidades(int DepartamentoId)
+    {
+        Console.WriteLine($"Departamento seleccionado: {DepartamentoId}");
+        if (DepartamentoId > 0)
+        {
+            // Actualiza la lista de localidades dependiendo del departamento seleccionado
+            localidad = await http.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
+
+            // Si ya hay un valor seleccionado de localidad, asegúrate de que esté en la lista
+            if (crearAlumno.LocalidadId != 0 && !localidad.Any(l => l.Id == crearAlumno.LocalidadId))
+            {
+                crearAlumno.LocalidadId = 0;  // Resetea la localidad si no está en la nueva lista
+            }
+
+            StateHasChanged();  // Actualiza la UI
+        }
+    }
+
+    // private async Task ActualizarDepartamentos(int ProvinciaId)
     // {
-    //     Console.WriteLine($"Consultando localidades para el departamento ID: {departamentoId}");
+    //     Console.WriteLine($"Provincia seleccionada: {ProvinciaId}");
 
-    //     // Llama a la API para obtener las localidades correspondientes al departamento seleccionado
-    //     localidad = await http.SelectLocalidadesPorDepartamentoAsync(departamentoId);
-
-    //     if (localidad == null || !localidad.Any())
+    //     if (ProvinciaId > 0)
     //     {
-    //         Console.WriteLine("No se encontraron localidades.");
+    //         // Llamamos a la API para obtener los departamentos correspondientes a la provincia seleccionada
+    //         departamento = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
+    //         Console.WriteLine($"Departamentos recibidos: {departamento.Count}");
+
+    //         if (departamento == null || !departamento.Any())
+    //         {
+    //             Console.WriteLine("No se encontraron departamentos para esta provincia.");
+    //         }
+
+    //         // Forzar la actualización del componente
+    //         StateHasChanged();
     //     }
     //     else
     //     {
-    //         Console.WriteLine($"Se cargaron {localidad.Count} localidades.");
+    //         Console.WriteLine("No se seleccionó una provincia válida.");
     //     }
     // }
+
+    // // Este método actualiza las localidades cuando se selecciona un departamento
+    // private async Task ActualizarLocalidades(int DepartamentoId)
+    // {
+    //     Console.WriteLine($"Departamento seleccionado: {DepartamentoId}");
+
+    //     if (DepartamentoId > 0)
+    //     {
+    //         localidad = await http.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
+    //         Console.WriteLine($"Localidades recibidas: {localidad.Count}");
+
+    //         if (localidad == null || !localidad.Any())
+    //         {
+    //             Console.WriteLine("No se encontraron localidades para este departamento.");
+    //         }
+
+    //         StateHasChanged(); // Fuerza la actualización del componente
+    //     }
+    //     else
+    //     {
+    //         Console.WriteLine("No se seleccionó un departamento válido.");
+    //     }
+    // }
+
+
+    // Propiedades booleanas que se vinculan con los checkboxes
+    private bool FotocopiaDNIBool
+    {
+        get => crearAlumno.FotocopiaDNI == "Sí";
+        set => crearAlumno.FotocopiaDNI = value ? "Sí" : "No";
+    }
+
+    private bool ConstanciaCUILBool
+    {
+        get => crearAlumno.ConstanciaCUIL == "Sí";
+        set => crearAlumno.ConstanciaCUIL = value ? "Sí" : "No";
+    }
+
+    private bool PartidaNacimientoBool
+    {
+        get => crearAlumno.PartidaNacimiento == "Sí";
+        set => crearAlumno.PartidaNacimiento = value ? "Sí" : "No";
+    }
+
+    private bool AnaliticoBool
+    {
+        get => crearAlumno.Analitico == "Sí";
+        set => crearAlumno.Analitico = value ? "Sí" : "No";
+    }
+
+    private bool FotoCarnetBool
+    {
+        get => crearAlumno.FotoCarnet == "Sí";
+        set => crearAlumno.FotoCarnet = value ? "Sí" : "No";
+    }
+
+    private bool CUSBool
+    {
+        get => crearAlumno.CUS == "Sí";
+        set => crearAlumno.CUS = value ? "Sí" : "No";
+    }
 
     // Este método se ejecuta cuando el formulario es enviado y válido
     private async Task HandleValidSubmit()
     {
+        Console.WriteLine($"PaisId: {crearAlumno.PaisId}, ProvinciaId: {crearAlumno.ProvinciaId}, DepartamentoId: {crearAlumno.DepartamentoId}, LocalidadId: {crearAlumno.LocalidadId}");
+
         try
         {
-            // Enviar datos al backend para crear el alumno
             var response = await _http.PostAsJsonAsync("api/Alumnos", crearAlumno);
 
             if (response.IsSuccessStatusCode)
             {
-                // Redirigir a la lista de alumnos o a una página de éxito
                 Navigation.NavigateTo("/Administracion/ListaAlumnos");
             }
             else
             {
-                // Manejar el error, por ejemplo, mostrar un mensaje de error
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 Console.WriteLine($"Error: {errorMessage}");
             }
         }
         catch (Exception ex)
         {
-            // Manejar el error de conexión o cualquier otra excepción
             Console.WriteLine($"Exception: {ex.Message}");
         }
     }
 }
-

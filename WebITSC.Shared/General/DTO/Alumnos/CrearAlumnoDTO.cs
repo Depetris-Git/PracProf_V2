@@ -42,12 +42,12 @@ namespace WebITSC.Shared.General.DTO.Alumnos
             [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
             public string Email { get; set; }
 
-            [Required(ErrorMessage = "El nombre de usuario de la persona es necesario")]
-            [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
-            public string Contrasena { get; set; }
+        [Required(ErrorMessage = "El nombre de usuario de la persona es necesario")]
+        [MaxLength(80, ErrorMessage = "Máximo número de caracteres {100}.")]
+        public string Contrasena { get; set; } = "DefaultPassword123";
 
-            // Datos específicos del Alumno
-            [Required(ErrorMessage = "El sexo del alumno es necesario")]
+        // Datos específicos del Alumno
+        [Required(ErrorMessage = "El sexo del alumno es necesario")]
             [MaxLength(20, ErrorMessage = "Máximo número de caracteres {100}.")]
             public string Sexo { get; set; }
 

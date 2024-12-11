@@ -5,6 +5,7 @@ namespace Repositorio.General
 {
     public interface ITipoDocumentoRepositorio : IRepositorio<TipoDocumento>
     {
-        Task<TipoDocumento> GetByIdAsync(int id);
+        Task<TipoDocumento> GetByIdAsync(int id); 
+        
     }
 }

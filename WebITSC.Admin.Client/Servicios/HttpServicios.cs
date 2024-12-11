@@ -109,7 +109,7 @@ namespace WebITSC.Admin.Client.Servicios
         // Obtener departamentos por provincia
         public async Task<List<Departamento>> SelectDepartamentosPorProvinciaAsync(int ProvinciaId)
         {
-            var response = await http.GetAsync($"api/Departamentos/{ProvinciaId}");
+            var response = await http.GetAsync($"api/Departamentos/porProvincia/{ProvinciaId}");
             if (response.IsSuccessStatusCode)
             {
                 var departamentos = await response.Content.ReadFromJsonAsync<List<Departamento>>();
@@ -121,12 +121,11 @@ namespace WebITSC.Admin.Client.Servicios
                 return new List<Departamento>();
             }
         }
-      
 
         // Obtener localidades por departamento
         public async Task<List<Localidad>> SelectLocalidadesPorDepartamentoAsync(int DepartamentoId)
         {
-            var response = await http.GetAsync($"api/Localidades/{DepartamentoId}");
+            var response = await http.GetAsync($"api/Localidades/porDepartamento/{DepartamentoId}");
             if (response.IsSuccessStatusCode)
             {
                 var localidades = await response.Content.ReadFromJsonAsync<List<Localidad>>();

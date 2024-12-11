@@ -21,7 +21,7 @@ namespace WebITSC.DB.Data.Entity
 
         [Required(ErrorMessage = "La contraseña es necesaria")]
         [MaxLength(30, ErrorMessage = "Máximo número de caracteres {1}.")]
-        public string Contrasena { get; set; }
+        public string Contrasena { get; set; } 
 
         public bool Estado { get; set; } = true; //si está activo o no el usuario, para bloquear o dar acceso al usuario entero
     }

@@ -51,6 +51,26 @@ namespace WebITSC.Admin.Server.Controllers
             return existe;
         }
 
+        // Este método obtiene las localidades de un departamento dado un DepartamentoId
+        [HttpGet("porDepartamento/{DepartamentoId:int}")]
+        public async Task<ActionResult<List<GetLocalidadesDTO>>> GetLocalidadesPorDepartamento(int DepartamentoId)
+        {
+            // Obtenemos las localidades asociadas al DepartamentoId
+            var localidades = await eRepositorio.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
+
+            if (localidades == null || !localidades.Any())
+            {
+                return NotFound("No se encontraron localidades para este departamento.");
+            }
+
+            // Mapeamos las localidades a DTOs (Data Transfer Objects)
+            var localidadesDto = mapper.Map<List<GetLocalidadesDTO>>(localidades);
+
+            // Retornamos las localidades como respuesta
+            return Ok(localidadesDto);
+        }
+
+
         // Crear una nueva localidad
         [HttpPost]
         public async Task<ActionResult<int>> Post(CrearLocalidadesDTO localidadDTO)

@@ -18,6 +18,10 @@ namespace Repositorio.General.Repos_Genericos.Residencia
         {
             _context = context;
         }
+        public async Task<Provincia> GetByIdAsync(int id)
+        {
+            return await _context.Set<Provincia>().FindAsync(id);
+        }
 
         public async Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId)
         {

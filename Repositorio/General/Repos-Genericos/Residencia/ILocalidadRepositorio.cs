@@ -5,6 +5,7 @@ namespace Repositorio.General.Repos_Genericos.Residencia
 {
     public interface ILocalidadRepositorio : IRepositorio<Localidad>
     {
-        Task<List<Localidad>> ObtenerLocalidadesPorDepartamentoAsync(int DepartamentoId);
+        Task<Localidad> GetByIdAsync(int id);
+        Task<List<Localidad>> SelectLocalidadesPorDepartamentoAsync(int DepartamentoId);
     }
 }

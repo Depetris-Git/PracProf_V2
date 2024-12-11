@@ -52,6 +52,24 @@ namespace WebITSC.Admin.Server.Controllers
             return existe;
         }
 
+        [HttpGet("porProvincia/{ProvinciaId:int}")]
+        public async Task<ActionResult<List<GetDepartamentosDTO>>> GetDepartamentosPorProvincia(int ProvinciaId)
+        {
+            // Obtener los departamentos asociados al provinciaId
+            var departamentos = await eRepositorio.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
+
+            if (departamentos == null || !departamentos.Any())
+            {
+                return NotFound("No se encontraron departamentos para esta provincia.");
+            }
+
+            // Mapear los departamentos a DTOs (Data Transfer Objects)
+            var departamentosDto = mapper.Map<List<GetDepartamentosDTO>>(departamentos);
+
+            // Retornar los departamentos como respuesta
+            return Ok(departamentosDto);
+        }
+
         // Crear un nuevo departamento
         [HttpPost]
         public async Task<ActionResult<int>> Post(CrearDepartamentosDTO departamentoDTO)

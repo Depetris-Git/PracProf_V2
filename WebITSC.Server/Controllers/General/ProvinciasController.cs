@@ -56,24 +56,29 @@ namespace WebITSC.Admin.Server.Controllers
             return existe;
         }
 
-        //// Este método obtiene las provincias de un país dado un paisId
-        //[HttpGet("porPais/{PaisId:int}")]
-        //public async Task<ActionResult<List<GetProvinciaDTO>>> GetProvinciasPorPais(int PaisId)
-        //{
-        //    // Obtenemos las provincias asociadas al paisId
-        //    var provincias = await eRepositorio.SelectProvinciasPorPaisAsync(PaisId);
+        [HttpGet("porPais/{PaisId:int}")]
+        public async Task<ActionResult<List<GetProvinciaDTO>>> GetProvinciasPorPais(int PaisId)
+        {
+            // Agregar depuración para ver el PaisId
+            Console.WriteLine($"Recibiendo solicitud para País ID: {PaisId}");
 
-        //    if (provincias == null || !provincias.Any())
-        //    {
-        //        return NotFound("No se encontraron provincias para este país.");
-        //    }
+            var provincias = await eRepositorio.SelectProvinciasPorPaisAsync(PaisId);
 
-        //    // Mapeamos las provincias a DTOs (Data Transfer Objects)
-        //    var provinciasDto = mapper.Map<List<GetProvinciaDTO>>(provincias);
+            // Verificar si se encontraron provincias
+            if (provincias == null || !provincias.Any())
+            {
+                Console.WriteLine("No se encontraron provincias para este país.");
+                return NotFound("No se encontraron provincias para este país.");
+            }
 
-        //    // Retornamos las provincias como respuesta
-        //    return Ok(provinciasDto);
-        //}
+            // Mapeamos las provincias a DTOs (Data Transfer Objects)
+            var provinciasDto = mapper.Map<List<GetProvinciaDTO>>(provincias);
+
+            // Retornamos las provincias como respuesta
+            Console.WriteLine($"Se encontraron {provinciasDto.Count} provincias.");
+            return Ok(provinciasDto);
+        }
+
 
         // Método para obtener los departamentos de una provincia
         [HttpGet("{ProvinciaId:int}/departamentos")]

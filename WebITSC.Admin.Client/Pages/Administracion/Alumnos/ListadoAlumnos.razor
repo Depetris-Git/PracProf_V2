@@ -8,10 +8,20 @@
 <div>
     <h3>Listado de Alumnos</h3>
 
-    <!-- Botón de "Cargar + Alumnos" fijo en la esquina superior derecha -->
-    <button class="btn position-fixed rounded-circle" style="top: 80px; right: 20px; z-index: 9999; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; background-color: #00bfff;" @onclick="IrACargaAlumnos">
-        <i class="bi bi-person-plus" style="color: white; font-size: 30px;"></i> <!-- Ícono de persona con + -->
-    </button>
+    <!-- Contenedor para los botones -->
+    <div style="position: fixed; top: 80px; right: 20px; z-index: 9999; display: flex; gap: 10px;">
+
+        <!-- Botón de "Cargar + Alumnos" -->
+        <button class="btn rounded-circle" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: #00bfff;" @onclick="IrACargaAlumnos">
+            <i class="bi bi-person-plus" style="color: white; font-size: 20px;"></i> <!-- Ícono de persona con + -->
+        </button>
+
+        <!-- Botón de "Importar Excel" -->
+        <button class="btn rounded-circle" style="width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; background-color: #28a745;" @onclick="IrAImportarExcel">
+            <i class="bi bi-file-earmark-excel" style="color: white; font-size: 20px;"></i> <!-- Ícono de Excel -->
+        </button>
+
+    </div>
 
     <!-- Filtros de búsqueda -->
     <div class="form-group">
@@ -241,6 +251,11 @@
     {
         // Redirige a la página de edición del alumno
         Navigation.NavigateTo($"/Administracion/EditarAlumnos/{documento}");
+    }
+    private void IrAImportarExcel()
+    {
+        // Redirige a la página de edición del alumno
+        Navigation.NavigateTo($"/Administracion/ImportarAlumnos");
     }
 
     // Método para eliminar alumno
