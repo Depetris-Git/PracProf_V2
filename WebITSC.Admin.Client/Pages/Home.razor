@@ -2,6 +2,8 @@
 @using Microsoft.AspNetCore.Components
 @inject ServicioRol ServicioRol
 @inject NavigationManager Navigation
+@layout MainLayout
+
 
 <div class="center-text">
     <h3><b>Bienvenidos</b></h3>
@@ -10,17 +12,12 @@
 <!-- Definimos variables que contienen el valor del rol -->
 @{
     var administrador = "Administrador";
-    // var alumnos = "Alumnos";
-    // var profesores = "Profesores";
 }
 
 <!-- Botones para seleccionar el rol -->
 <div class="role-selection">
     <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(administrador)">Administradores</button>
-    @*     <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(alumnos)">Alumnos</button>
-    <button class="btn btn-primary btn-custom" @onclick="() => SelectRole(profesores)">Profesores</button> *@
 </div>
-
 
 @if (!string.IsNullOrEmpty(selectedRole))
 {
@@ -28,8 +25,10 @@
     <p>Rol seleccionado: @selectedRole</p>
 }
 
+
 @code {
     private string selectedRole = string.Empty;
+    private bool isMenuExpanded = false; // Nueva propiedad para controlar el estado
 
     // Método para seleccionar el rol y actualizar el servicio
     private void SelectRole(string role)
@@ -38,9 +37,19 @@
         ServicioRol.SeleccionarRol(role);   // Actualiza el rol en el servicio
         StateHasChanged();                  // Forzar actualización
 
+        // Cambiar el estado del menú
+        isMenuExpanded = true; // Cambiar el estado del menú a expandido
+
         // Realizamos la redirección a la página común
         Navigation.NavigateTo("/Inicio");  // Redirige a la página común
     }
+   
+        // Método para alternar el estado del menú
+        private void ToggleMenu()
+        {
+            isMenuExpanded = !isMenuExpanded;  // Alternar el estado del menú
+        }
+    
 }
 
 
