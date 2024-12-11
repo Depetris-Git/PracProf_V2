@@ -2,6 +2,7 @@
 @inject IHttpServicios http
 @inject HttpClient _http
 @inject NavigationManager Navigation
+@inject IJSRuntime JSRuntime
 @using System.Net.Http.Json
 @using WebITSC.Shared.General.DTO.Carreraa
 @using WebITSC.Shared.General.DTO.Alumnos
@@ -9,6 +10,32 @@
 @using WebITSC.Shared.General.DTO.ProvinciaDptoLocal
 
 <h3>Alumnos</h3>
+<button type="button" class="btn rounded-circle position-fixed"
+style="width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; background-color: #00bfff; top: 60px; right: 20px; z-index: 9999;" @onclick="HandleValidSubmit">
+    <i class="bi bi-save" style="color: white; font-size: 30px;"></i> <!-- Ícono de guardar -->
+</button>
+<!-- Modal de éxito (se muestra cuando mostrarMensaje es true) -->
+@if (mostrarMensaje)
+{
+    <!-- Modal -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">¡Alumno guardado correctamente!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    El alumno se ha guardado correctamente.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 
 <EditForm Model="crearAlumno" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -186,7 +213,6 @@
     </div>   *@
     </b>
 
-    <button type="submit" class="btn btn-primary">Crear Alumno</button>
 </EditForm>
 
 @code {
@@ -197,6 +223,7 @@
     private List<Departamento> departamento = new List<Departamento>();
     private List<Localidad> localidad = new List<Localidad>();
     private List<Carrera> carreras = new List<Carrera>();
+    private bool mostrarMensaje = false;
 
     // Este método se ejecuta al cargar la página
     protected override async Task OnInitializedAsync()
@@ -399,6 +426,14 @@
 
             if (response.IsSuccessStatusCode)
             {
+                mostrarMensaje = true;
+                StateHasChanged(); // Forzar la actualización de la UI.
+
+                // await Task.Delay(3000); // Esperar 3 segundos para que el modal se vea.
+
+                // Mostrar modal con JSRuntime si estás usando Bootstrap.
+                await JSRuntime.InvokeVoidAsync("openModal");
+
                 Navigation.NavigateTo("/Administracion/ListaAlumnos");
             }
             else
@@ -411,5 +446,13 @@
         {
             Console.WriteLine($"Exception: {ex.Message}");
         }
+
     }
+
+        private async Task CerrarModal()
+        {
+            await JSRuntime.InvokeVoidAsync("closeModal");
+        }
+    }
+
 }
