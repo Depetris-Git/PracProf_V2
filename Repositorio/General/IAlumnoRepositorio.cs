@@ -14,5 +14,6 @@ namespace WebITSC.Admin.Server.Repositorio
         Task<List<Alumno>> FullGetAll();
         Task<Alumno> FullGetById(int id);
         Task<bool> EliminarAlumno(int alumnoId);
+        Task<Alumno> GetAlumnoPorCUIL(string cuil);
     }
 }

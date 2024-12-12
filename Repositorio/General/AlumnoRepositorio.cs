@@ -133,6 +133,16 @@ namespace WebITSC.Admin.Server.Repositorio
         }
 
 
+        //---validar Cuil---
+        public async Task<Alumno> GetAlumnoPorCUIL(string cuil)
+        {
+            return await context.Alumnos
+                .Include(a => a.Usuario)
+                .Include(a => a.Usuario.Persona)
+                .FirstOrDefaultAsync(a => a.CUIL == cuil);
+        }
+
+
         //-----------editar alumno------------------------
 
         public async Task<Alumno> GetAlumnoPorDocumento(string documento)

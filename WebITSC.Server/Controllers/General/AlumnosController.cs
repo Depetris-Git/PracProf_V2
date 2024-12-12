@@ -8,6 +8,7 @@ using WebITSC.Shared.General.DTO.UsuariosDTO;
 using Repositorio.General;
 using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs;
 using Repositorio.General.Repos_Genericos.Residencia;
+using System.Text.RegularExpressions;
 
 
 namespace WebITSC.Server.Controllers.General
@@ -164,6 +165,26 @@ namespace WebITSC.Server.Controllers.General
                 return BadRequest(ModelState);
             }
 
+            // Validar CUIL y DNI
+            if (!ValidarCUIL(crearAlumnoDTO.CUIL, crearAlumnoDTO.Documento))
+            {
+                return BadRequest("El CUIL no es válido o no coincide con el DNI.");
+            }
+
+            // Validar unicidad en la base de datos
+            var alumnoExistente = await eRepositorio.GetAlumnoPorDocumento(crearAlumnoDTO.Documento);
+            if (alumnoExistente != null)
+            {
+                return BadRequest("El DNI ya está registrado.");
+            }
+
+            var cuilExistente = await eRepositorio.GetAlumnoPorCUIL(crearAlumnoDTO.CUIL);
+            if (cuilExistente != null)
+            {
+                return BadRequest("El CUIL ya está registrado.");
+            }
+
+
             // Paso 1: Validar que la carrera exista
             var carrera = await carreraRepositorio.GetCarreraByIdAsync(crearAlumnoDTO.CarreraId);
             if (carrera == null)
@@ -277,6 +298,22 @@ namespace WebITSC.Server.Controllers.General
             return CreatedAtAction(nameof(GetById), new { id = alumno.Id }, getAlumnoDTO);
         }
 
+        private bool ValidarCUIL(string cuil, string dni)
+        {
+            var regex = new Regex(@"^\d{2}-\d{8}-\d{1}$");
+            if (!regex.IsMatch(cuil))
+            {
+                return false;
+            }
+
+            var partes = cuil.Split('-');
+            if (partes[1] != dni)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
 
         // Actualizar alumno

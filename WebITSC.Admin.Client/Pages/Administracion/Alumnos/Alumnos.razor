@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JSRuntime
 @using System.Net.Http.Json
+@using System.Text.RegularExpressions
 @using WebITSC.Shared.General.DTO.Carreraa
 @using WebITSC.Shared.General.DTO.Alumnos
 @using WebITSC.Shared.General.DTO.PaisesDTO
@@ -213,6 +214,26 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     </div>   *@
     </b>
 
+    <!-- Alerta de advertencia -->
+    @if (mostrarAdvertencia)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> El CUIL no es válido o no coincide con el DNI.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Alerta de advertencia para DNI duplicado -->
+    @if (mostrarAdvertenciaDNI)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> El DNI ya está registrado.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+
 </EditForm>
 
 @code {
@@ -224,6 +245,8 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     private List<Localidad> localidad = new List<Localidad>();
     private List<Carrera> carreras = new List<Carrera>();
     private bool mostrarMensaje = false;
+    private bool mostrarAdvertencia = false;
+    private bool mostrarAdvertenciaDNI = false;
 
     // Este método se ejecuta al cargar la página
     protected override async Task OnInitializedAsync()
@@ -231,10 +254,11 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
         tiposDocumentos = await _http.GetFromJsonAsync<List<TipoDocumento>>("api/TipoDocumento");
         carreras = await _http.GetFromJsonAsync<List<Carrera>>("api/Carreras");
         paises = await http.SelectPaisesAsync();
-        provincia = new List<Provincia>();  // Inicializar lista vacía
-        departamento = new List<Departamento>();  // Inicializar lista vacía
-        localidad = new List<Localidad>(); 
+        provincia = new List<Provincia>(); // Inicializar lista vacía
+        departamento = new List<Departamento>(); // Inicializar lista vacía
+        localidad = new List<Localidad>();
     }
+
     // Método que se ejecuta cuando el campo pierde el foco
     private void AddGmailDomain()
     {
@@ -252,7 +276,6 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     {
         // Asignamos el nuevo PaisId a crearAlumno
         crearAlumno.PaisId = paisId;
-
         // Actualizamos las provincias basadas en el país seleccionado
         ActualizarProvincias(paisId);
     }
@@ -261,7 +284,6 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     {
         // Asignamos el nuevo ProvinciaId a crearAlumno
         crearAlumno.ProvinciaId = provinciaId;
-
         // Actualizamos los departamentos basados en la provincia seleccionada
         ActualizarDepartamentos(provinciaId);
     }
@@ -270,11 +292,9 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     {
         // Asignamos el nuevo DepartamentoId a crearAlumno
         crearAlumno.DepartamentoId = departamentoId;
-
         // Actualizamos las localidades basadas en el departamento seleccionado
         ActualizarLocalidades(departamentoId);
     }
-
 
     private async Task ActualizarProvincias(int PaisId)
     {
@@ -283,14 +303,12 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
         {
             // Actualiza la lista de provincias dependiendo del país seleccionado
             provincia = await http.SelectProvinciasPorPaisAsync(PaisId);
-
             // Si ya hay un valor seleccionado de provincia, asegúrate de que esté en la lista
             if (crearAlumno.ProvinciaId != 0 && !provincia.Any(p => p.Id == crearAlumno.ProvinciaId))
             {
-                crearAlumno.ProvinciaId = 0;  // Resetea la provincia si no está en la nueva lista
+                crearAlumno.ProvinciaId = 0; // Resetea la provincia si no está en la nueva lista
             }
-
-            StateHasChanged();  // Para actualizar la UI
+            StateHasChanged(); // Para actualizar la UI
         }
     }
 
@@ -301,14 +319,12 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
         {
             // Actualiza la lista de departamentos dependiendo de la provincia seleccionada
             departamento = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
-
             // Si ya hay un valor seleccionado de departamento, asegúrate de que esté en la lista
             if (crearAlumno.DepartamentoId != 0 && !departamento.Any(d => d.Id == crearAlumno.DepartamentoId))
             {
-                crearAlumno.DepartamentoId = 0;  // Resetea el departamento si no está en la nueva lista
+                crearAlumno.DepartamentoId = 0; // Resetea el departamento si no está en la nueva lista
             }
-
-            StateHasChanged();  // Actualiza la UI
+            StateHasChanged(); // Actualiza la UI
         }
     }
 
@@ -319,64 +335,14 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
         {
             // Actualiza la lista de localidades dependiendo del departamento seleccionado
             localidad = await http.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
-
             // Si ya hay un valor seleccionado de localidad, asegúrate de que esté en la lista
             if (crearAlumno.LocalidadId != 0 && !localidad.Any(l => l.Id == crearAlumno.LocalidadId))
             {
-                crearAlumno.LocalidadId = 0;  // Resetea la localidad si no está en la nueva lista
+                crearAlumno.LocalidadId = 0; // Resetea la localidad si no está en la nueva lista
             }
-
-            StateHasChanged();  // Actualiza la UI
+            StateHasChanged(); // Actualiza la UI
         }
     }
-
-    // private async Task ActualizarDepartamentos(int ProvinciaId)
-    // {
-    //     Console.WriteLine($"Provincia seleccionada: {ProvinciaId}");
-
-    //     if (ProvinciaId > 0)
-    //     {
-    //         // Llamamos a la API para obtener los departamentos correspondientes a la provincia seleccionada
-    //         departamento = await http.SelectDepartamentosPorProvinciaAsync(ProvinciaId);
-    //         Console.WriteLine($"Departamentos recibidos: {departamento.Count}");
-
-    //         if (departamento == null || !departamento.Any())
-    //         {
-    //             Console.WriteLine("No se encontraron departamentos para esta provincia.");
-    //         }
-
-    //         // Forzar la actualización del componente
-    //         StateHasChanged();
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No se seleccionó una provincia válida.");
-    //     }
-    // }
-
-    // // Este método actualiza las localidades cuando se selecciona un departamento
-    // private async Task ActualizarLocalidades(int DepartamentoId)
-    // {
-    //     Console.WriteLine($"Departamento seleccionado: {DepartamentoId}");
-
-    //     if (DepartamentoId > 0)
-    //     {
-    //         localidad = await http.SelectLocalidadesPorDepartamentoAsync(DepartamentoId);
-    //         Console.WriteLine($"Localidades recibidas: {localidad.Count}");
-
-    //         if (localidad == null || !localidad.Any())
-    //         {
-    //             Console.WriteLine("No se encontraron localidades para este departamento.");
-    //         }
-
-    //         StateHasChanged(); // Fuerza la actualización del componente
-    //     }
-    //     else
-    //     {
-    //         Console.WriteLine("No se seleccionó un departamento válido.");
-    //     }
-    // }
-
 
     // Propiedades booleanas que se vinculan con los checkboxes
     private bool FotocopiaDNIBool
@@ -420,25 +386,33 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
     {
         Console.WriteLine($"PaisId: {crearAlumno.PaisId}, ProvinciaId: {crearAlumno.ProvinciaId}, DepartamentoId: {crearAlumno.DepartamentoId}, LocalidadId: {crearAlumno.LocalidadId}");
 
+        mostrarAdvertencia = false;
+        mostrarAdvertenciaDNI = false;
+
+        if (!ValidarCUIL(crearAlumno.CUIL, crearAlumno.Documento))
+        {
+            mostrarAdvertencia = true;
+            return;
+        }
+
         try
         {
             var response = await _http.PostAsJsonAsync("api/Alumnos", crearAlumno);
-
             if (response.IsSuccessStatusCode)
             {
                 mostrarMensaje = true;
                 StateHasChanged(); // Forzar la actualización de la UI.
-
-                // await Task.Delay(3000); // Esperar 3 segundos para que el modal se vea.
-
-                // Mostrar modal con JSRuntime si estás usando Bootstrap.
+                                   // Mostrar modal con JSRuntime si estás usando Bootstrap.
                 await JSRuntime.InvokeVoidAsync("openModal");
-
                 Navigation.NavigateTo("/Administracion/ListaAlumnos");
             }
             else
             {
                 var errorMessage = await response.Content.ReadAsStringAsync();
+                if (errorMessage.Contains("El DNI ya está registrado"))
+                {
+                    mostrarAdvertenciaDNI = true;
+                }
                 Console.WriteLine($"Error: {errorMessage}");
             }
         }
@@ -446,13 +420,28 @@ style="width: 60px; height: 60px; display: flex; justify-content: center; align-
         {
             Console.WriteLine($"Exception: {ex.Message}");
         }
-
     }
 
-        private async Task CerrarModal()
+    private bool ValidarCUIL(string cuil, string dni)
+    {
+        var regex = new Regex(@"^\d{2}-\d{8}-\d{1}$");
+        if (!regex.IsMatch(cuil))
         {
-            await JSRuntime.InvokeVoidAsync("closeModal");
+            return false;
         }
+
+        var partes = cuil.Split('-');
+        if (partes[1] != dni)
+        {
+            return false;
+        }
+
+        return true;
     }
 
+    private async Task CerrarModal()
+    {
+        await JSRuntime.InvokeVoidAsync("closeModal");
+    }
 }
+
