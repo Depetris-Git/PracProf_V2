@@ -1,4 +1,8 @@
 ﻿@page "/MateriasPlanEstudio"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "admin")]
+
 @inject IHttpServicios http
 @inject HttpClient http
 @inject NavigationManager Navigation

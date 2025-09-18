@@ -1,4 +1,8 @@
 ﻿@page "/GenerarCertificado"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "admin")]
+
 @inject HttpClient Http
 @inject IJSRuntime JS
 

@@ -10,7 +10,7 @@ namespace WebITSC.Admin.Client.Servicios
         Task<List<Localidad>> SelectLocalidadesPorDepartamentoAsync(int DepartamentoId);
         Task<List<Pais>> SelectPaisesAsync();
         Task<List<Provincia>> SelectProvinciasPorPaisAsync(int PaisId);
-        Task<HttpRespuesta<object>> Post<O>(string url, O entidad);
+        Task<HttpRespuesta<TResp>> Post<O, TResp>(string url, O entidad);
         Task<HttpRespuesta<object>> Put<O>(string url, O entidad);
         Task<HttpRespuesta<object>> Delete(string url);
     }

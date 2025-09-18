@@ -1,0 +1,37 @@
+﻿@using Onlyou.Client.Autorizacion
+<AuthorizeView>
+    <Authorized>
+        <span class="me-2">
+            <i class="bi bi-person-circle"></i> @context.User.Identity?.Name
+        </span>
+        <button class="btn btn-link nav-link text-white " @onclick="LogoutConConfirmacion" title="Cerrar sesión">
+            <i class="bi bi-box-arrow-right"></i>
+        </button>
+    </Authorized>
+    <NotAuthorized>
+        <a href="registrar" class="nav-link btn btn-link text-white " title="Registrar">
+            <i class="bi bi-person-plus"></i>
+        </a>
+        <a href="login" class="nav-link btn btn-link text-white " title="Login">
+            <i class="bi bi-box-arrow-in-right"></i>
+        </a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    [Inject] private ILoginService loginService { get; set; }
+    [Inject] private IJSRuntime js { get; set; }
+    [Inject] private NavigationManager navigationManager { get; set; }
+
+    private async Task LogoutConConfirmacion()
+    {
+        bool confirmar = await js.InvokeAsync<bool>("confirm", "¿Estás seguro de que quieres salir?");
+        if (confirmar)
+        {
+            await loginService.Logout();
+            navigationManager.NavigateTo("/");
+        }
+    }
+}
+
+

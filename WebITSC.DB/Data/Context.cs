@@ -1,10 +1,11 @@
 ﻿
 using WebITSC.DB.Data.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebITSC.DB.Data
 {
-	public class Context : DbContext
+	public class Context : IdentityDbContext
     {
         public DbSet<Alumno> Alumnos { get; set; }
         public DbSet<Carrera> Carreras { get; set; }

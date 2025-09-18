@@ -1,4 +1,8 @@
 ﻿@page "/Administracion/ListaAlumnos"
+
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "admin")]
+
 @using WebITSC.Shared.General.DTO.Alumnos
 @using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs
 @using WebITSC.Shared.General.DTO.Carreraa

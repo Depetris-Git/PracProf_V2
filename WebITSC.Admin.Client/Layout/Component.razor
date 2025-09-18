@@ -1,0 +1,1 @@
+string.Join(", ", (await AuthenticationStateTask).User.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value))

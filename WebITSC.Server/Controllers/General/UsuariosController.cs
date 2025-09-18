@@ -1,115 +1,147 @@
 ﻿using AutoMapper;
-
-using WebITSC.DB.Data.Entity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebITSC.Shared.General.DTO.UsuariosDTO;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using WebITSC.Admin.Server.Repositorio;
+using WebITSC.DB.Data.Entity;
+using WebITSC.Shared.General.DTO.UsuariosDTO;
 
 namespace WebITSC.Server.Controllers.General
 {
     [ApiController]
-    [Route("api/Usuario")]
-    public class UsuarioController : ControllerBase
+    [Route("usuarios")]
+    public class UsuariosController : ControllerBase
     {
-        private readonly IUsuarioRepositorio eRepositorio;
-        private readonly IMapper mapper;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly IConfiguration configuration;
 
-
-        public UsuarioController(IUsuarioRepositorio eRepositorio,
-                                  IMapper mapper)
+        public UsuariosController(UserManager<IdentityUser> userManager,
+                                 SignInManager<IdentityUser> signInManager,
+                                 IConfiguration configuration)
         {
-
-            this.eRepositorio = eRepositorio;
-            this.mapper = mapper;
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<GetUsuarioDTO>>> GetAll()
-        {// Obtener todos los usuarios
-            var usuarios = await eRepositorio.FullGetAll();
-
-            // Usar AutoMapper para mapear la lista de 'Usuario' a 'GetUsuarioDTO'
-            var usuariosDTO = mapper.Map<List<GetUsuarioDTO>>(usuarios);
-
-            // Devolver la respuesta mapeada
-            return Ok(usuariosDTO);
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.configuration = configuration;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Usuario>> GetById(int id)
+        [HttpPost("registrar")]
+        public async Task<ActionResult<UserTokenDTO>> CrearUsuario([FromBody] UserInfoDTO modelo)
         {
-            var usuario = await eRepositorio.FullGetById(id);
-            if (usuario == null) return NotFound();
+            var usuario = new IdentityUser { UserName = modelo.Email, Email = modelo.Email };
+            //var resultado = await userManager.CreateAsync(usuario, modelo.Password);
 
-            return Ok(usuario);
-        }
+            //if (resultado.Succeeded)
+            //{
+            //    return await ConstruirToken(modelo);
+            //}
+            //else
+            //{
+            //    // Enviar todos los errores de contraseña
+            //    var errores = resultado.Errors.Select(e => e.Description).ToList();
+            //    return BadRequest(errores);
+            //}
+            var resultado = await userManager.CreateAsync(usuario, modelo.Password);
 
-        [HttpPost]
-        public async Task<ActionResult<int>> Post(CrearUsuarioDTO entidadDTO)
-        {
-            try
+            if (resultado.Succeeded)
             {
-                Usuario entidad = mapper.Map<Usuario>(entidadDTO);
+                // Asignar rol al usuario recién creado
+                await userManager.AddToRoleAsync(usuario, "admin");
 
-                return await eRepositorio.Insert(entidad);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Usuario entidad)
-        {
-            if (id != entidad.Id)
-            {
-                return BadRequest("Datos incorrectos");
-            }
-            var sel = await eRepositorio.SelectById(id);
-            //sel = Seleccion
-
-            if (sel == null)
-            {
-                return NotFound("No existe el tipo de documento buscado.");
-            }
-
-
-            sel = mapper.Map<Usuario>(entidad);
-
-            try
-            {
-                await eRepositorio.Update(id, sel);
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var existe = await eRepositorio.Existe(id);
-            if (!existe)
-            {
-                return NotFound($"El Usuario {id} no existe");
-            }
-            Usuario EntidadABorrar = new Usuario();
-            EntidadABorrar.Id = id;
-
-            if (await eRepositorio.Delete(id))
-            {
-                return Ok();
+                return await ConstruirToken(modelo);
             }
             else
             {
-                return BadRequest();
+                // Enviar todos los errores de contraseña
+                var errores = resultado.Errors.Select(e => e.Description).ToList();
+                return BadRequest(errores);
+
             }
 
+            }
+
+        //private async Task<UserTokenDTO> ConstruirToken(UserInfoDTO userInfoDTO)
+        //{
+        //    var claims = new List<Claim>()
+        //    {
+        //        new Claim(ClaimTypes.Email, userInfoDTO.Email)
+        //        // Codigo para agregar claims custom: new new Claim("customClaim", "valorDelClaim")
+        //    };
+
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]!));
+        //    var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        //    var expiracion = DateTime.UtcNow.AddMonths(1);
+
+        //    var token = new JwtSecurityToken(
+
+        //        issuer: null,
+        //        audience: null,
+        //        claims: claims,
+        //        expires: expiracion,
+        //        signingCredentials: credenciales
+
+        //        );
+
+        //    return new UserTokenDTO()
+        //    {
+        //        Token = new JwtSecurityTokenHandler().WriteToken(token),
+        //        Expiracion = expiracion
+        //    };
+
+        //}
+
+        private async Task<UserTokenDTO> ConstruirToken(UserInfoDTO userInfoDTO)
+        {
+            var usuario = await userManager.FindByEmailAsync(userInfoDTO.Email);
+            var claims = new List<Claim>()
+    {
+        new Claim(ClaimTypes.Email, userInfoDTO.Email)
+    };
+
+            var roles = await userManager.GetRolesAsync(usuario);
+            foreach (var rol in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, rol));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtKey"]!));
+            var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var expiracion = DateTime.UtcNow.AddMonths(1);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: expiracion,
+                signingCredentials: credenciales
+            );
+
+            return new UserTokenDTO()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiracion = expiracion
+            };
         }
 
 
+        [HttpPost("login")]
+        public async Task<ActionResult<UserTokenDTO>> LogIn([FromBody] UserInfoDTO userInfoDTO)
+        {
+            var resultado = await signInManager.PasswordSignInAsync(userInfoDTO.Email, userInfoDTO.Password, isPersistent: false, lockoutOnFailure: false);
+
+            if (resultado.Succeeded)
+            {
+                return await ConstruirToken(userInfoDTO);
+            }
+            else
+            {
+                return BadRequest("LogIn Incorrecto");
+            }
+
+        }
 
     }
 

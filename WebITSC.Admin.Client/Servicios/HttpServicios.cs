@@ -34,7 +34,7 @@ namespace WebITSC.Admin.Client.Servicios
             return new HttpRespuesta<object>(null, !respuesta.IsSuccessStatusCode, respuesta);
         }
 
-        public async Task<HttpRespuesta<object>> Post<O>(string url, O entidad)  // "O" lo que se envia, "object" lo que recibo.
+        public async Task<HttpRespuesta<TResp>> Post<O, TResp >(string url, O entidad)  // "O" lo que se envia, "object" lo que recibo.
         {
             var EntSerializada = JsonSerializer.Serialize(entidad);
             var EnviarJSON = new StringContent(EntSerializada, Encoding.UTF8, "application/json");
@@ -42,12 +42,12 @@ namespace WebITSC.Admin.Client.Servicios
 
             if (response.IsSuccessStatusCode)
             {
-                var respuesta = await DesSerealizar<object>(response);
-                return new HttpRespuesta<object>(respuesta, false, response);
+                var respuesta = await DesSerealizar<TResp>(response);
+                return new HttpRespuesta<TResp>(respuesta, false, response);
             }
             else
             {
-                return new HttpRespuesta<object>(default, true, response);
+                return new HttpRespuesta<TResp>(default, true, response);
             }
         }
 

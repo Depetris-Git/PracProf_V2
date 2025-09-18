@@ -1,20 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebITSC.DB.Data.Entity;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
+using Repositorio.General;
+using Repositorio.General.Repos_Genericos.Residencia;
 using WebITSC.Admin.Server.Repositorio;
+using WebITSC.DB.Data.Entity;
 using WebITSC.Shared.General.DTO.Alumnos;
+using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs;
 using WebITSC.Shared.General.DTO.Persona;
 using WebITSC.Shared.General.DTO.UsuariosDTO;
 using Repositorio.General;
 using WebITSC.Shared.General.DTO.BuscarAlumnosDTOs;
 using Repositorio.General.Repos_Genericos.Residencia;
-using System.Text.RegularExpressions;
 
 
 namespace WebITSC.Server.Controllers.General
 {
     [ApiController]
     [Route("/api/Alumnos")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AlumnosController : ControllerBase
     {
         private readonly IAlumnoRepositorio eRepositorio;
@@ -28,6 +34,8 @@ namespace WebITSC.Server.Controllers.General
         private readonly IProvinciaRepositorio provinciaRepositorio;
         private readonly IDepartamentoRepositorio departamentoRepositorio;
         private readonly ILocalidadRepositorio localidadRepositorio;
+        private readonly IOutputCacheStore outputCacheStore;
+        private const string cacheKey = "Alumnos";
 
         // Constructor
         public AlumnosController(IAlumnoRepositorio eRepositorio,
@@ -40,7 +48,9 @@ namespace WebITSC.Server.Controllers.General
                                   IPaisRepositorio paisRepositorio,
                                   IProvinciaRepositorio provinciaRepositorio,
                                   IDepartamentoRepositorio departamentoRepositorio,
-                                  ILocalidadRepositorio localidadRepositorio)
+                                  ILocalidadRepositorio localidadRepositorio,
+                                  IOutputCacheStore outputCacheStore)
+
         {
             this.eRepositorio = eRepositorio;
             this.mapper = mapper;
@@ -53,12 +63,15 @@ namespace WebITSC.Server.Controllers.General
             this.provinciaRepositorio = provinciaRepositorio;
             this.departamentoRepositorio = departamentoRepositorio;
             this.localidadRepositorio = localidadRepositorio;
+            this.outputCacheStore = outputCacheStore;
 
 
         }
 
         // Obtener todos los alumnos
         [HttpGet]
+        [OutputCache(Tags = [cacheKey])]
+        [AllowAnonymous]
         public async Task<ActionResult<List<GetAlumnoDTO>>> GetAll()
         {
             // Obtener todos los alumnos
@@ -75,6 +88,7 @@ namespace WebITSC.Server.Controllers.General
         // Obtener alumno por ID
 
         [HttpGet("{id:int}")]
+        [OutputCache(Tags = [cacheKey])]
         public async Task<ActionResult<GetAlumnoDTO>> GetById(int id)
         {
             var alumno = await eRepositorio.FullGetById(id);
@@ -85,6 +99,7 @@ namespace WebITSC.Server.Controllers.General
 
         //GET: api/alumnos/buscar
         [HttpGet("buscar")]
+        [OutputCache(Tags = [cacheKey])]
         public async Task<ActionResult<IEnumerable<BuscarAlumnoDTO>>> BuscarAlumnos(
             [FromQuery] string? nombre,
             [FromQuery] string? apellido,
@@ -106,6 +121,7 @@ namespace WebITSC.Server.Controllers.General
 
 
         [HttpGet("documento/{documento}")]
+        [OutputCache(Tags = [cacheKey])]
         public async Task<ActionResult<EditarAlumnoDTO>> GetAlumnoPorDocumento(string documento)
         {
             var alumno = await eRepositorio.GetAlumnoPorDocumento(documento);
@@ -147,7 +163,8 @@ namespace WebITSC.Server.Controllers.General
             {
                 return BadRequest("No se pudo actualizar el alumno.");
             }
-
+            // 🔥 Limpiar cache
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
             return NoContent();
         }
 
@@ -290,6 +307,9 @@ namespace WebITSC.Server.Controllers.General
             };
 
             await inscripcionCarreraRepositorio.Insert(inscripcionCarrera); // Inscribir al alumno en la carrera
+                                                                            
+            // 🔥 Limpiar cache
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
 
             // Mapea el Alumno a GetAlumnoDTO para la respuesta
             var getAlumnoDTO = mapper.Map<GetAlumnoDTO>(alumno);
@@ -334,14 +354,16 @@ namespace WebITSC.Server.Controllers.General
 
             // Actualiza la entidad
             mapper.Map(entidad, sel); // Mapea los nuevos valores a la entidad existente
-
+                                     
             try
             {
                 // Usa `eRepositorio.Update` para actualizar
                 var updated = await eRepositorio.Update(id, sel);
                 if (updated)
                 {
-                    return Ok();
+                    // 🔥 Limpiar cache después de actualizar con éxito
+                    await outputCacheStore.EvictByTagAsync(cacheKey, default);
+                    return NoContent();
                 }
                 return BadRequest("No se pudo actualizar el alumno.");
             }
@@ -367,6 +389,8 @@ namespace WebITSC.Server.Controllers.General
                 return BadRequest("No se pudo eliminar el alumno.");
             }
 
+            // 🔥 Limpiar cache
+            await outputCacheStore.EvictByTagAsync(cacheKey, default);
             return NoContent();
         }
 

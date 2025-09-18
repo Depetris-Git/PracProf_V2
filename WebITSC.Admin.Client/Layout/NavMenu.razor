@@ -1,4 +1,5 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using System.Security.Claims
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">ITSC - Login</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -7,59 +8,76 @@
     </div>
 </div>
 
-@* Menú visible solo para Administradores *@
-@if (Role == "Administrador")
-{
-    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-        <nav class="flex-column">
-            <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="/Inicio" Match="NavLinkMatch.All">
-                    <span class="bi bi-house-door-fill me-2" aria-hidden="true"></span> Inicio
-                </NavLink>
-            </div>
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link d-flex align-items-center" href="/Inicio" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill me-2" aria-hidden="true"></span> Inicio
+            </NavLink>
+        </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ListaAlumnos">
-                    <span class="bi bi-person-lines-fill me-2" aria-hidden="true"></span> Alumnos
-                </NavLink>
-            </div>
+        <AuthorizeView>
+            <Authorized>
+                @* Debug: muestra roles del usuario autenticado *@
+ @*                <p class="text-white">Roles: @string.Join(", ", UserRoles)</p> *@
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="api/Nota">
-                    <span class="bi bi-file-earmark-text me-2" aria-hidden="true"></span> Notas Finales
-                </NavLink>
-            </div>
+                @* Menú solo para admin *@
+                @if (UserRoles.Contains("admin"))
+                {
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ListaAlumnos">
+                            <span class="bi bi-person-lines-fill me-2" aria-hidden="true"></span> Alumnos
+                        </NavLink>
+                    </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="/GenerarCertificado">
-                    <span class="bi bi-file-earmark-check me-2" aria-hidden="true"></span> Generar Certificado
-                </NavLink>
-            </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link d-flex align-items-center" href="/GenerarCertificado">
+                            <span class="bi bi-file-earmark-check me-2" aria-hidden="true"></span> Generar Certificado
+                        </NavLink>
+                    </div>
 
-            <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="/MateriasPlanEstudio">
-                    <span class="bi bi-book me-2" aria-hidden="true"></span> Materias en P.Estudio
-                </NavLink>
-            </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link d-flex align-items-center" href="/MateriasPlanEstudio">
+                            <span class="bi bi-book me-2" aria-hidden="true"></span> Materias en P.Estudio
+                        </NavLink>
+                    </div>
+                }
+            </Authorized>
 
-            @* <div class="nav-item px-3">
-                <NavLink class="nav-link d-flex align-items-center" href="/Administracion/ImportarAlumnos">
-                    <span class="bi bi-book me-2" aria-hidden="true"></span> Importar Alumnos
-                </NavLink>
-            </div> *@
-        </nav>
-    </div>
-}
+            <NotAuthorized>
+                <div class="d-flex justify-content-center align-items-center vh-100">
+                <p class="text-white">No estás logueado</p>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    </nav>
+</div>
 
 @code {
-    [Parameter] public string Role { get; set; }
-
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
 
-    private void ToggleNavMenu()
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    private IEnumerable<string> UserRoles { get; set; } = new List<string>();
+
+    protected override async Task OnParametersSetAsync()
     {
-        collapseNavMenu = !collapseNavMenu;
+        var authState = await AuthenticationStateTask;
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            UserRoles = user.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value)
+                .ToList();
+        }
+        else
+        {
+            UserRoles = new List<string>();
+        }
     }
 }

@@ -6,7 +6,13 @@
 
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"> 
+            <Authorizing>
+                <p> Autorizando...</p>
+            </Authorizing>
+        </AuthorizeRouteView>
+
+
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
@@ -16,7 +22,7 @@
         </LayoutView>
     </NotFound>
 </Router>
-
+@* 
 @code {
     // Inyección del servicio
     [Inject] public ServicioRol ServicioRol { get; set; }
@@ -27,4 +33,4 @@
         var rol = ServicioRol.ObtenerRol();  // Usando el servicio
         Console.WriteLine($"Rol obtenido: {rol}");  // Ejemplo de uso
     }
-}
+} *@

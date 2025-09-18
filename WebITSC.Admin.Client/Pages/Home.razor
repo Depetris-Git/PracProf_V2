@@ -1,15 +1,30 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Components
+@* @using Microsoft.AspNetCore.Components
 @inject ServicioRol ServicioRol
 @inject NavigationManager Navigation
-@layout MainLayout
+@layout MainLayout *@
 
+<PageTitle>Home</PageTitle>
 
-<div class="center-text">
-    <h3><b>Bienvenidos</b></h3>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <AuthorizeView>
+        <Authorized>
+            <p class="text-center fs-4">
+                Hola Administrador! Sos un usuario autenticado
+            </p>
+        </Authorized>
+        <NotAuthorized>
+            <p class="text-center fs-4">
+                Hola, no estás autenticado, realiza el login
+            </p>
+        </NotAuthorized>
+    </AuthorizeView>
 </div>
 
-<!-- Definimos variables que contienen el valor del rol -->
+
+@* <NavMenu /> *@
+
+@* <!-- Definimos variables que contienen el valor del rol -->
 @{
     var administrador = "Administrador";
 }
@@ -24,33 +39,33 @@
     <br />
     <p>Rol seleccionado: @selectedRole</p>
 }
+ *@
 
+@* @code {
+    // private string selectedRole = string.Empty;
+     private bool isMenuExpanded = false; // Nueva propiedad para controlar el estado
 
-@code {
-    private string selectedRole = string.Empty;
-    private bool isMenuExpanded = false; // Nueva propiedad para controlar el estado
+    // // Método para seleccionar el rol y actualizar el servicio
+    // private void SelectRole(string role)
+    // {
+    //     selectedRole = role;                // Cambiar el valor de selectedRole
+    //     ServicioRol.SeleccionarRol(role);   // Actualiza el rol en el servicio
+    //     StateHasChanged();                  // Forzar actualización
 
-    // Método para seleccionar el rol y actualizar el servicio
-    private void SelectRole(string role)
-    {
-        selectedRole = role;                // Cambiar el valor de selectedRole
-        ServicioRol.SeleccionarRol(role);   // Actualiza el rol en el servicio
-        StateHasChanged();                  // Forzar actualización
+    //     // Cambiar el estado del menú
+    //     isMenuExpanded = true; // Cambiar el estado del menú a expandido
 
-        // Cambiar el estado del menú
-        isMenuExpanded = true; // Cambiar el estado del menú a expandido
-
-        // Realizamos la redirección a la página común
-        Navigation.NavigateTo("/Inicio");  // Redirige a la página común
-    }
+    //     // Realizamos la redirección a la página común
+    //     Navigation.NavigateTo("/Inicio");  // Redirige a la página común
+    // }
    
-        // Método para alternar el estado del menú
-        private void ToggleMenu()
-        {
+         // Método para alternar el estado del menú
+         private void ToggleMenu()
+         {
             isMenuExpanded = !isMenuExpanded;  // Alternar el estado del menú
-        }
+         }
     
-}
+} *@
 
 
 

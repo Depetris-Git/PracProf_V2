@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using WebITSC.Admin.Server.Repositorio;
-
-using WebITSC.DB.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
-using WebITSC.Shared.General.DTO.Carreraa;
-using WebITSC.Shared.General.DTO.Alumnos;
+using Microsoft.AspNetCore.OutputCaching;
 using Repositorio.General;
+using WebITSC.Admin.Server.Repositorio;
+using WebITSC.DB.Data.Entity;
+using WebITSC.Shared.General.DTO.Alumnos;
+using WebITSC.Shared.General.DTO.Carreraa;
 
 namespace WebITSC.Admin.Server.Controllers
 {
@@ -17,18 +17,26 @@ namespace WebITSC.Admin.Server.Controllers
         {
             private readonly ICarreraRepositorio eRepositorio;
             private readonly IMapper mapper;
+            private readonly IOutputCacheStore outputCacheStore;
+            private const string cacheKey = "Carreras";
 
             public CarrerasController(ICarreraRepositorio eRepositorio,
-                                                IMapper mapper)
+                                                IMapper mapper,
+                                                IOutputCacheStore outputCacheStore)
             {
                 this.eRepositorio = eRepositorio;
                 this.mapper = mapper;
+                this.outputCacheStore = outputCacheStore;
+
             }
 
             [HttpGet]
+            [OutputCache(Tags = [cacheKey])]
             public async Task<ActionResult<List<GetCarreraDTO>>> GetAll()
             {
                 var carreras = await eRepositorio.Select();
+                 
+                
                 return Ok(carreras);
             }
 

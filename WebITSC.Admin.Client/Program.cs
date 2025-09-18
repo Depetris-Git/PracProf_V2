@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Onlyou.Client.Autorizacion;
 using WebITSC.Admin.Client;
+using WebITSC.Admin.Client.Autorizacion;
 using WebITSC.Admin.Client.Servicios;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -9,15 +12,20 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Registro de servicios
+builder.Services.AddAuthorizationCore();
+
 // Configuración para las llamadas HTTP (por ejemplo, si vas a hacer llamadas al servidor)
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
 // Registro del servicio HttpServicios para interactuar con el backend (API)
 builder.Services.AddScoped<IHttpServicios, HttpServicios>();
 
-// Aquí registramos el servicio de roles que se utilizará en el cliente para manejar los roles del usuario
-builder.Services.AddSingleton<ServicioRol>();
+
+builder.Services.AddScoped<ProveedorAutenticacionJWT>();
+builder.Services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(prov => prov.GetRequiredService<ProveedorAutenticacionJWT>());
+builder.Services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(prov => prov.GetRequiredService<ProveedorAutenticacionJWT>());
+
+
 
 // Si tienes algún otro servicio específico del cliente, puedes agregarlo aquí
 // builder.Services.AddScoped<OtroServicio>();

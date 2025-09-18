@@ -1,0 +1,14 @@
+﻿@page "/logout"
+@using Onlyou.Client.Autorizacion
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+
+<h3>Cerrando sesión...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await loginService.Logout();
+        navigationManager.NavigateTo("/");
+    }
+}

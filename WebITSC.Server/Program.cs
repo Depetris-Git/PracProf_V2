@@ -1,18 +1,25 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.JSInterop;
+using Repositorio.General;
+using Repositorio.General.Repos_Genericos.Residencia;
+using System.ComponentModel;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using WebITSC.Admin.Client.Servicios;
 using WebITSC.Admin.Server.Repositorio;
 using WebITSC.DB.Data;
 using WebITSC.DB.Data.Entity;
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
-using WebITSC.Admin.Client.Servicios;
-using System.Text.Json;
-using Repositorio.General;
 using WebITSC.Server.Controllers.General;
-using Repositorio.General.Repos_Genericos.Residencia;
-
-using Microsoft.JSInterop;
-using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddOutputCache(options =>
+{
+    options.DefaultExpirationTimeSpan = TimeSpan.FromMinutes(60);
+});
+
 
 // Add services to the container.
 // servicio controller 
@@ -48,12 +55,47 @@ builder.Services.AddControllers();
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 
+//SERVICIOS IDENTITY 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<Context>()
+    .AddDefaultTokenProviders();
+
+//contraseña
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+});
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtKey"])),
+            ClockSkew = TimeSpan.Zero // Esto reduce el sesgo del reloj a cero para fines de prueba
+        };
+    });
+
 //SERVICIO DE MAPPER
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //SERVICIO DE ROLES FRONT
 builder.Services.AddSingleton<ServicioRol>();
+
+
 
 //builder.Services.AddScoped<IJSRuntime, JSRuntime>();
 
@@ -63,6 +105,7 @@ builder.Services.AddRazorPages();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 
 //servicio que conecta la bd
@@ -105,6 +148,18 @@ builder.Services.AddScoped<IHttpServicios, HttpServicios>();
 
 var app = builder.Build();
 
+// Crear roles automáticamente al iniciar la app
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    if (!await roleManager.RoleExistsAsync("admin"))
+        await roleManager.CreateAsync(new IdentityRole("admin"));
+
+    if (!await roleManager.RoleExistsAsync("operador"))
+        await roleManager.CreateAsync(new IdentityRole("operador"));
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -113,7 +168,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+ 
 app.UseBlazorFrameworkFiles();
 
 app.UseStaticFiles();
@@ -124,7 +179,11 @@ app.MapRazorPages();
 
 app.UseExceptionHandler("/error"); // Cambia esto para devolver JSON si es necesario
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.UseOutputCache();  //cache
 
 app.MapControllers();
 
