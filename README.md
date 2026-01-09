@@ -11,5 +11,5 @@ Aplicación web para afianzar conceptos de desarrollo frontend y backend.
 - CSS
 
 ## Descripción
-Aplicacion para gestionar Alumnos de un Instituto
+Aplicacion para gestionar Alumnos de un Instituto -
 Proyecto de aprendizaje enfocado en la práctica de estructuras, componentes y lógica de aplicaciones web.
